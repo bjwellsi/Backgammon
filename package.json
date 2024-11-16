@@ -1,0 +1,12 @@
+{
+  "name": "backgammon",
+  "version": "1.0.0",
+  "description": "Backgammon Game",
+  "main": "App.js",
+  "scripts": {
+    "test": "node App.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "type": "module"
+}
