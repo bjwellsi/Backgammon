@@ -17,6 +17,10 @@ class Jail {
   removePiece() {
     return this.pieces.pop();
   }
+
+  renderInConsole() {
+    return this.pieces.map((piece) => piece.renderInConsole()).join("");
+  }
 }
 
 export default Jail;

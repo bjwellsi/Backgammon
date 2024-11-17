@@ -3,6 +3,14 @@ class Piece {
   constructor(color) {
     this.color = color;
   }
+
+  renderInConsole() {
+    if (this.color == "black") {
+      return "b";
+    } else {
+      return "w";
+    }
+  }
 }
 
 export default Piece;

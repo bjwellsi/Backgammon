@@ -26,6 +26,10 @@ class Home {
   homeFull() {
     return this.pieces.length == this.maxPieceCount;
   }
+
+  renderInConsole() {
+    return this.pieces.map((piece) => piece.renderInConsole()).join("");
+  }
 }
 
 export default Home;

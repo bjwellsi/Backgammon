@@ -10,8 +10,8 @@ class Board {
     this.blackHome = new Home("black", this.piecesPerTeam);
     this.whiteHome = new Home("white", this.piecesPerTeam);
 
-    this.jail = new Jail("black");
-    this.jail = new Jail("white");
+    this.blackJail = new Jail("black");
+    this.whiteJail = new Jail("white");
 
     this.columns = [];
     for (let i = 0; i < 24; i++) {
@@ -60,6 +60,34 @@ class Board {
     this.columns[5].addPiece(this.blackHome.removePiece());
     this.columns[5].addPiece(this.blackHome.removePiece());
     this.columns[5].addPiece(this.blackHome.removePiece());
+  }
+
+  renderInConsole() {
+    let topRow = "";
+    for (let i = 0; i < 12; i++) {
+      topRow += `${i < 9 ? "0" : ""}${i + 1}|${this.columns[i].renderInConsole()}  `;
+    }
+
+    let bottomRow = "";
+    for (let i = 23; i > 11; i--) {
+      bottomRow += `${i + 1}|${this.columns[i].renderInConsole()}  `;
+    }
+
+    let board = `
+    ${this.blackHome.renderInConsole()} 
+
+    ${topRow}
+
+    ${this.blackJail.renderInConsole()}
+    --------------------------------------------------------------------------------------------------------------------------
+    ${this.whiteJail.renderInConsole()}
+
+    ${bottomRow}
+
+    ${this.whiteHome.renderInConsole()} 
+    `;
+
+    return board;
   }
 }
 

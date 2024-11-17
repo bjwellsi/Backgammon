@@ -38,6 +38,14 @@ class Column {
       return this.pieces.pop();
     }
   }
+
+  renderInConsole() {
+    let col = this.pieces.map((piece) => piece.renderInConsole()).join("");
+    while (col.length < 7) {
+      col += " ";
+    }
+    return col;
+  }
 }
 
 export default Column;
