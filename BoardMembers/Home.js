@@ -1,4 +1,4 @@
-import { Piece } from "./Piece.js";
+import Piece from "./Piece.js";
 
 class Home {
   constructor(color, maxPieceCount) {
@@ -7,24 +7,24 @@ class Home {
     this.maxPieceCount = maxPieceCount;
 
     for (let i = 0; i < maxPieceCount; i++) {
-      addPiece(new Piece(color));
+      this.addPiece(new Piece(color));
     }
   }
 
   addPiece(piece) {
-    if (piece.color == color) {
-      pieces.push(piece);
+    if (piece.color == this.color) {
+      this.pieces.push(piece);
     } else {
       throw Error("wrong home");
     }
   }
 
   removePiece() {
-    return pieces.pop();
+    return this.pieces.pop();
   }
 
   homeFull() {
-    return pieces.length == maxPieceCount;
+    return this.pieces.length == this.maxPieceCount;
   }
 }
 

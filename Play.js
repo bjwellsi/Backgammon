@@ -1,4 +1,4 @@
-import { Board } from "./BoardMembers/Board.js";
+import Board from "./BoardMembers/Board.js";
 
 function play() {
   let board = new Board();

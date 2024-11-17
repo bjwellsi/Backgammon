@@ -1,65 +1,65 @@
-import { Jail } from "./Jail.js";
-import { Column } from "./Column.js";
-import { Piece } from "./Piece.js";
-import { Home } from "./Home.js";
+import Jail from "./Jail.js";
+import Column from "./Column.js";
+import Piece from "./Piece.js";
+import Home from "./Home.js";
 
 class Board {
   constructor() {
     this.piecesPerTeam = 15;
 
-    this.blackHome = new Home("black", piecesPerTeam);
-    this.whiteHome = new Home("white", piecesPerTeam);
+    this.blackHome = new Home("black", this.piecesPerTeam);
+    this.whiteHome = new Home("white", this.piecesPerTeam);
 
     this.jail = new Jail("black");
     this.jail = new Jail("white");
 
     this.columns = [];
     for (let i = 0; i < 24; i++) {
-      columns.push(new Column());
+      this.columns.push(new Column());
     }
 
-    populateColumns();
+    this.populateColumns();
   }
 
   populateColumns() {
     //just braking this out for readability and potentially extensibility
-    columns[0].push(whiteHome.pop());
-    columns[0].push(whiteHome.pop());
+    this.columns[0].addPiece(this.whiteHome.removePiece());
+    this.columns[0].addPiece(this.whiteHome.removePiece());
 
-    columns[11].push(whiteHome.pop());
-    columns[11].push(whiteHome.pop());
-    columns[11].push(whiteHome.pop());
-    columns[11].push(whiteHome.pop());
-    columns[11].push(whiteHome.pop());
+    this.columns[11].addPiece(this.whiteHome.removePiece());
+    this.columns[11].addPiece(this.whiteHome.removePiece());
+    this.columns[11].addPiece(this.whiteHome.removePiece());
+    this.columns[11].addPiece(this.whiteHome.removePiece());
+    this.columns[11].addPiece(this.whiteHome.removePiece());
 
-    columns[16].push(whiteHome.pop());
-    columns[16].push(whiteHome.pop());
-    columns[16].push(whiteHome.pop());
+    this.columns[16].addPiece(this.whiteHome.removePiece());
+    this.columns[16].addPiece(this.whiteHome.removePiece());
+    this.columns[16].addPiece(this.whiteHome.removePiece());
 
-    columns[18].push(whiteHome.pop());
-    columns[18].push(whiteHome.pop());
-    columns[18].push(whiteHome.pop());
-    columns[18].push(whiteHome.pop());
-    columns[18].push(whiteHome.pop());
+    this.columns[18].addPiece(this.whiteHome.removePiece());
+    this.columns[18].addPiece(this.whiteHome.removePiece());
+    this.columns[18].addPiece(this.whiteHome.removePiece());
+    this.columns[18].addPiece(this.whiteHome.removePiece());
+    this.columns[18].addPiece(this.whiteHome.removePiece());
 
-    columns[23].push(blackHome.pop());
-    columns[23].push(blackHome.pop());
+    this.columns[23].addPiece(this.blackHome.removePiece());
+    this.columns[23].addPiece(this.blackHome.removePiece());
 
-    columns[12].push(blackHome.pop());
-    columns[12].push(blackHome.pop());
-    columns[12].push(blackHome.pop());
-    columns[12].push(blackHome.pop());
-    columns[12].push(blackHome.pop());
+    this.columns[12].addPiece(this.blackHome.removePiece());
+    this.columns[12].addPiece(this.blackHome.removePiece());
+    this.columns[12].addPiece(this.blackHome.removePiece());
+    this.columns[12].addPiece(this.blackHome.removePiece());
+    this.columns[12].addPiece(this.blackHome.removePiece());
 
-    columns[7].push(blackHome.pop());
-    columns[7].push(blackHome.pop());
-    columns[7].push(blackHome.pop());
+    this.columns[7].addPiece(this.blackHome.removePiece());
+    this.columns[7].addPiece(this.blackHome.removePiece());
+    this.columns[7].addPiece(this.blackHome.removePiece());
 
-    columns[5].push(blackHome.pop());
-    columns[5].push(blackHome.pop());
-    columns[5].push(blackHome.pop());
-    columns[5].push(blackHome.pop());
-    columns[5].push(blackHome.pop());
+    this.columns[5].addPiece(this.blackHome.removePiece());
+    this.columns[5].addPiece(this.blackHome.removePiece());
+    this.columns[5].addPiece(this.blackHome.removePiece());
+    this.columns[5].addPiece(this.blackHome.removePiece());
+    this.columns[5].addPiece(this.blackHome.removePiece());
   }
 }
 

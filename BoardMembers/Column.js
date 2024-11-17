@@ -1,4 +1,4 @@
-import { Piece } from "./Piece.js";
+import Piece from "./Piece.js";
 
 class Column {
   constructor() {
@@ -6,29 +6,25 @@ class Column {
   }
 
   empty() {
-    if (pieces.length === 0) {
-      return true;
-    } else {
-      return false;
-    }
+    return this.pieces.length === 0;
   }
 
   getColor() {
-    if (empty()) {
+    if (this.empty()) {
       return "neutral";
     } else {
-      return pieces[0].color;
+      return this.pieces[0].color;
     }
   }
 
   addPiece(piece) {
     //returns the piece that was hit or nothing if add was successful
-    if (empty() || getColor() == piece.color) {
-      pieces.push(piece);
-    } else if (pieces.length === 1) {
+    if (this.empty() || this.getColor() == piece.color) {
+      this.pieces.push(piece);
+    } else if (this.pieces.length === 1) {
       //hit
-      let victim = pieces.pop();
-      pieces.push(piece);
+      let victim = this.pieces.pop();
+      this.pieces.push(piece);
       return victim;
     } else {
       throw Error("column can't have multiple piece colors");
@@ -36,10 +32,10 @@ class Column {
   }
 
   removePiece() {
-    if (empty()) {
+    if (this.empty()) {
       throw Error("column is empty");
     } else {
-      return pieces.pop();
+      return this.pieces.pop();
     }
   }
 }

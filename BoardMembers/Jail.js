@@ -1,4 +1,4 @@
-import { Piece } from "./Piece.js";
+import Piece from "./Piece.js";
 
 class Jail {
   constructor(color) {
@@ -7,15 +7,15 @@ class Jail {
   }
 
   addPiece(piece) {
-    if (piece.color == color) {
-      pieces.push(piece);
+    if (piece.color == this.color) {
+      this.pieces.push(piece);
     } else {
       throw Error("wrong jail");
     }
   }
 
   removePiece() {
-    return pieces.pop();
+    return this.pieces.pop();
   }
 }
 
