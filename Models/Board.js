@@ -3,21 +3,16 @@ import Column from "./Column.js";
 import Piece from "./Piece.js";
 import Home from "./Home.js";
 import Dice from "./Dice.js";
+import Player from "./Player.js";
 
 class Board {
   constructor() {
     this.piecesPerTeam = 15;
 
-    this.blackHome = new Home("black", this.piecesPerTeam);
-    this.whiteHome = new Home("white", this.piecesPerTeam);
+    this.blackPlayer = new Player("black", this.piecesPerTeam);
+    this.whitePlayer = new Player("white", this.piecesPerTeam);
 
-    this.blackJail = new Jail("black");
-    this.whiteJail = new Jail("white");
-
-    this.blackDice = new Dice();
-    this.whiteDice = new Dice();
-
-    this.turn = "";
+    this.turn = null;
 
     this.columns = [];
     for (let i = 0; i < 24; i++) {
@@ -29,43 +24,43 @@ class Board {
 
   populateColumns() {
     //just braking this out for readability and potentially extensibility
-    this.columns[0].addPiece(this.whiteHome.removePiece());
-    this.columns[0].addPiece(this.whiteHome.removePiece());
+    this.columns[0].addPiece(this.whitePlayer.home.removePiece());
+    this.columns[0].addPiece(this.whitePlayer.home.removePiece());
 
-    this.columns[11].addPiece(this.whiteHome.removePiece());
-    this.columns[11].addPiece(this.whiteHome.removePiece());
-    this.columns[11].addPiece(this.whiteHome.removePiece());
-    this.columns[11].addPiece(this.whiteHome.removePiece());
-    this.columns[11].addPiece(this.whiteHome.removePiece());
+    this.columns[11].addPiece(this.whitePlayer.home.removePiece());
+    this.columns[11].addPiece(this.whitePlayer.home.removePiece());
+    this.columns[11].addPiece(this.whitePlayer.home.removePiece());
+    this.columns[11].addPiece(this.whitePlayer.home.removePiece());
+    this.columns[11].addPiece(this.whitePlayer.home.removePiece());
 
-    this.columns[16].addPiece(this.whiteHome.removePiece());
-    this.columns[16].addPiece(this.whiteHome.removePiece());
-    this.columns[16].addPiece(this.whiteHome.removePiece());
+    this.columns[16].addPiece(this.whitePlayer.home.removePiece());
+    this.columns[16].addPiece(this.whitePlayer.home.removePiece());
+    this.columns[16].addPiece(this.whitePlayer.home.removePiece());
 
-    this.columns[18].addPiece(this.whiteHome.removePiece());
-    this.columns[18].addPiece(this.whiteHome.removePiece());
-    this.columns[18].addPiece(this.whiteHome.removePiece());
-    this.columns[18].addPiece(this.whiteHome.removePiece());
-    this.columns[18].addPiece(this.whiteHome.removePiece());
+    this.columns[18].addPiece(this.whitePlayer.home.removePiece());
+    this.columns[18].addPiece(this.whitePlayer.home.removePiece());
+    this.columns[18].addPiece(this.whitePlayer.home.removePiece());
+    this.columns[18].addPiece(this.whitePlayer.home.removePiece());
+    this.columns[18].addPiece(this.whitePlayer.home.removePiece());
 
-    this.columns[23].addPiece(this.blackHome.removePiece());
-    this.columns[23].addPiece(this.blackHome.removePiece());
+    this.columns[23].addPiece(this.blackPlayer.home.removePiece());
+    this.columns[23].addPiece(this.blackPlayer.home.removePiece());
 
-    this.columns[12].addPiece(this.blackHome.removePiece());
-    this.columns[12].addPiece(this.blackHome.removePiece());
-    this.columns[12].addPiece(this.blackHome.removePiece());
-    this.columns[12].addPiece(this.blackHome.removePiece());
-    this.columns[12].addPiece(this.blackHome.removePiece());
+    this.columns[12].addPiece(this.blackPlayer.home.removePiece());
+    this.columns[12].addPiece(this.blackPlayer.home.removePiece());
+    this.columns[12].addPiece(this.blackPlayer.home.removePiece());
+    this.columns[12].addPiece(this.blackPlayer.home.removePiece());
+    this.columns[12].addPiece(this.blackPlayer.home.removePiece());
 
-    this.columns[7].addPiece(this.blackHome.removePiece());
-    this.columns[7].addPiece(this.blackHome.removePiece());
-    this.columns[7].addPiece(this.blackHome.removePiece());
+    this.columns[7].addPiece(this.blackPlayer.home.removePiece());
+    this.columns[7].addPiece(this.blackPlayer.home.removePiece());
+    this.columns[7].addPiece(this.blackPlayer.home.removePiece());
 
-    this.columns[5].addPiece(this.blackHome.removePiece());
-    this.columns[5].addPiece(this.blackHome.removePiece());
-    this.columns[5].addPiece(this.blackHome.removePiece());
-    this.columns[5].addPiece(this.blackHome.removePiece());
-    this.columns[5].addPiece(this.blackHome.removePiece());
+    this.columns[5].addPiece(this.blackPlayer.home.removePiece());
+    this.columns[5].addPiece(this.blackPlayer.home.removePiece());
+    this.columns[5].addPiece(this.blackPlayer.home.removePiece());
+    this.columns[5].addPiece(this.blackPlayer.home.removePiece());
+    this.columns[5].addPiece(this.blackPlayer.home.removePiece());
   }
 
   renderInConsole() {
@@ -80,22 +75,36 @@ class Board {
     }
 
     let board = `
-    ${this.blackHome.renderInConsole()} 
-                                                                      ${this.blackDice.renderInConsole()}
+    ${this.blackPlayer.home.renderInConsole()} 
+                                                                      ${this.blackPlayer.dice.renderInConsole()}
 
     ${topRow}
 
-                                                                       ${this.blackJail.renderInConsole()}
+                                                                       ${this.blackPlayer.jail.renderInConsole()}
     -------------------------------------------------------------------JAIL----------------------------------------------------------------------------
-                                                                       ${this.whiteJail.renderInConsole()}
+                                                                       ${this.whitePlayer.jail.renderInConsole()}
 
     ${bottomRow}
-                                                                      ${this.whiteDice.renderInConsole()}
+                                                                      ${this.whitePlayer.dice.renderInConsole()}
 
-    ${this.whiteHome.renderInConsole()} 
+    ${this.whitePlayer.home.renderInConsole()} 
     `;
 
     return board;
+  }
+
+  changeTurn(color) {
+    this.turn = color;
+  }
+
+  changeTurn() {
+    if (this.turn == "black") {
+      this.turn = "white";
+    } else if (this.turn == "white") {
+      this.turn = "black";
+    } else {
+      throw Error("invalid initial turn color");
+    }
   }
 
   jailBreak() {
@@ -110,14 +119,14 @@ class Board {
     let fromCol = this.columns[from];
     let toCol = this.columns[to];
 
-    let dice = this.whiteDice;
-    let selfJail = this.whiteJail;
-    let otherJail = this.blackJail;
+    let dice = this.whitePlayer.dice;
+    let selfJail = this.whitePlayer.jail;
+    let otherJail = this.blackPlayer.jail;
 
     if (this.turn == "black") {
-      dice = this.blackDice;
-      selfJail = this.blackJail;
-      otherJail = this.whiteJail;
+      dice = this.blackPlayer.dice;
+      selfJail = this.blackPlayer.jail;
+      otherJail = this.whitePlayer.jail;
     }
 
     const putPieceBack = (error) => {
