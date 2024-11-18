@@ -81,6 +81,7 @@ class Board {
 
     let board = `
     ${this.blackHome.renderInConsole()} 
+                                                                      ${this.blackDice.renderInConsole()}
 
     ${topRow}
 
@@ -89,6 +90,7 @@ class Board {
                                                                        ${this.whiteJail.renderInConsole()}
 
     ${bottomRow}
+                                                                      ${this.whiteDice.renderInConsole()}
 
     ${this.whiteHome.renderInConsole()} 
     `;
@@ -96,9 +98,27 @@ class Board {
     return board;
   }
 
+  jailBreak() {
+    throw Error("not implemented");
+  }
+
+  goHome() {
+    throw Error("not implemented");
+  }
+
   movePiece(from, to) {
     let fromCol = this.columns[from];
     let toCol = this.columns[to];
+
+    let dice = this.whiteDice;
+    let selfJail = this.whiteJail;
+    let otherJail = this.blackJail;
+
+    if (this.turn == "black") {
+      dice = this.blackDice;
+      selfJail = this.blackJail;
+      otherJail = this.whiteJail;
+    }
 
     const putPieceBack = (error) => {
       fromCol.addPiece(piece);
@@ -116,20 +136,17 @@ class Board {
       putPieceBack("Can't move the other team's piece");
     }
 
-    //now we at least know you have a legal piece, make sure it's moving the right way
+    //can't move with a piece in jail
+    if (!selfJail.empty()) {
+      putPieceBack("Can't move with a piece in jail");
+    }
+
+    //make sure it's moving the right way
     if (
       (piece.color == "black" && from < to) ||
       (piece.color == "white" && from > to)
     ) {
       putPieceBack("You can't move backward");
-    }
-
-    let dice = this.whiteDice;
-    let jail = this.blackJail;
-
-    if (this.turn == "black") {
-      dice = this.blackDice;
-      jail = this.blackJail;
     }
 
     const distance = Math.abs(from - to);
@@ -138,12 +155,12 @@ class Board {
       putPieceBack("Can't move that distance with current roll");
     }
 
-    //is the column currently full of the other team
+    //is the column currently full of the other team?
     if (!toCol.empty() && toCol.getColor() != piece.color) {
-      //can we hit
+      //can we hit?
       if (toCol.canHit()) {
         //yes we can, hit
-        jail.addPiece(toCol.removePiece());
+        otherJail.addPiece(toCol.removePiece());
       } else {
         //no we can't
         putPieceBack("Can't move to a column full of the other team");
@@ -153,6 +170,7 @@ class Board {
     //move the piece
     //this is where you could log the move if you wanted an undo feature
     toCol.addPiece(piece);
+    dice.useRoll(distance);
   }
 }
 

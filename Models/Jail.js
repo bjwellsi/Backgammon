@@ -18,6 +18,10 @@ class Jail {
     return this.pieces.pop();
   }
 
+  empty() {
+    return !this.pieces.length > 0;
+  }
+
   renderInConsole() {
     return this.pieces.map((piece) => piece.renderInConsole()).join("");
   }

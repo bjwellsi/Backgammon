@@ -1,17 +1,21 @@
-import chance from "chance";
+import Chance from "chance";
 
 class Dice {
   constructor() {
     this.rolls = [];
+    this.chance = new Chance();
   }
 
   rollForIniative() {
-    return chance.integer({ min: 1, max: 6 });
+    this.clearDice();
+    let die = this.chance.integer({ min: 1, max: 6 });
+    this.rolls.push(die);
+    return die;
   }
 
   roll() {
-    let die1 = chance.integer({ min: 1, max: 6 });
-    let die2 = chance.integer({ min: 1, max: 6 });
+    let die1 = this.chance.integer({ min: 1, max: 6 });
+    let die2 = this.chance.integer({ min: 1, max: 6 });
 
     this.rolls.push(die1);
     this.rolls.push(die2);
@@ -24,16 +28,31 @@ class Dice {
     return moves.slice(0, 2);
   }
 
+  clearDice() {
+    this.rolls = [];
+  }
+
+  addRoll(roll) {
+    this.rolls.push(roll);
+  }
+
   useRoll(roll) {
-    if (this.rollLegal(roll)) {
+    if (!this.rollLegal(roll)) {
       throw Error("roll not available");
     }
 
-    this.rolls.splice(rollIndex, 1);
+    this.rolls.splice(this.rolls.indexOf(roll), 1);
   }
 
   rollLegal(roll) {
     return !(this.rolls.indexOf(roll) == -1);
+  }
+
+  renderInConsole() {
+    if (this.rolls.length === 0) {
+      return "No moves left this turn";
+    }
+    return `Moves left ${this.rolls.map((roll) => roll).join(", ")}`;
   }
 }
 
