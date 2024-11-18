@@ -1,10 +1,8 @@
-import Board from "./BoardMembers/Board.js";
-import util from "util";
+import GameController from "./GameController.js";
 
 function play() {
-  let board = new Board();
-  //console.log(util.inspect(board, { depth: null })); // Fully expands nested objects
-  console.log(board.renderInConsole());
+  let game = new GameController();
+  game.playGame();
 }
 
 export default play;

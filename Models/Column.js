@@ -9,6 +9,10 @@ class Column {
     return this.pieces.length === 0;
   }
 
+  canHit() {
+    return this.pieces.length === 1;
+  }
+
   getColor() {
     if (this.empty()) {
       return "neutral";
