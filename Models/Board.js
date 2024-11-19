@@ -1,6 +1,5 @@
-import Jail from "./Jail.js";
 import Column from "./Column.js";
-import Piece from "./Piece.js";
+import Jail from "./Jail.js";
 import Home from "./Home.js";
 import Dice from "./Dice.js";
 import Player from "./Player.js";
@@ -94,6 +93,9 @@ class Board {
   }
 
   changeTurn(color) {
+    if (color != "black" && color != "white") {
+      throw Error("invalid initial turn color");
+    }
     this.turn = color;
   }
 

@@ -7,7 +7,7 @@ class GameController {
     this.UserInput = new UserInput();
   }
 
-  playGame() {
+  async playGame() {
     //fake couple moves for testing manually
     /*    this.board.turn = "black";
     this.board.blackPlayer.dice.rolls.push(2);
@@ -37,16 +37,20 @@ class GameController {
     let whiteRoll = 0;
     do {
       let userResponse;
-      userResponse = this.UserInput.getInput(
-        "Black, type anything to roll the die",
+      userResponse = await this.UserInput.getInput(
+        "Black, type anything to roll the die\n",
       );
-      console.log(`You typed ${userResponse}, weird choice`);
       blackRoll = board.blackPlayer.dice.rollForIniative();
-      userResponse = this.UserInput.getInput(
-        "Now white, type anything to roll the die",
+      console.log(
+        `You typed ${userResponse}, weird choice. You rolled ${blackRoll}`,
       );
-      console.log(`You typed ${userResponse}, also weird choice`);
+      userResponse = await this.UserInput.getInput(
+        "Now white, type anything to roll the die\n",
+      );
       whiteRoll = board.whitePlayer.dice.rollForIniative();
+      console.log(
+        `You typed ${userResponse}, also weird choice. You rolled ${whiteRoll}`,
+      );
       console.log(`Black rolled ${blackRoll}, white rolled ${whiteRoll}`);
       if (whiteRoll > blackRoll) {
         board.whitePlayer.dice.addRoll(blackRoll);

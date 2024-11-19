@@ -1,20 +1,20 @@
 import Readline from "readline";
 
 class UserInput {
-  constructor() {
-    this.readLine = Readline.createInterface({
+  constructor() {}
+
+  async getInput(question) {
+    let readLine = Readline.createInterface({
       input: process.stdin,
       output: process.stdout,
     });
-  }
 
-  getInput(question) {
-    let userResponse;
-    this.readLine.question(question, (input) => {
-      userResponse = input;
-      this.readLine.close();
+    return new Promise((resolve) => {
+      readLine.question(question, (input) => {
+        resolve(input);
+        readLine.close();
+      });
     });
-    return userResponse;
   }
 }
 
