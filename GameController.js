@@ -38,33 +38,24 @@ class GameController {
     let currentPlayer;
     do {
       let userResponse;
-      userResponse = await this.UserInput.getInput(
-        "Black, type anything to roll the die\n",
-      );
+      await this.UserInput.getInput("Black, hit enter to roll the die\n");
       blackRoll = board.blackPlayer.dice.rollForIniative();
-      console.log(
-        `You typed ${userResponse}, weird choice. You rolled ${blackRoll}`,
-      );
-      userResponse = await this.UserInput.getInput(
-        "Now white, type anything to roll the die\n",
-      );
+      console.log(`You rolled ${blackRoll}\n`);
+      await this.UserInput.getInput("Now white, hit enter to roll the die\n");
       whiteRoll = board.whitePlayer.dice.rollForIniative();
-      console.log(
-        `You typed ${userResponse}, also weird choice. You rolled ${whiteRoll}`,
-      );
-      console.log(`Black rolled ${blackRoll}, white rolled ${whiteRoll}`);
+      console.log(`You rolled ${whiteRoll}\n`);
       if (whiteRoll > blackRoll) {
         board.whitePlayer.dice.addRoll(blackRoll);
         board.blackPlayer.dice.clearDice();
         board.turn = "white";
         currentPlayer = board.whitePlayer;
-        console.log("White goes first!");
+        console.log("White goes first!\n");
       } else if (whiteRoll < blackRoll) {
         board.blackPlayer.dice.addRoll(whiteRoll);
         board.whitePlayer.dice.clearDice();
         board.turn = "black";
         currentPlayer = board.blackPlayer;
-        console.log("Black goes first!");
+        console.log("Black goes first!\n");
       }
     } while (blackRoll == whiteRoll);
     console.log(this.board.renderInConsole());
@@ -75,16 +66,21 @@ class GameController {
           console.log(this.board.renderInConsole());
           let move = await this.UserInput.getInput(
             `${player.color}, what's your next move?\n 
-Format it like this: "3,4" (from column, to column)\n
 Moves left: ${player.dice.rolls}\n`,
           );
-          let fromCol = parseInt(move[0]) - 1;
-          let toCol = parseInt(move[2]) - 1;
-          if (!player.dice.rollLegal(Math.abs(fromCol - toCol))) {
-            throw Error("Illegal move");
-          } else {
-            board.movePiece(fromCol, toCol);
-            console.log(`Piece moved from ${fromCol} to ${toCol}`);
+          try {
+            const cols = move.split(",").map(Number);
+            let fromCol = cols[0] - 1;
+            let toCol = cols[1] - 1;
+            if (!player.dice.rollLegal(Math.abs(fromCol - toCol))) {
+              throw Error(); //any error from this block is going to be thrown as illegal move
+            } else {
+              board.movePiece(fromCol, toCol);
+              console.log(`Piece moved from ${fromCol + 1} to ${toCol + 1}\n`);
+            }
+          } catch (error) {
+            throw Error(`Illegal move. ${error.message}\n
+Format your move like this, "3,4" (without the quotes), to move from column 3 to column 4\n`);
           }
         } catch (error) {
           console.log(error.message);
@@ -97,7 +93,7 @@ Moves left: ${player.dice.rolls}\n`,
     const rollDice = async (player) => {
       await this.UserInput.getInput("Hit enter to roll the dice\n");
       let roll = player.dice.roll();
-      console.log(`You rolled ${roll}`);
+      console.log(`You rolled ${roll}\n`);
     };
 
     const nextTurn = () => {
@@ -108,7 +104,7 @@ Moves left: ${player.dice.rolls}\n`,
         board.turn = "black";
         currentPlayer = board.blackPlayer;
       }
-      console.log(`${board.turn}'s turn`);
+      console.log(`${board.turn}'s turn\n`);
     };
     //while the game hasn't been won, do the following:
     //as long as there are rolls left, get the next move from the player whose turn it is
