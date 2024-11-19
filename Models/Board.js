@@ -74,8 +74,9 @@ class Board {
     }
 
     let board = `
+                                                                       ${this.turn}'s turn
+
     ${this.blackPlayer.home.renderInConsole()} 
-                                                                      ${this.blackPlayer.dice.renderInConsole()}
 
     ${topRow}
 
@@ -84,7 +85,6 @@ class Board {
                                                                        ${this.whitePlayer.jail.renderInConsole()}
 
     ${bottomRow}
-                                                                      ${this.whitePlayer.dice.renderInConsole()}
 
     ${this.whitePlayer.home.renderInConsole()} 
     `;

@@ -25,7 +25,7 @@ class Dice {
       this.rolls.push(die2);
     }
 
-    return moves.slice(0, 2);
+    return this.rolls.slice(0, 2);
   }
 
   clearDice() {
@@ -46,6 +46,10 @@ class Dice {
 
   rollLegal(roll) {
     return !(this.rolls.indexOf(roll) == -1);
+  }
+
+  rollsRemain() {
+    return this.rolls.length > 0;
   }
 
   renderInConsole() {

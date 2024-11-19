@@ -6,8 +6,9 @@ import Dice from "./Dice.js";
 
 class Player {
   constructor(color, piecesPerTeam) {
+    this.color = color;
     this.home = new Home(color, piecesPerTeam);
-    this.jail = new Jail("black");
+    this.jail = new Jail(color);
     this.dice = new Dice();
   }
 }
