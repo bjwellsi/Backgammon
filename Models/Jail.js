@@ -22,6 +22,14 @@ class Jail {
     return !this.pieces.length > 0;
   }
 
+  getFirstPiece() {
+    if (this.empty()) {
+      throw Error("jail is empty");
+    } else {
+      return this.pieces[];
+    }
+  }
+  
   renderInConsole() {
     return this.pieces.map((piece) => piece.renderInConsole()).join("");
   }

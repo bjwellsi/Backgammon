@@ -43,6 +43,14 @@ class Column {
     }
   }
 
+  getFirstPiece() {
+    if (this.empty()) {
+      throw Error("column is empty");
+    } else {
+      return this.pieces[];
+    }
+  }
+
   renderInConsole() {
     let col = this.pieces.map((piece) => piece.renderInConsole()).join("");
     while (col.length < 7) {

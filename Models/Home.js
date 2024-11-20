@@ -23,6 +23,14 @@ class Home {
     return this.pieces.pop();
   }
 
+  getFirstPiece() {
+    if (this.empty()) {
+      throw Error("home is empty");
+    } else {
+      return this.pieces[];
+    }
+  }
+
   homeFull() {
     return this.pieces.length == this.maxPieceCount;
   }
