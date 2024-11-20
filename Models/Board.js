@@ -19,6 +19,7 @@ class Board {
     }
 
     this.populateColumns();
+    this.whitePlayer.jail.addPiece(this.columns[0].removePiece());
   }
 
   populateColumns() {
@@ -109,12 +110,102 @@ class Board {
     }
   }
 
-  jailBreak() {
-    throw Error("not implemented");
+  jailBreak(columnNum, player) {
+    let toCol = this.columns[columnNum];
+
+    let dice = this.whitePlayer.dice;
+    let selfJail = this.whitePlayer.jail;
+    let otherJail = this.blackPlayer.jail;
+    let selfHome = this.whitePlayer.home;
+
+    if (this.turn == "black") {
+      dice = this.blackPlayer.dice;
+      selfJail = this.blackPlayer.jail;
+      otherJail = this.whitePlayer.jail;
+      selfHome = this.blackPlayer.home;
+    }
+
+    //first get the base nums for the enemy player
+    let enemyStartColumn = 23;
+    if ((player.color = "white")) {
+      enemyStartColumn = 0;
+    }
+
+    let inmate = selfJail.pieces[0];
+
+    //check if there's a space at the given column
+    //if so, remove the piece from jail and put it in the column
+    if (!this.spaceAvailable(columnNum, inmate)) {
+      throw Error("Can't move to a column full of the other team");
+    } else {
+      if (!toCol.empty() && toCol.getColor() != inmate.color) {
+        //hit
+        otherJail.addPiece(toCol.removePiece());
+      }
+      //move
+      //this is where you could log the move if you wanted an undo feature
+      toCol.addPiece(selfJail.removePiece());
+      dice.useRoll(Math.abs(columnNum - enemyStartColumn) + 1);
+    }
   }
 
-  goHome() {
-    throw Error("not implemented");
+  goHome(columnNum, player) {
+    //basically just check if the player has any pieces outside their base
+    //if they don't and there's a piece at that col, move the piece home
+    let dice = this.whitePlayer.dice;
+    let selfJail = this.whitePlayer.jail;
+    let selfHome = this.whitePlayer.home;
+
+    if (this.turn == "black") {
+      dice = this.blackPlayer.dice;
+      selfHome = this.blackPlayer.home;
+      otherJail = this.whitePlayer.jail;
+    }
+    //first get the base nums for the given player
+    let baseStartColumn = 0;
+    if ((player.color = "white")) {
+      baseStartColumn = 23;
+    }
+    if (Math.abs(columnNum - baseStartColumn) > 6) {
+      throw new Error("Can only move home from your first six columns");
+    } else {
+      //make sure there's a piece there
+      if (this.columns[from].length === 0) {
+        throw Error("can't move piece from empty column");
+      }
+
+      //make sure the piece is the right color
+      let piece = this.columns[from].removePiece();
+      if (piece.color != this.turn) {
+        putPieceBack("Can't move the other team's piece");
+      }
+
+      //can't move with a piece in jail
+      if (!selfJail.empty()) {
+        putPieceBack("Can't move with a piece in jail");
+      }
+
+      const distance = Math.abs(columnNum - baseStartColumn);
+      //make sure the distance is available
+      if (!dice.rollLegal(distance)) {
+        putPieceBack("Can't move that distance with current roll");
+      }
+      dice.useRoll(distance);
+      selfHome.addPiece(piece);
+    }
+  }
+
+  spaceAvailable(columnNum, piece) {
+    //is the column currently full of the other team?
+    let col = this.columns[columnNum];
+    if (!col.empty() && col.getColor() != piece.color) {
+      //can we hit?
+      if (!col.canHit()) {
+        //no we can't
+        return false;
+      }
+    }
+    return true;
   }
 
   movePiece(from, to) {
@@ -166,22 +257,18 @@ class Board {
       putPieceBack("Can't move that distance with current roll");
     }
 
-    //is the column currently full of the other team?
-    if (!toCol.empty() && toCol.getColor() != piece.color) {
-      //can we hit?
-      if (toCol.canHit()) {
-        //yes we can, hit
+    if (!this.spaceAvailable(to, piece)) {
+      putPieceBack("Can't move to a column full of the other team");
+    } else {
+      if (!toCol.empty() && toCol.getColor() != piece.color) {
+        //hit
         otherJail.addPiece(toCol.removePiece());
-      } else {
-        //no we can't
-        putPieceBack("Can't move to a column full of the other team");
       }
+      //move
+      //this is where you could log the move if you wanted an undo feature
+      toCol.addPiece(piece);
+      dice.useRoll(distance);
     }
-
-    //move the piece
-    //this is where you could log the move if you wanted an undo feature
-    toCol.addPiece(piece);
-    dice.useRoll(distance);
   }
 }
 
