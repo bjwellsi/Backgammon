@@ -1,16 +1,16 @@
 import Board from "./Models/Board.js";
-import UserInput from "./UserInput.js";
+import UserInteraction from "./UserInteraction.js";
 
 class GameController {
   constructor() {
     this.board = new Board();
-    this.UserInput = new UserInput();
+    this.userInteraction = new UserInteraction();
   }
 
   async rollDice() {
-    await this.UserInput.getInput("Hit enter to roll the dice\n");
+    await this.userInteraction.getInput("Hit enter to roll the dice\n");
     let roll = this.board.currentTeam().dice.roll();
-    console.log(`You rolled ${roll}\n`);
+    userInteraction.createOutput(`You rolled ${roll}\n`);
   }
 
   async runTurn() {
@@ -18,11 +18,11 @@ class GameController {
     let team = this.board.currentTeam();
     while (team.dice.rollsRemain()) {
       try {
-        console.log(board.renderInConsole());
+        userInteraction.createOutput(board.renderInConsole());
         if (!team.jail.empty()) {
           //they're in jail
-          console.log("You're in jail!\n");
-          console.log(`${team.dice.renderInConsole()}\n`);
+          userInteraction.createOutput("You're in jail!\n");
+          userInteraction.createOutput(`${team.dice.renderInConsole()}\n`);
           //check their dice against the board
           let inmate = team.jail.getFirstPiece();
           let hasOptions = false;
@@ -33,23 +33,25 @@ class GameController {
           }
           if (!hasOptions) {
             //can't get out of jail this turn
-            console.log("You can't get out this turn!\n");
+            userInteraction.createOutput("You can't get out this turn!\n");
             board.changeTurn();
           } else {
             //tell them to make a move and how to format that move
-            let move = await this.UserInput.getInput(
+            let move = await this.userInteraction.getInput(
               `Where would you like to move? (Just type the column number)\n`,
             );
             try {
               let column = parseInt(move);
               board.jailBreak(column - 1);
-              console.log(`Moved from jail to column ${column}\n`);
+              userInteraction.createOutput(
+                `Moved from jail to column ${column}\n`,
+              );
             } catch (error) {
               throw Error(`Illegal move. ${error.message}\n`);
             }
           }
         } else {
-          let move = await this.UserInput.getInput(
+          let move = await this.userInteraction.getInput(
             `${team.color}, what's your next move?\n 
 ${team.dice.renderInConsole()}\n`,
           );
@@ -70,10 +72,12 @@ ${team.dice.renderInConsole()}\n`,
                 //TODO
                 //TODO
                 board.goHome(fromCol);
-                console.log(`Piece moved home from ${fromCol + 1}\n`);
+                userInteraction.createOutput(
+                  `Piece moved home from ${fromCol + 1}\n`,
+                );
               } else {
                 board.movePiece(fromCol, toCol);
-                console.log(
+                userInteraction.createOutput(
                   `Piece moved from ${fromCol + 1} to ${toCol + 1}\n`,
                 );
               }
@@ -85,11 +89,11 @@ If you want to move a piece home, use 0 as your to column (3,0 for ex.)\n`);
           }
         }
       } catch (error) {
-        console.log(error.message);
+        userInteraction.createOutput(error.message);
       }
     }
     board.changeTurn();
-    console.log(board.renderInConsole());
+    userInteraction.createOutput(board.renderInConsole());
   }
 
   async runFirstTurn() {
@@ -101,22 +105,24 @@ If you want to move a piece home, use 0 as your to column (3,0 for ex.)\n`);
     let blackRoll = 0;
     let whiteRoll = 0;
     do {
-      await this.UserInput.getInput("Black, hit enter to roll the die\n");
+      await this.userInteraction.getInput("Black, hit enter to roll the die\n");
       blackRoll = board.teams[0].dice.rollForIniative();
-      console.log(`You rolled ${blackRoll}\n`);
-      await this.UserInput.getInput("Now white, hit enter to roll the die\n");
+      userInteraction.createOutput(`You rolled ${blackRoll}\n`);
+      await this.userInteraction.getInput(
+        "Now white, hit enter to roll the die\n",
+      );
       whiteRoll = board.teams[1].dice.rollForIniative();
-      console.log(`You rolled ${whiteRoll}\n`);
+      userInteraction.createOutput(`You rolled ${whiteRoll}\n`);
       if (whiteRoll > blackRoll) {
         board.teams[1].dice.addRoll(blackRoll);
         board.teams[0].dice.clearRolls();
         board.setStartingTurn("white", "black");
-        console.log("White goes first!\n");
+        userInteraction.createOutput("White goes first!\n");
       } else if (whiteRoll < blackRoll) {
         board.teams[0].dice.addRoll(whiteRoll);
         board.teams[1].dice.clearRolls();
         board.setStartingTurn("black", "white");
-        console.log("Black goes first!\n");
+        userInteraction.createOutput("Black goes first!\n");
       }
     } while (blackRoll == whiteRoll);
 

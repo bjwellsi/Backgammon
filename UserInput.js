@@ -16,6 +16,10 @@ class UserInput {
       });
     });
   }
+
+  createOutput(message) {
+    console.log(message);
+  }
 }
 
 export default UserInput;
