@@ -88,8 +88,8 @@ If you want to move a piece home, use 0 as your to column (3,0 for ex.)\n`);
         console.log(error.message);
       }
     }
-    console.log(board.renderInConsole());
     board.changeTurn();
+    console.log(board.renderInConsole());
   }
 
   async runFirstTurn() {
@@ -119,7 +119,6 @@ If you want to move a piece home, use 0 as your to column (3,0 for ex.)\n`);
         console.log("Black goes first!\n");
       }
     } while (blackRoll == whiteRoll);
-    console.log(board.renderInConsole());
 
     await this.runTurn(); //gotta do the first turn before starting the loop so you can check win status at the beginning of the loop
   }

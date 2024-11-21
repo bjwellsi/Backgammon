@@ -100,9 +100,9 @@ class Board {
 
   setStartingTurn(color, opponentColor) {
     //search the team array for the color, and if it's not present throw err
-    let startingTeam = this.teams.findIndex((team) => (team.color = color));
+    let startingTeam = this.teams.findIndex((team) => team.color == color);
     let startingOpponent = this.teams.findIndex(
-      (team) => (team.color = opponentColor),
+      (team) => team.color == opponentColor,
     );
     if (startingTeam == -1 || startingOpponent == -1) {
       throw Error("Invalid team selections\n");
@@ -148,8 +148,8 @@ class Board {
     } else {
       //move the piece, hit if there's a piece moved
       let hitPiece = toColumn.addPiece(fromColumn.removePiece());
-      if (hitPiece != null) {
-        this.currentOpponent.jail.addPiece(hitPiece);
+      if (hitPiece != undefined) {
+        this.currentOpponent().jail.addPiece(hitPiece);
       }
     }
   }
@@ -165,18 +165,18 @@ class Board {
     }
 
     //check if the colummn they're moving to is in the enemy base
-    if (!currentOpp.isInStartBase(columnNum)) {
+    if (!currentOpp.isInHomeBase(columnNum)) {
       throw Error("Can't escape jail except into enemy base\n");
     }
 
     //check if they can move that far with the current rolls
     let rollDistance = currentOpp.homeBaseIndex(columnNum) + 1;
-    if (currentTeam.dice.rollLegal(rollDistance)) {
+    if (!currentTeam.dice.rollLegal(rollDistance)) {
       throw Error("Can't move that distance with current roll\n");
     }
 
-    transferPiece(currentTeam.jail, this.columns[columnNum]);
-    currentTeam.dice.userRoll(rollDistance);
+    this.transferPiece(currentTeam.jail, this.columns[columnNum]);
+    currentTeam.dice.useRoll(rollDistance);
   }
 
   goHome(columnNum) {
@@ -185,16 +185,16 @@ class Board {
     //if they don't and there's a piece at that col, move the piece home
     let currentTeam = this.currentTeam();
 
-    if (!currentTeam.isInStartBase(columnNum)) {
+    if (!currentTeam.isInHomeBase(columnNum)) {
       throw new Error("Can only move home from your start base\n");
     }
     //make sure there's a piece there
-    if (this.columns[from].empty()) {
+    if (this.columns[columnNum].empty()) {
       throw Error("Can't move a piece from empty column\n");
     }
 
     //make sure the piece is the right color
-    let piece = this.columns[from].getFirstPiece();
+    let piece = this.columns[columnNum].getFirstPiece();
     if (piece.color != currentTeam.color) {
       throw Error("Can't move the other team's piece\n");
     }
@@ -209,23 +209,24 @@ class Board {
     if (!currentTeam.dice.rollLegal(distance)) {
       throw Error("Can't move that distance with current roll\n");
     }
-    currentTeam.home.addPiece(piece);
+
+    this.transferPiece(currentTeam.jail, this.columns[columnNum]);
     currentTeam.dice.useRoll(distance);
   }
 
-  movePiece(fromColumn, toColumn) {
+  movePiece(fromIndex, toIndex) {
     //going to assume you're calling this as the currentTeam
 
     let currentTeam = this.currentTeam();
 
     //make sure there's a piece there
-    if (this.columns[from].empty()) {
+    if (this.columns[fromIndex].empty()) {
       throw Error("Can't move a piece from empty column\n");
     }
-    let piece = this.columns[fromColumn].getFirstPiece();
+    let piece = this.columns[fromIndex].getFirstPiece();
 
     //make sure the piece is the right color
-    if (piece.color != currentTeam.color()) {
+    if (piece.color != currentTeam.color) {
       throw Error("Can't move the other team's piece\n");
     }
 
@@ -235,18 +236,18 @@ class Board {
     }
 
     //make sure it's moving the right way
-    if (currentTeam.directionMultiplier * (toColumn - fromColumn) < 0) {
+    if (currentTeam.directionMultiplier * (toIndex - fromIndex) < 0) {
       throw Error("Can't move backward\n");
     }
 
     //make sure the distance is available
-    const distance = Math.abs(fromColumn - toColumn);
+    const distance = Math.abs(fromIndex - toIndex);
     if (!currentTeam.dice.rollLegal(distance)) {
       throw Error("Can't move that distance with current rolls\n");
     }
 
-    transferPiece(this.columns[fromColumn], this.columns[toColumn]);
-    currentTeam.dice.userRoll(distance);
+    this.transferPiece(this.columns[fromIndex], this.columns[toIndex]);
+    currentTeam.dice.useRoll(distance);
   }
 }
 
