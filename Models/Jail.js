@@ -1,37 +1,30 @@
 import Piece from "./Piece.js";
+import Column from "./Column.js";
 
-class Jail {
+class Jail extends Column {
   constructor(color) {
-    this.pieces = [];
+    super();
     this.color = color;
   }
 
+  getColor() {
+    return this.color;
+  }
+
   addPiece(piece) {
-    if (piece.color == this.color) {
+    if (piece.color == this.getColor()) {
       this.pieces.push(piece);
     } else {
-      throw Error("wrong jail");
+      throw Error("wrong jail\n");
     }
   }
 
-  removePiece() {
-    return this.pieces.pop();
-  }
-
-  empty() {
-    return !this.pieces.length > 0;
-  }
-
-  getFirstPiece() {
-    if (this.empty()) {
-      throw Error("jail is empty");
+  approvedForMove(piece) {
+    if (piece.color == this.getColor()) {
+      return true;
     } else {
-      return this.pieces[];
+      return false;
     }
-  }
-  
-  renderInConsole() {
-    return this.pieces.map((piece) => piece.renderInConsole()).join("");
   }
 }
 

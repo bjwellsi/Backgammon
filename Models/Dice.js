@@ -7,7 +7,7 @@ class Dice {
   }
 
   rollForIniative() {
-    this.clearDice();
+    this.clearRolls();
     let die = this.chance.integer({ min: 1, max: 6 });
     this.rolls.push(die);
     return die;
@@ -28,7 +28,7 @@ class Dice {
     return this.rolls.slice(0, 2);
   }
 
-  clearDice() {
+  clearRolls() {
     this.rolls = [];
   }
 

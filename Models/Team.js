@@ -21,8 +21,30 @@ class Team {
     this.homeBaseSize = homeBaseSize;
   }
 
-  isInStartBase(columnIndex) {
-    return directionMultiplier * (homeBaseStart - columnIndex) < homeBaseSize;
+  homeBaseIndex(columnIndex) {
+    //returns 0 if the index is out of bounds of the home base
+    let index = (this.homeBaseStart - columnIndex) * this.directionMultiplier;
+    if (index < this.homeBaseSize) {
+      return index;
+    } else {
+      return -1;
+    }
+  }
+
+  homeBaseIndexToColumnNum(homeBaseIndex) {
+    if (homeBaseIndex >= this.homeBaseSize) {
+      return 0;
+    } else {
+      return homeBaseIndex * this.directionMultiplier;
+    }
+  }
+
+  isInHomeBase(columnIndex) {
+    return this.homeBaseIndex(columnIndex) > 0;
+  }
+
+  hasWon() {
+    return this.home.homeFull();
   }
 }
 

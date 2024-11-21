@@ -12,8 +12,8 @@ class Board {
     this.teams.push(new Team("black", this.piecesPerTeam, -1, 0, 6));
     this.teams.push(new Team("white", this.piecesPerTeam, 1, 23, 6));
 
-    this.currentTeam = null;
-    this.currentOpponent = null;
+    this.currentTeamIndex = null;
+    this.currentOpponentIndex = null;
 
     this.columns = [];
     for (let i = 0; i < 24; i++) {
@@ -21,6 +21,10 @@ class Board {
     }
 
     this.populateColumns();
+  }
+
+  winner() {
+    return this.teams.find((team) => team.hasWon());
   }
 
   populateColumns() {
@@ -76,7 +80,7 @@ class Board {
     }
 
     let board = `
-                                                                       ${this.currentTeam().color}'s.currentTeam().color
+                                                                       ${this.currentTeam().color}'s turn
 
     ${this.teams[0].home.renderInConsole()} 
 
@@ -96,43 +100,58 @@ class Board {
 
   setStartingTurn(color, opponentColor) {
     //search the team array for the color, and if it's not present throw err
-    let startingTeam = teams.findIndex((team) => (team.color = color));
-    let startingOpponent = teams.findIndex(
+    let startingTeam = this.teams.findIndex((team) => (team.color = color));
+    let startingOpponent = this.teams.findIndex(
       (team) => (team.color = opponentColor),
     );
     if (startingTeam == -1 || startingOpponent == -1) {
       throw Error("Invalid team selections\n");
     }
-    this.currentTeam = startingTeam;
-    this.currentOpponent = startingOpponent;
+    this.currentTeamIndex = startingTeam;
+    this.currentOpponentIndex = startingOpponent;
   }
 
   changeTurn() {
     //just loop through the team array.
     //this is (needlessly rn) extensibile in that it allows more teams in the future, potentially allowing a way to check for active too
-    if (this.currentTeam == null) {
-      throw Error("No starting team set!");
-    } else if (this.currentTeam == this.teams.length) {
-      this.currentTeam = 0;
+    if (this.currentTeamIndex == null) {
+      throw Error("No starting team set!\n");
     } else {
-      this.currentTeam++;
+      this.currentTeam().dice.clearRolls();
+      if (this.currentTeamIndex == this.teams.length - 1) {
+        this.currentTeamIndex = 0;
+      } else {
+        this.currentTeamIndex++;
+      }
     }
     //just use the same logic for the enemy too. It's going to just trail the currentTeam basically
-    if (this.currentOpponent == null) {
-      throw Error("No starting opponent set!");
-    } else if (this.currentOpponent == this.teams.length) {
-      this.currentOpponent = 0;
+    if (this.currentOpponentIndex == null) {
+      throw Error("No starting opponent set\n]");
+    } else if (this.currentOpponentIndex == this.teams.length - 1) {
+      this.currentOpponentIndex = 0;
     } else {
-      this.currentOpponent++;
+      this.currentOpponentIndex++;
     }
   }
 
   currentTeam() {
-    return this.teams[currentTeam];
+    return this.teams[this.currentTeamIndex];
   }
 
   currentOpponent() {
-    return this.teams[currentOpponent];
+    return this.teams[this.currentOpponentIndex];
+  }
+
+  transferPiece(fromColumn, toColumn) {
+    if (!toColumn.approvedForMove(fromColumn.getFirstPiece())) {
+      throw new Error("Can't move here\n");
+    } else {
+      //move the piece, hit if there's a piece moved
+      let hitPiece = toColumn.addPiece(fromColumn.removePiece());
+      if (hitPiece != null) {
+        this.currentOpponent.jail.addPiece(hitPiece);
+      }
+    }
   }
 
   jailBreak(columnNum) {
@@ -140,36 +159,24 @@ class Board {
     let currentTeam = this.currentTeam();
     let currentOpp = this.currentOpponent();
 
-    let inmate = currentTeam.jail.getFirstPiece();
-
     //check if there's even a piece in jail
     if (currentTeam.jail.empty()) {
       throw Error("Jail is already empty\n");
     }
 
-    //check if the colummn they're moving to is in their home
+    //check if the colummn they're moving to is in the enemy base
     if (!currentOpp.isInStartBase(columnNum)) {
       throw Error("Can't escape jail except into enemy base\n");
     }
 
-    //check if there's a space at the given column
-    //if so, remove the piece from jail and put it in the column
-    let toColStatus = this.spaceAvailable(columnNum);
-
-    if (toColStatus == 0) {
-      throw Error("Can't move to a column full of the other team\n");
-    } else {
-      if (toColStatus == -1) {
-        //hit
-        otherJail.addPiece(toCol.removePiece());
-      }
-      //move
-      //this is where you could log the move if you wanted an undo feature
-      toCol.addPiece(selfJail.removePiece());
-      currentPlayer.dice.useRoll(
-        Math.abs(columnNum - currentOpp.homeBaseStart) + 1,
-      );
+    //check if they can move that far with the current rolls
+    let rollDistance = currentOpp.homeBaseIndex(columnNum) + 1;
+    if (currentTeam.dice.rollLegal(rollDistance)) {
+      throw Error("Can't move that distance with current roll\n");
     }
+
+    transferPiece(currentTeam.jail, this.columns[columnNum]);
+    currentTeam.dice.userRoll(rollDistance);
   }
 
   goHome(columnNum) {
@@ -180,69 +187,42 @@ class Board {
 
     if (!currentTeam.isInStartBase(columnNum)) {
       throw new Error("Can only move home from your start base\n");
-    } else {
-      //make sure there's a piece there
-      if (this.columns[from].length === 0) {
-        throw Error("Can't move a piece from empty column\n");
-      }
-
-      //make sure the piece is the right color
-      let piece = this.columns[from].getFirstPiece();
-      if (piece.color != currentTeam.color) {
-        throw Error("Can't move the other team's piece\n");
-      }
-
-      //can't move with a piece in jail
-      if (!currentTeam.jail.empty()) {
-        throw Error("Can't move with a piece in jail\n");
-      }
-
-      const distance = Math.abs(columnNum - baseStartColumn);
-      //make sure the distance is available
-      if (!currentTeam.dice.rollLegal(distance)) {
-        throw Error("Can't move that distance with current roll\n");
-      }
-      currentTeam.dice.useRoll(distance);
-      currentTeam.home.addPiece(piece);
     }
+    //make sure there's a piece there
+    if (this.columns[from].empty()) {
+      throw Error("Can't move a piece from empty column\n");
+    }
+
+    //make sure the piece is the right color
+    let piece = this.columns[from].getFirstPiece();
+    if (piece.color != currentTeam.color) {
+      throw Error("Can't move the other team's piece\n");
+    }
+
+    //can't move with a piece in jail
+    if (!currentTeam.jail.empty()) {
+      throw Error("Can't move with a piece in jail\n");
+    }
+
+    const distance = currentTeam.homeBaseIndex(columnNum);
+    //make sure the distance is available
+    if (!currentTeam.dice.rollLegal(distance)) {
+      throw Error("Can't move that distance with current roll\n");
+    }
+    currentTeam.home.addPiece(piece);
+    currentTeam.dice.useRoll(distance);
   }
 
-  spaceAvailable(columnNum) {
+  movePiece(fromColumn, toColumn) {
     //going to assume you're calling this as the currentTeam
-    //0 is no
-    //1 is yes
-    //-1 is it has the other team, but you can hit
-    //is the column currently full of the other team?
-    let col = this.columns[columnNum];
-    if (!col.empty() && col.getColor() != currentTeam().color) {
-      //can we hit?
-      if (!col.canHit()) {
-        //no we can't
-        return 0;
-      } else {
-        return -1;
-      }
-    } else {
-      //col is empty or has your team in it, therefore safe
-      return 1;
-    }
-  }
-
-  movePiece(fromIndex, toIndex) {
-    //going to assume you're calling this as the currentTeam
-    let fromCol = this.columns[from];
-    let toCol = this.columns[toIndex];
 
     let currentTeam = this.currentTeam();
-    let currentOpp = this.currentOpponent();
 
     //make sure there's a piece there
-    let piece;
-    try {
-      piece = this.columns[fromIndex].getFirstPiece();
-    } catch (err) {
-      throw Error("can't move piece from empty column\n");
+    if (this.columns[from].empty()) {
+      throw Error("Can't move a piece from empty column\n");
     }
+    let piece = this.columns[fromColumn].getFirstPiece();
 
     //make sure the piece is the right color
     if (piece.color != currentTeam.color()) {
@@ -255,32 +235,18 @@ class Board {
     }
 
     //make sure it's moving the right way
-    if (currentTeam.directionMultiplier * (toCol - fromCol) < 0) {
+    if (currentTeam.directionMultiplier * (toColumn - fromColumn) < 0) {
       throw Error("Can't move backward\n");
     }
 
-    const distance = Math.abs(fromIndex - toIndex);
     //make sure the distance is available
+    const distance = Math.abs(fromColumn - toColumn);
     if (!currentTeam.dice.rollLegal(distance)) {
       throw Error("Can't move that distance with current rolls\n");
     }
 
-    //check if there's a space at the given column
-    //if so, remove the piece from jail and put it in the column
-    let toColStatus = this.spaceAvailable(columnNum);
-
-    if (toColStatus == 0) {
-      throw Error("Can't move to a column full of the other team\n");
-    } else {
-      if (toColStatus == -1) {
-        //hit
-        currentOpp.jail.addPiece(toCol.removePiece());
-      }
-      //move
-      //this is where you could log the move if you wanted an undo feature
-      toCol.addPiece(fromCol.removePiece());
-      currentTeam.dice.useRoll(distance);
-    }
+    transferPiece(this.columns[fromColumn], this.columns[toColumn]);
+    currentTeam.dice.userRoll(distance);
   }
 }
 

@@ -9,8 +9,16 @@ class Column {
     return this.pieces.length === 0;
   }
 
-  canHit() {
+  canBeHit() {
     return this.pieces.length === 1;
+  }
+
+  approvedForMove(piece) {
+    if (this.getColor() == piece.color || this.empty() || this.canBeHit()) {
+      return true;
+    } else {
+      return false;
+    }
   }
 
   getColor() {
@@ -31,13 +39,13 @@ class Column {
       this.pieces.push(piece);
       return victim;
     } else {
-      throw Error("column can't have multiple piece colors");
+      throw Error("Column can't have multiple piece colors\n");
     }
   }
 
   removePiece() {
     if (this.empty()) {
-      throw Error("column is empty");
+      throw Error("No pieces to remove\n");
     } else {
       return this.pieces.pop();
     }
@@ -45,9 +53,9 @@ class Column {
 
   getFirstPiece() {
     if (this.empty()) {
-      throw Error("column is empty");
+      throw Error("No pieces present\n");
     } else {
-      return this.pieces[];
+      return this.pieces[0];
     }
   }
 

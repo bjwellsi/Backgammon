@@ -1,8 +1,9 @@
 import Piece from "./Piece.js";
+import Column from "./Column.js";
 
-class Home {
+class Home extends Column {
   constructor(color, maxPieceCount) {
-    this.pieces = [];
+    super();
     this.color = color;
     this.maxPieceCount = maxPieceCount;
 
@@ -12,31 +13,27 @@ class Home {
   }
 
   addPiece(piece) {
-    if (piece.color == this.color) {
+    if (piece.color == this.getColor()) {
       this.pieces.push(piece);
     } else {
-      throw Error("wrong home");
+      throw Error("wrong home\n");
     }
   }
 
-  removePiece() {
-    return this.pieces.pop();
+  getColor() {
+    return this.color;
   }
 
-  getFirstPiece() {
-    if (this.empty()) {
-      throw Error("home is empty");
+  approvedForMove(piece) {
+    if (piece.color == this.getColor()) {
+      return true;
     } else {
-      return this.pieces[];
+      return false;
     }
   }
 
   homeFull() {
     return this.pieces.length == this.maxPieceCount;
-  }
-
-  renderInConsole() {
-    return this.pieces.map((piece) => piece.renderInConsole()).join("");
   }
 }
 
