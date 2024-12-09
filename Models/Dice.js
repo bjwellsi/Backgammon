@@ -56,7 +56,7 @@ class Dice {
     if (this.rolls.length === 0) {
       return "No moves left this turn";
     }
-    return `Moves left ${this.rolls.map((roll) => roll).join(", ")}`;
+    return `dice: ${this.rolls.map((roll) => roll).join(", ")}`;
   }
 }
 

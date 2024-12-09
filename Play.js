@@ -1,7 +1,7 @@
-import GameController from "./GameController.js";
+import GameControlFlow from "./GameControlFlow.js";
 
 function play() {
-  let game = new GameController();
+  let game = new GameControlFlow();
   game.playGame();
 }
 

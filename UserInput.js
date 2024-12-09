@@ -3,7 +3,8 @@ import Readline from "readline";
 class UserInput {
   constructor() {}
 
-  async getInput(question) {
+  async getInput(question, priorityLevel) {
+    //todo use priority level
     let readLine = Readline.createInterface({
       input: process.stdin,
       output: process.stdout,
@@ -17,7 +18,8 @@ class UserInput {
     });
   }
 
-  createOutput(message) {
+  createOutput(message, priorityLevel) {
+    //todo use priority level
     console.log(message);
   }
 }
