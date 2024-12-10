@@ -1,5 +1,4 @@
 import Board from "./Models/Board.js";
-import UserInput from "./UserInput.js";
 import ConsoleView from "./ConsoleView.js";
 
 class GameControlFlow {
@@ -10,15 +9,15 @@ class GameControlFlow {
 
   async rollDice() {
     await this.view.requestDiceRoll();
-    this.view.reloadObject(this.board.currentTeam().dice);
+    this.view.reloadObject(this.board.currentTeam.dice);
   }
 
   async runTurn() {
-    while (this.board.currentTeam().dice.rollsRemain()) {
+    while (this.board.currentTeam.dice.rollsRemain()) {
       if (!this.board.hasLegalMovesRemaining()) {
         break;
       }
-      let action = await this.view.getNextMove();
+      let action = await this.view.retrieveNextMove();
       try {
         this.board.processTurnAction(action);
       } catch (error) {
@@ -27,7 +26,7 @@ class GameControlFlow {
       this.view.reloadObject(this.board);
     }
 
-    this.board.currentTeam().dice.clearRolls();
+    this.board.currentTeam.dice.clearRolls();
     this.board.changeTurn();
   }
 
@@ -41,23 +40,23 @@ class GameControlFlow {
     do {
       this.board.setStartingTurn("black", "white");
       await this.view.requestDiceRoll();
-      blackRoll = this.board.currentTeam().dice.rollForIniative();
+      blackRoll = this.board.currentTeam.dice.rollForIniative();
       this.view.reloadObject(this.board);
       this.board.changeTurn();
-      whiteRoll = this.board.currentTeam().dice.rollForIniative();
+      whiteRoll = this.board.currentTeam.dice.rollForIniative();
       this.view.reloadObject(this.board);
       if (whiteRoll > blackRoll) {
-        board.currentTeam().dice.addRoll(blackRoll);
-        board.currentOpponent().dice.clearRolls();
+        this.board.currentTeam.dice.addRoll(blackRoll);
+        this.board.currentOpponent.dice.clearRolls();
       } else if (whiteRoll < blackRoll) {
-        board.changeTurn();
-        board.currentTeam().dice.addRoll(whiteRoll);
-        board.currentOpponent().dice.clearRolls();
+        this.board.changeTurn();
+        this.board.currentTeam.dice.addRoll(whiteRoll);
+        this.board.currentOpponent.dice.clearRolls();
       } else {
         //rolls were equal. Restart the process
-        board.changeTurn();
-        board.currentTeam().dice.clearRolls();
-        board.currentOpponent().dice.clearRolls();
+        this.board.changeTurn();
+        this.board.currentTeam.dice.clearRolls();
+        this.board.currentOpponent.dice.clearRolls();
         //this part isn't necessary but feels cleaner
         blackRoll = 0;
         whiteRoll = 0;
@@ -68,12 +67,12 @@ class GameControlFlow {
 
   async playGame() {
     await this.runFirstTurn();
-    let winner = this.board.winner();
+    let winner = this.board.winner;
 
     while (winner === undefined) {
       await this.rollDice();
       await this.runTurn();
-      winner = this.board.winner(); //check if someone has won
+      winner = this.board.winner; //check if someone has won
     }
 
     await this.view.endGame(winner);

@@ -14,14 +14,14 @@ class Column {
   }
 
   approvedForMove(piece) {
-    if (this.getColor() == piece.color || this.empty() || this.canBeHit()) {
+    if (this.color == piece.color || this.empty() || this.canBeHit()) {
       return true;
     } else {
       return false;
     }
   }
 
-  getColor() {
+  get color() {
     if (this.empty()) {
       return "neutral";
     } else {
@@ -31,7 +31,7 @@ class Column {
 
   addPiece(piece) {
     //returns the piece that was hit or nothing if add was successful
-    if (this.empty() || this.getColor() == piece.color) {
+    if (this.empty() || this.color == piece.color) {
       this.pieces.push(piece);
     } else if (this.pieces.length === 1) {
       //hit
@@ -51,7 +51,7 @@ class Column {
     }
   }
 
-  getFirstPiece() {
+  retrieveFirstPiece() {
     if (this.empty()) {
       throw Error("No pieces present\n");
     } else {

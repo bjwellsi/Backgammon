@@ -30,7 +30,7 @@ class ConsoleView {
     this.consoleOutput(error);
   }
 
-  async getNextMove() {
+  async retrieveNextMove() {
     let turnAction = null;
     let homeRegex = /^\d+,home$/;
     let jailRegex = /^\jail,d+$/;
@@ -75,7 +75,7 @@ class ConsoleView {
   }
 
   async requestDiceRoll() {
-    await consoleInput("Press any key to roll\n");
+    await this.consoleInput("Press any key to roll\n");
   }
 
   async gameOver(winner) {

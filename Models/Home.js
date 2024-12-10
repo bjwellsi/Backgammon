@@ -4,7 +4,7 @@ import Column from "./Column.js";
 class Home extends Column {
   constructor(color, maxPieceCount) {
     super();
-    this.color = color;
+    this._color = color;
     this.maxPieceCount = maxPieceCount;
 
     for (let i = 0; i < maxPieceCount; i++) {
@@ -13,19 +13,19 @@ class Home extends Column {
   }
 
   addPiece(piece) {
-    if (piece.color == this.getColor()) {
+    if (piece.color == this.color) {
       this.pieces.push(piece);
     } else {
       throw Error("wrong home\n");
     }
   }
 
-  getColor() {
-    return this.color;
+  get color() {
+    return this._color;
   }
 
   approvedForMove(piece) {
-    if (piece.color == this.getColor()) {
+    if (piece.color == this.color) {
       return true;
     } else {
       return false;

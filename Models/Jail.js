@@ -4,15 +4,15 @@ import Column from "./Column.js";
 class Jail extends Column {
   constructor(color) {
     super();
-    this.color = color;
+    this._color = color;
   }
 
-  getColor() {
-    return this.color;
+  get color() {
+    return this._color;
   }
 
   addPiece(piece) {
-    if (piece.color == this.getColor()) {
+    if (piece.color == this.color) {
       this.pieces.push(piece);
     } else {
       throw Error("wrong jail\n");
@@ -20,7 +20,7 @@ class Jail extends Column {
   }
 
   approvedForMove(piece) {
-    if (piece.color == this.getColor()) {
+    if (piece.color == this.color) {
       return true;
     } else {
       return false;
