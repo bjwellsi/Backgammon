@@ -325,12 +325,12 @@ class Board {
     let color = team.color;
     if (!team.jail.empty()) {
       //check if any of the enemy base indexes that match the current rolls are legal moves
-      rolls.forEach((roll) => {
+      for (let roll of rolls) {
         let columnIndex = opponent.homeBaseIndexToColumnNum(roll);
         if (this.moveLegal(new TurnAction("jail", columnIndex))) {
           return true;
         }
-      });
+      }
       return false;
     } else {
       //check if there's a player outside the home base
@@ -357,20 +357,17 @@ class Board {
       } else {
         //typical case, there's nobody in jail but there are pieces outside home base
         //have to check each roll against each populated column, see if the column it could move to would be a legal move
-        rolls.forEach((roll) => {
+        for (let roll of rolls) {
           for (let i = 0; i < columns.length; i++) {
             if (columns[i].color == color) {
-              let action = new TurnAction(
-                i,
-                i + roll * team.directionMultiplier,
-              );
+              let moveTo = i + roll * team.directionMulitplier;
+              let action = new TurnAction(i, moveTo);
               if (this.moveLegal(action)) {
                 return true;
               }
             }
           }
-        });
-        //if you make it out of here without once returning true, you've got no legal moves
+        }
         return false;
       }
     }

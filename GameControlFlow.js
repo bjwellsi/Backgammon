@@ -9,11 +9,13 @@ class GameControlFlow {
 
   async rollDice() {
     await this.view.requestDiceRoll();
+    this.board.currentTeam.dice.roll();
     this.view.reloadObject(this.board.currentTeam.dice);
   }
 
   async runTurn() {
     while (this.board.currentTeam.dice.rollsRemain()) {
+      this.view.reloadObject(this.board);
       if (!this.board.hasLegalMovesRemaining()) {
         break;
       }
@@ -23,10 +25,10 @@ class GameControlFlow {
       } catch (error) {
         await this.view.processError(error);
       }
-      this.view.reloadObject(this.board);
     }
 
     this.board.currentTeam.dice.clearRolls();
+    this.view.reloadObject(this.board.currentTeam.dice);
     await this.view.endTurn();
     this.board.changeTurn();
   }
@@ -68,7 +70,6 @@ class GameControlFlow {
         whiteRoll = 0;
       }
     } while (blackRoll == whiteRoll);
-    this.view.reloadObject(this.board);
     await this.runTurn(); //gotta do the first turn before starting the loop so you can check win status at the beginning of the loop
   }
 

@@ -41,10 +41,10 @@ class ConsoleView {
       );
       if (userResponse == "h") {
         this.consoleOutput(
-          "Type a standard move as #,# to indicate the columns you'd like to move from and to\n" +
-            "For example, 6,3 would move a piece from column 6 to column 3, hitting in the process if 3 is occupied by the opponent\n" +
-            "To move home, simply type #,home - EX: 4,home\n" +
-            "If you're in jail, type jail,# - EX: jail,22\n",
+          "Type a standard move as #,# to indicate the columns you'd like to move from and to\n\n" +
+            "For example, 6,3 would move a piece from column 6 to column 3, hitting in the process if 3 is occupied by the opponent\n\n" +
+            "To move home, simply type #,home - EX: 4,home\n\n" +
+            "If you're in jail, type jail,# - EX: jail,22\n\n",
         );
       } else {
         if (homeRegex.test(userResponse)) {
