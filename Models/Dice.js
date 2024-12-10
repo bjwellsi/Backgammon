@@ -36,6 +36,10 @@ class Dice {
     this.rolls.push(roll);
   }
 
+  maxRoll() {
+    return this.rolls.sort((a, b) => a - b)[0];
+  }
+
   useRoll(roll) {
     if (!this.rollLegal(roll)) {
       throw Error("roll not available");

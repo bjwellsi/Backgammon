@@ -22,8 +22,8 @@ class Team {
   }
 
   homeBaseIndex(columnIndex) {
-    //returns 0 if the index is out of bounds of the home base
-    let index = (this.homeBaseStart - columnIndex) * this.directionMultiplier;
+    //returns -1 if the index is out of bounds of the home base
+    let index = Math.abs(this.homeBaseStart - columnIndex);
     if (index < this.homeBaseSize) {
       return index;
     } else {
@@ -33,14 +33,30 @@ class Team {
 
   homeBaseIndexToColumnNum(homeBaseIndex) {
     if (homeBaseIndex >= this.homeBaseSize) {
-      return 0;
+      return -1;
     } else {
-      return homeBaseIndex * this.directionMultiplier;
+      return this.homeBaseStart - homeBaseIndex * this.directionMultiplier;
     }
   }
 
   isInHomeBase(columnIndex) {
     return this.homeBaseIndex(columnIndex) > 0;
+  }
+
+  incrementHomeBaseIndex(homeBaseIndex) {
+    homeBaseIndex++;
+    if (homeBaseSize <= homeBaseIndex) {
+      return -1;
+    }
+    return homeBaseIndex;
+  }
+
+  decrementHomeBaseIndex(homeBaseIndex) {
+    homeBaseIndex--;
+    if (homeBaseIndex < 0) {
+      return -1;
+    }
+    return homeBaseIndex;
   }
 
   hasWon() {

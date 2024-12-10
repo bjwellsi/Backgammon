@@ -157,108 +157,167 @@ class Board {
   }
 
   processTurnAction(action) {
-    //once I build move legal, I could likely just combine all the roll actions into
-    //moveLegal?
-    //  then move the piece, remove the roll
-    //no?
-    //  then throw the error that you got back from move legal
+    //assess the turn action for legality
+    action = this.moveLegal(action);
 
-    //parse out the turnAction
-    if (action.fromJail()) {
-      this.jailBreak(action.to);
-    } else if (action.toHome()) {
-      this.goHome(action.from);
+    if (action.getMoveLegal()) {
+      this.transferPiece(action.getFrom(), action.getTo());
+      currentTeam.dice.useRoll(action.getRollCost());
     } else {
-      this.movePiece(action.from, action.to);
+      throw Error(action.getErrorMessage());
     }
   }
 
   moveLegal(turnAction) {
-    //figure out return type and how you're going to call this.
-    //would like to return a message if the roll isn't legal, but also have some simple way to indicate it is
-    //could be a pair, with bool and message?
-    //need to return the roll that needs to be removed, so that we can do so outside this message
-
-    //also todo is allow legal moves in home for rolls where the index is empty but the greater index isn't
-
     //going to assume you're calling this as the currentTeam
     let currentTeam = this.currentTeam();
     let currentOpp = this.currentOpponent();
 
     if (turnAction.fromJail()) {
-      //jail only logic
-
-      //check if there's even a piece in jail
-      if (currentTeam.jail.empty()) {
-        throw Error("Jail is already empty\n");
-      }
-
-      //check if the colummn they're moving to is in the enemy base
-      if (!currentOpp.isInHomeBase(turnAction.to)) {
-        throw Error("Can't escape jail except into enemy base\n");
-      }
-
-      //check if they can move that far with the current rolls
-      let rollDistance = currentOpp.homeBaseIndex(turnAction.to) + 1;
-      if (!currentTeam.dice.rollLegal(rollDistance)) {
-        throw Error("Can't move that distance with current roll\n");
-      }
+      return this.jailBreakLegal(turnAction);
+    } else if (turnAction.toHome()) {
+      return this.homeReturnLegal(turnAction);
     } else {
-      //shared home and standard logic
+      return this.standardMoveLegal(turnAction);
+    }
+  }
 
-      //make sure there's a piece there
-      if (this.columns[turnAction.from].empty()) {
-        throw Error("Can't move a piece from empty column\n");
-      }
+  jailBreakLegal(turnAction) {
+    //check if there's even a piece in jail
+    if (currentTeam.jail.empty()) {
+      turnAction.cannotMove("Jail is already empty\n");
+      return turnAction;
+    }
 
-      //make sure the piece is the right color
-      let piece = this.columns[turnAction.from].getFirstPiece();
-      if (piece.color != currentTeam.color) {
-        throw Error("Can't move the other team's piece\n");
-      }
+    //check if the colummn they're moving to is in the enemy base
+    if (!currentOpp.isInHomeBase(turnAction.getTo())) {
+      turnAction.cannotMove("Can't escape jail except into enemy base\n");
+      return turnAction;
+    }
 
-      //can't move with a piece in jail
-      if (!currentTeam.jail.empty()) {
-        throw Error("Can't move with a piece in jail\n");
-      }
+    //check if they can move that far with the current rolls
+    let rollDistance = currentOpp.homeBaseIndex(turnAction.getTo()) + 1;
+    if (!currentTeam.dice.rollLegal(rollDistance)) {
+      turnAction.cannotMove("Can't move that distance with current roll\n");
+      return turnAction;
+    }
 
-      if (turnAction.tohome()) {
-        //home only logic
+    turnAction.canMove(rollDistance);
+    return turnAction;
+  }
 
-        //basically just check if the team has any pieces outside their base
-        //if they don't and there's a piece at that col, move the piece home
+  homeReturnLegal(turnAction) {
+    //make sure there's a piece there
+    if (this.columns[turnAction.getFrom()].empty()) {
+      turnAction.cannotMove("Can't move a piece from empty column\n");
+      return turnAction;
+    }
 
-        if (!currentTeam.isInHomeBase(turnAction.from)) {
-          throw new Error("Can only move home from your start base\n");
-        }
+    //make sure the piece is the right color
+    let piece = this.columns[turnAction.getFrom()].getFirstPiece();
+    if (piece.color != currentTeam.color) {
+      turnAction.cannotMove("Can't move the other team's piece\n");
+      return turnAction;
+    }
 
-        //todo, check if the index being attempted is the largest available index < than one of the rolls
-        //for this logic, you'd say either the roll matches an index exactly (easy case)
-        //or all home indexes > than one of the rolls are empty
-        //return which roll should be removed.
+    //can't move with a piece in jail
+    if (!currentTeam.jail.empty()) {
+      turnAction.cannotMove("Can't move with a piece in jail\n");
+      return turnAction;
+    }
 
-        const distance = currentTeam.homeBaseIndex(turnAction.from);
-        //make sure the distance is available
-        if (!currentTeam.dice.rollLegal(distance)) {
-          throw Error("Can't move that distance with current roll\n");
-        }
-      } else {
-        //standard move logic
-
-        //make sure it's moving the right way
-        const distanceVertex =
-          currentTeam.directionMultiplier * (turnAction.to - turnAction.from);
-        if (distanceVertex < 0) {
-          throw Error("Can't move backward\n");
-        }
-
-        //make sure the distance is available
-        const distance = Math.abs(distanceVertex);
-        if (!currentTeam.dice.rollLegal(distance)) {
-          throw Error("Can't move that distance with current rolls\n");
-        }
+    //check if there's a player outside the home base
+    let readyForHome = true;
+    for (let i = 0; i < columns.length; i++) {
+      if (!currentTeam.isInHomeBase(i)) {
+        readyForHome = false;
       }
     }
+    if (!readyForHome) {
+      turnAction.cannotMove(
+        "Can't move home with pieces outside of home base\n",
+      );
+      return turnAction;
+    }
+
+    //confirm piece is in home base. Redundant check based on other logic but doing to be explicit
+    let fromHomeIndex = currentTeam.homeBaseIndex(turnAction.getFrom());
+    if (fromHomeIndex < 0) {
+      turnAction.cannotMove("Can't move home from outside home base\n");
+      return turnAction;
+    }
+
+    //confirm the move is in the dice
+    //if the column matches a roll exactly, you're good
+    if (currentTeam.dice.rollLegal(fromHomeIndex + 1)) {
+      //you're allowed to move
+      turnAction.canMove(fromHomeIndex + 1);
+      return turnAction;
+    } else {
+      //if it doesn't match a roll exactly, first check if there's a roll that's > than this index
+      if (currentTeam.dice.maxRoll() < fromHomeIndex + 1) {
+        turnAction.cannotMove(
+          "Can't move from a larger column than your highest roll\n",
+        );
+        return turnAction;
+      }
+      //now check if there are any columns that are larger than this index that are populated
+      let nextHomeIndex = currentTeam.incrementHomeBaseIndex(fromHomeIndex);
+      let nextColumn = currentTeam.homeBaseIndexToColumnNum(nextHomeIndex);
+      while (nextHomeIndex >= 0) {
+        if (columns[nextColumn].getColor() == currentTeam.getColor()) {
+          turnAction.cannotMove(
+            "Can't move from a column that doesn't match a dice roll while larger columns are populated\n",
+          );
+          return turnAction;
+        }
+        nextHomeIndex = currentTeam.incrementHomeBaseIndex(nextHomeIndex);
+      }
+      //you're allowed to move
+      //return the max roll
+      turnAction.canMove(currentTeam.dice.maxRoll());
+      return turnAction;
+    }
+  }
+
+  standardMoveLegal(turnAction) {
+    //make sure there's a piece there
+    if (this.columns[turnAction.getFrom()].empty()) {
+      turnAction.cannotMove("Can't move a piece from empty column\n");
+      return turnAction;
+    }
+
+    //make sure the piece is the right color
+    let piece = this.columns[turnAction.getFrom()].getFirstPiece();
+    if (piece.color != currentTeam.color) {
+      turnAction.cannotMove("Can't move the other team's piece\n");
+      return turnAction;
+    }
+
+    //can't move with a piece in jail
+    if (!currentTeam.jail.empty()) {
+      turnAction.cannotMove("Can't move with a piece in jail\n");
+      return turnAction;
+    }
+
+    //make sure it's moving the right way
+    const distanceVertex =
+      currentTeam.directionMultiplier *
+      (turnAction.getTo() - turnAction.getFrom());
+    if (distanceVertex < 0) {
+      turnAction.cannotMove("Can't move backward\n");
+      return turnAction;
+    }
+
+    //make sure the distance is available
+    const distance = Math.abs(distanceVertex);
+    if (!currentTeam.dice.rollLegal(distance)) {
+      turnAction.cannotMove("Can't move that distance with current rolls\n");
+      return turnAction;
+    }
+    //you're allowed to move
+    turnAction.canMove(distance);
+    return turnAction;
   }
 
   hasLegalMovesRemaining() {
@@ -267,6 +326,13 @@ class Board {
     //it also is a lot of logic to have to run between every move, but i also don't see a way to simplify that
     //other than running some sort of indexing, like on currently populated columns for ex.
     //the problem with that is it would increase the complexity of the codebase, and the likelihood of errors around unsynced data
+    //
+    //
+    //the other way to handle this class would be to just call moveLegal for all possible populated columns. That might be much easier from a maintenance perspective
+    //but at least slightly more complex from a runtime perspective.
+    //the downside of this current strategy is that it means that the logic needs to be maintained in two places.
+    //the upside is really that you just save a few allocations and method calls per index you check.
+    //honestly maybe that's not a huge deal.
     let team = this.currentTeam();
     let opponent = this.currentOpponent();
     let columns = this.columns;
@@ -283,7 +349,7 @@ class Board {
       return false;
     } else {
       //check if there's a player outside the home base
-      let readyForHome = true;
+      let readyforhome = true;
       for (let i = 0; i < columns.length; i++) {
         if (!team.isInHomeBase(i)) {
           readyForHome = false;
@@ -353,102 +419,6 @@ class Board {
         return false;
       }
     }
-  }
-
-  jailBreak(columnNum) {
-    //going to assume you're calling this as the currentTeam
-    let currentTeam = this.currentTeam();
-    let currentOpp = this.currentOpponent();
-
-    //check if there's even a piece in jail
-    if (currentTeam.jail.empty()) {
-      throw Error("Jail is already empty\n");
-    }
-
-    //check if the colummn they're moving to is in the enemy base
-    if (!currentOpp.isInHomeBase(columnNum)) {
-      throw Error("Can't escape jail except into enemy base\n");
-    }
-
-    //check if they can move that far with the current rolls
-    let rollDistance = currentOpp.homeBaseIndex(columnNum) + 1;
-    if (!currentTeam.dice.rollLegal(rollDistance)) {
-      throw Error("Can't move that distance with current roll\n");
-    }
-
-    this.transferPiece(currentTeam.jail, this.columns[columnNum]);
-    currentTeam.dice.useRoll(rollDistance);
-  }
-
-  goHome(columnNum) {
-    //going to assume you're calling this as the currentTeam
-    //basically just check if the team has any pieces outside their base
-    //if they don't and there's a piece at that col, move the piece home
-    let currentTeam = this.currentTeam();
-
-    if (!currentTeam.isInHomeBase(columnNum)) {
-      throw new Error("Can only move home from your start base\n");
-    }
-    //make sure there's a piece there
-    if (this.columns[columnNum].empty()) {
-      throw Error("Can't move a piece from empty column\n");
-    }
-
-    //make sure the piece is the right color
-    let piece = this.columns[columnNum].getFirstPiece();
-    if (piece.color != currentTeam.color) {
-      throw Error("Can't move the other team's piece\n");
-    }
-
-    //can't move with a piece in jail
-    if (!currentTeam.jail.empty()) {
-      throw Error("Can't move with a piece in jail\n");
-    }
-
-    const distance = currentTeam.homeBaseIndex(columnNum);
-    //make sure the distance is available
-    if (!currentTeam.dice.rollLegal(distance)) {
-      throw Error("Can't move that distance with current roll\n");
-    }
-
-    this.transferPiece(currentTeam.jail, this.columns[columnNum]);
-    currentTeam.dice.useRoll(distance);
-  }
-
-  movePiece(fromIndex, toIndex) {
-    //going to assume you're calling this as the currentTeam
-
-    let currentTeam = this.currentTeam();
-
-    //make sure there's a piece there
-    if (this.columns[fromIndex].empty()) {
-      throw Error("Can't move a piece from empty column\n");
-    }
-    let piece = this.columns[fromIndex].getFirstPiece();
-
-    //make sure the piece is the right color
-    if (piece.color != currentTeam.color) {
-      throw Error("Can't move the other team's piece\n");
-    }
-
-    //can't move with a piece in jail
-    if (!currentTeam.jail.empty()) {
-      throw Error("Can't move with a piece in jail\n");
-    }
-
-    //make sure it's moving the right way
-    if (currentTeam.directionMultiplier * (toIndex - fromIndex) < 0) {
-      throw Error("Can't move backward\n");
-    }
-
-    //make sure the distance is available
-    const distance = Math.abs(fromIndex - toIndex);
-    if (!currentTeam.dice.rollLegal(distance)) {
-      throw Error("Can't move that distance with current rolls\n");
-    }
-
-    this.transferPiece(this.columns[fromIndex], this.columns[toIndex]);
-    currentTeam.dice.useRoll(distance);
   }
 }
 
