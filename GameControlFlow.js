@@ -27,6 +27,7 @@ class GameControlFlow {
     }
 
     this.board.currentTeam.dice.clearRolls();
+    await this.view.endTurn();
     this.board.changeTurn();
   }
 
@@ -39,12 +40,17 @@ class GameControlFlow {
     let whiteRoll = 0;
     do {
       this.board.setStartingTurn("black", "white");
+      this.view.reloadObject(this.board);
       await this.view.requestDiceRoll();
       blackRoll = this.board.currentTeam.dice.rollForIniative();
-      this.view.reloadObject(this.board);
+      this.view.reloadObject(this.board.currentTeam.dice);
+      await this.view.endTurn();
       this.board.changeTurn();
-      whiteRoll = this.board.currentTeam.dice.rollForIniative();
       this.view.reloadObject(this.board);
+      await this.view.requestDiceRoll();
+      whiteRoll = this.board.currentTeam.dice.rollForIniative();
+      this.view.reloadObject(this.board.currentTeam.dice);
+      await this.view.endTurn();
       if (whiteRoll > blackRoll) {
         this.board.currentTeam.dice.addRoll(blackRoll);
         this.board.currentOpponent.dice.clearRolls();
@@ -62,6 +68,7 @@ class GameControlFlow {
         whiteRoll = 0;
       }
     } while (blackRoll == whiteRoll);
+    this.view.reloadObject(this.board);
     await this.runTurn(); //gotta do the first turn before starting the loop so you can check win status at the beginning of the loop
   }
 

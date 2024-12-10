@@ -78,6 +78,10 @@ class ConsoleView {
     await this.consoleInput("Press any key to roll\n");
   }
 
+  async endTurn() {
+    await this.consoleInput("Press any key to continue\n");
+  }
+
   async gameOver(winner) {
     await this.consoleInput(
       `Congrats ${winner}, you won!\n Hit any key to play again\n`,
