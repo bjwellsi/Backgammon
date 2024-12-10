@@ -1,5 +1,11 @@
 class TurnAction {
   constructor(from, to) {
+    if (from === "jail") {
+      this.setFromJail();
+    }
+    if (to === "home") {
+      this.setToHome();
+    }
     this.from = from;
     this.to = to;
     this.actionLegal = null;
@@ -7,12 +13,20 @@ class TurnAction {
     this.rollCost = null;
   }
 
-  fromJail() {
+  getFromJail() {
     return this.from == -1;
   }
 
-  toHome() {
+  setFromJail() {
+    this.from = -1;
+  }
+
+  getToHome() {
     return this.to == -2;
+  }
+
+  setToHome() {
+    this.to = -2;
   }
 
   canMove(rollCost) {

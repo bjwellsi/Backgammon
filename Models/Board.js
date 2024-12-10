@@ -22,6 +22,8 @@ class Board {
     }
 
     this.populateColumns();
+
+    this.setStartingTurn("black", "white");
   }
 
   winner() {
@@ -119,7 +121,6 @@ class Board {
     if (this.currentTeamIndex == null) {
       throw Error("No starting team set!\n");
     } else {
-      this.currentTeam().dice.clearRolls();
       if (this.currentTeamIndex == this.teams.length - 1) {
         this.currentTeamIndex = 0;
       } else {
@@ -173,9 +174,9 @@ class Board {
     let currentTeam = this.currentTeam();
     let currentOpp = this.currentOpponent();
 
-    if (turnAction.fromJail()) {
+    if (turnAction.getFromJail()) {
       return this.jailBreakLegal(turnAction);
-    } else if (turnAction.toHome()) {
+    } else if (turnAction.getToHome()) {
       return this.homeReturnLegal(turnAction);
     } else {
       return this.standardMoveLegal(turnAction);
@@ -321,6 +322,8 @@ class Board {
   }
 
   hasLegalMovesRemaining() {
+    //new plan
+
     //this method is really complex, but I don't see a way to simplify it without needlessly breaking it into smaller methods
     //that only serve to increase the amount of jumping around in method definitions you have to do.
     //it also is a lot of logic to have to run between every move, but i also don't see a way to simplify that
