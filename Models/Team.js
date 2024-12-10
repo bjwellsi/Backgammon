@@ -43,6 +43,14 @@ class Team {
     return this.homeBaseIndex(columnIndex) > 0;
   }
 
+  minHomeBaseIndex() {
+    return 0;
+  }
+
+  maxHomeBaseIndex() {
+    return this.homeBaseSize - 1;
+  }
+
   incrementHomeBaseIndex(homeBaseIndex) {
     homeBaseIndex++;
     if (homeBaseSize <= homeBaseIndex) {

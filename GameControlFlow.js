@@ -15,7 +15,7 @@ class GameControlFlow {
 
   async runTurn() {
     while (this.board.currentTeam().dice.rollsRemain()) {
-      if (!this.board.hasLegalMovesRemaining) {
+      if (!this.board.hasLegalMovesRemaining()) {
         break;
       }
       let action = await this.view.getNextMove();
@@ -39,6 +39,7 @@ class GameControlFlow {
     let blackRoll = 0;
     let whiteRoll = 0;
     do {
+      this.board.setStartingTurn("black", "white");
       await this.view.requestDiceRoll();
       blackRoll = this.board.currentTeam().dice.rollForIniative();
       this.view.reloadObject(this.board);

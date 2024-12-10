@@ -22,8 +22,6 @@ class Board {
     }
 
     this.populateColumns();
-
-    this.setStartingTurn("black", "white");
   }
 
   winner() {
@@ -322,82 +320,40 @@ class Board {
   }
 
   hasLegalMovesRemaining() {
-    //new plan
-
-    //this method is really complex, but I don't see a way to simplify it without needlessly breaking it into smaller methods
-    //that only serve to increase the amount of jumping around in method definitions you have to do.
-    //it also is a lot of logic to have to run between every move, but i also don't see a way to simplify that
-    //other than running some sort of indexing, like on currently populated columns for ex.
-    //the problem with that is it would increase the complexity of the codebase, and the likelihood of errors around unsynced data
-    //
-    //
-    //the other way to handle this class would be to just call moveLegal for all possible populated columns. That might be much easier from a maintenance perspective
-    //but at least slightly more complex from a runtime perspective.
-    //the downside of this current strategy is that it means that the logic needs to be maintained in two places.
-    //the upside is really that you just save a few allocations and method calls per index you check.
-    //honestly maybe that's not a huge deal.
     let team = this.currentTeam();
     let opponent = this.currentOpponent();
     let columns = this.columns;
     let rolls = team.dice.rolls;
+    let color = team.getColor();
     if (!team.jail.empty()) {
-      //check if any of the enemy base indexes that match the current rolls are empty
-      let piece = team.jail.getFirstPiece();
+      //check if any of the enemy base indexes that match the current rolls are legal moves
       rolls.forEach((roll) => {
-        let column = columns[opponent.homeBaseIndexToColumnNum(roll)];
-        if (column.approvedForMove(piece)) {
+        let columnIndex = opponent.homeBaseIndexToColumnNum(roll);
+        if (this.moveLegal(new TurnAction("jail", columnIndex))) {
           return true;
         }
       });
       return false;
     } else {
       //check if there's a player outside the home base
-      let readyforhome = true;
+      let readyForHome = true;
       for (let i = 0; i < columns.length; i++) {
         if (!team.isInHomeBase(i)) {
           readyForHome = false;
         }
       }
       if (readyForHome) {
-        //the only way you couldn't move in this case is if
-        //you don't have a piece on the column you rolled,
-        //and the pieces you do have are > col indexes than your roll,
-        //and where they can move to is occupied by an enemy tower
-        let largerColsPopulated = false;
-        rolls.forEach((roll) => {
-          let rollColumn = team.homeBaseIndexToColumnNum(roll);
-          if (columns[rollColumn].getColor() == team.getColor()) {
-            return true;
-          } else {
-            //you don't have a piece on the column, you have to move from a higher one if populated
-            //so loop through the home base, checking if column - the roll is a legal column to move to (if populated)
-            //this is where it gets tricky. Because if there isn't a column that's populated above this column, you can move
-            //if there isn't, you can't
-            //so you have to keep track of whether there's a populated column > than the roll, and if there isn't then you can move
-            //if there is, AND that column doesn't have a valid destination, you can't
-            let nextColumn = team.homeBaseIndexToColumnNum(
-              team.homeBaseIndex(rollColumn) + 1,
-            );
-            while (nextColumn != -1) {
-              if (columns[nextColumn].getColor() == team.getColor()) {
-                largerColsPopulated = true;
-                if (
-                  columns[
-                    nextColumn + roll * team.directionMultiplier
-                  ].getColor() == team.getColor()
-                ) {
-                  return true;
-                }
-              }
-              nextColumn = team.homeBaseIndexToColumnNum(
-                team.homeBaseIndex(nextColumn) + 1,
-              );
+        //you just have to check every index in this case, since home moves have special privileges
+        let homeIndex = team.minHomeBaseIndex();
+        while (homeIndex != -1) {
+          let colIndex = team.homeBaseIndexToColumnNum(homeIndex);
+          if (columns[colIndex].getColor() == color) {
+            let action = new TurnAction(colIndex, "home");
+            if (this.moveLegal(action)) {
+              return true;
             }
           }
-        });
-        if (!largerColsPopulated) {
-          //now that you've checked every roll, if you have a true largerColsPopulated, but you couldn't move to one of the smaller cols, you can't move
-          return true;
+          team.incrementHomeBaseIndex(homeIndex);
         }
         return false;
       } else {
@@ -405,14 +361,12 @@ class Board {
         //have to check each roll against each populated column, see if the column it could move to would be a legal move
         rolls.forEach((roll) => {
           for (let i = 0; i < columns.length; i++) {
-            if (columns[i].getColor() == team.color) {
-              //only check populated columns for this team
-              let toIndex = i + roll * team.directionMultiplier;
-              if (
-                columns[toIndex].approvedForMove(columns[i].getFirstPiece())
-              ) {
-                //you've got a column you can move to
-                //so just return true, there's a legal move
+            if (columns[i].getColor() == color) {
+              let action = new TurnAction(
+                i,
+                i + roll * team.getDirectionMultiplier(),
+              );
+              if (this.moveLegal(action)) {
                 return true;
               }
             }
