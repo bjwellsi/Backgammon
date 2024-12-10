@@ -2,5 +2,8 @@
 
 Backgammon Game
 
-Running the console app in dev:
-npm start (requires nodemon to be installed)
+Running the console app (requires prexisting nodemon instalation:
+
+npm install
+
+npm start
