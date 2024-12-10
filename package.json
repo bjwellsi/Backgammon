@@ -4,6 +4,7 @@
   "description": "Backgammon Game",
   "main": "App.js",
   "scripts": {
+    "start": "nodemon App.js",
     "test": "node App.js"
   },
   "author": "",

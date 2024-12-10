@@ -79,12 +79,20 @@ class Board {
 
   renderInConsole() {
     let topRow = "";
-    for (let i = 0; i < 12; i++) {
+    for (let i = 0; i < 6; i++) {
+      topRow += `${i < 9 ? "0" : ""}${i + 1}|${this.columns[i].renderInConsole()}  `;
+    }
+    topRow += "| JAIL |     ";
+    for (let i = 6; i < 12; i++) {
       topRow += `${i < 9 ? "0" : ""}${i + 1}|${this.columns[i].renderInConsole()}  `;
     }
 
     let bottomRow = "";
-    for (let i = 23; i > 11; i--) {
+    for (let i = 23; i > 17; i--) {
+      bottomRow += `${i + 1}|${this.columns[i].renderInConsole()}  `;
+    }
+    bottomRow += "| JAIL |     ";
+    for (let i = 17; i > 11; i--) {
       bottomRow += `${i + 1}|${this.columns[i].renderInConsole()}  `;
     }
 
@@ -96,9 +104,9 @@ class Board {
 
     ${topRow}
 
-                                                                       ${this.teams[0].jail.renderInConsole()}
-    -------------------------------------------------------------------JAIL----------------------------------------------------------------------------
-                                                                       ${this.teams[1].jail.renderInConsole()}
+                                                                               ${this.teams[0].jail.renderInConsole()}
+    ------------------------------------------------------------------------| JAIL |-------------------------------------------------------------------------
+                                                                                ${this.teams[1].jail.renderInConsole()}
 
     ${bottomRow}
 
@@ -143,24 +151,28 @@ class Board {
     }
   }
 
-  transferPiece(fromColumn, toColumn) {
-    if (!toColumn.approvedForMove(fromColumn.retrieveFirstPiece())) {
-      throw new Error("Can't move here\n");
-    } else {
+  processTurnAction(action) {
+    //assess the turn action for legality
+    action = this.moveLegal(action);
+
+    if (action.actionLegal) {
+      let fromColumn;
+      let toColumn;
+      if (action.fromJail) {
+        fromColumn = this.currentTeam.jail;
+        toColumn = this.columns[action.to];
+      } else if (action.toHome) {
+        fromColumn = this.columns[action.from];
+        toColumn = this.currentTeam.home;
+      } else {
+        fromColumn = this.columns[action.from];
+        toColumn = this.columns[action.to];
+      }
       //move the piece, hit if there's a piece moved
       let hitPiece = toColumn.addPiece(fromColumn.removePiece());
       if (hitPiece != undefined) {
         this.currentOpponent.jail.addPiece(hitPiece);
       }
-    }
-  }
-
-  processTurnAction(action) {
-    //assess the turn action for legality
-    action = this.moveLegal(action);
-
-    if (action.moveLegal) {
-      this.transferPiece(action.from, action.to);
       this.currentTeam.dice.useRoll(action.rollCost);
     } else {
       throw Error(action.errorMessage);

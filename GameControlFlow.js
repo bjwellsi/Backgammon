@@ -20,10 +20,12 @@ class GameControlFlow {
         break;
       }
       let action = await this.view.retrieveNextMove();
-      try {
-        this.board.processTurnAction(action);
-      } catch (error) {
-        await this.view.processError(error);
+      if (action != null) {
+        try {
+          this.board.processTurnAction(action);
+        } catch (error) {
+          await this.view.processError(error);
+        }
       }
     }
 
