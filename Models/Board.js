@@ -21,7 +21,70 @@ class Board {
       this.columns.push(new Column());
     }
 
-    this.populateColumns();
+    //this.populateColumns();
+
+    this.populateHomeBase();
+  }
+
+  populateJail() {
+    this.columns[7].addPiece(this.teams[0].home.removePiece());
+    this.columns[7].addPiece(this.teams[0].home.removePiece());
+    this.columns[7].addPiece(this.teams[0].home.removePiece());
+    this.columns[7].addPiece(this.teams[0].home.removePiece());
+    this.columns[7].addPiece(this.teams[0].home.removePiece());
+
+    this.columns[18].addPiece(this.teams[1].home.removePiece());
+    this.columns[18].addPiece(this.teams[1].home.removePiece());
+    this.columns[18].addPiece(this.teams[1].home.removePiece());
+    this.columns[18].addPiece(this.teams[1].home.removePiece());
+    this.columns[18].addPiece(this.teams[1].home.removePiece());
+
+    this.teams[0].jail.addPiece(this.teams[0].home.removePiece());
+    this.teams[1].jail.addPiece(this.teams[1].home.removePiece());
+  }
+
+  populateHomeBase() {
+    this.columns[23].addPiece(this.teams[1].home.removePiece());
+    this.columns[23].addPiece(this.teams[1].home.removePiece());
+    this.columns[23].addPiece(this.teams[1].home.removePiece());
+
+    this.columns[22].addPiece(this.teams[1].home.removePiece());
+    this.columns[22].addPiece(this.teams[1].home.removePiece());
+    this.columns[22].addPiece(this.teams[1].home.removePiece());
+
+    this.columns[21].addPiece(this.teams[1].home.removePiece());
+    this.columns[21].addPiece(this.teams[1].home.removePiece());
+    this.columns[21].addPiece(this.teams[1].home.removePiece());
+
+    this.columns[20].addPiece(this.teams[1].home.removePiece());
+    this.columns[20].addPiece(this.teams[1].home.removePiece());
+
+    this.columns[19].addPiece(this.teams[1].home.removePiece());
+    this.columns[19].addPiece(this.teams[1].home.removePiece());
+
+    this.columns[18].addPiece(this.teams[1].home.removePiece());
+    this.columns[18].addPiece(this.teams[1].home.removePiece());
+
+    this.columns[0].addPiece(this.teams[0].home.removePiece());
+    this.columns[0].addPiece(this.teams[0].home.removePiece());
+    this.columns[0].addPiece(this.teams[0].home.removePiece());
+
+    this.columns[1].addPiece(this.teams[0].home.removePiece());
+    this.columns[1].addPiece(this.teams[0].home.removePiece());
+    this.columns[1].addPiece(this.teams[0].home.removePiece());
+
+    this.columns[2].addPiece(this.teams[0].home.removePiece());
+    this.columns[2].addPiece(this.teams[0].home.removePiece());
+    this.columns[2].addPiece(this.teams[0].home.removePiece());
+
+    this.columns[3].addPiece(this.teams[0].home.removePiece());
+    this.columns[3].addPiece(this.teams[0].home.removePiece());
+
+    this.columns[4].addPiece(this.teams[0].home.removePiece());
+    this.columns[4].addPiece(this.teams[0].home.removePiece());
+
+    this.columns[5].addPiece(this.teams[0].home.removePiece());
+    this.columns[5].addPiece(this.teams[0].home.removePiece());
   }
 
   get winner() {
@@ -237,8 +300,11 @@ class Board {
 
     //check if there's a player outside the home base
     let readyForHome = true;
-    for (let i = 0; i < columns.length; i++) {
-      if (!this.currentTeam.isInHomeBase(i)) {
+    for (let i = 0; i < this.columns.length; i++) {
+      if (
+        this.columns[i].color == this.currentTeam.color &&
+        !this.currentTeam.isInHomeBase(i)
+      ) {
         readyForHome = false;
       }
     }
@@ -275,7 +341,7 @@ class Board {
         this.currentTeam.incrementHomeBaseIndex(fromHomeIndex);
       let nextColumn = this.currentTeam.homeBaseIndexToColumnNum(nextHomeIndex);
       while (nextHomeIndex >= 0) {
-        if (columns[nextColumn].color == this.currentTeam.color) {
+        if (this.columns[nextColumn].color == this.currentTeam.color) {
           turnAction.cannotMove(
             "Can't move from a column that doesn't match a dice roll while larger columns are populated\n",
           );

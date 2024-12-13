@@ -30,9 +30,10 @@ class GameControlFlow {
     }
 
     this.board.currentTeam.dice.clearRolls();
-    this.view.reloadObject(this.board.currentTeam.dice);
+    this.view.reloadObject(this.board);
     await this.view.endTurn();
     this.board.changeTurn();
+    this.view.reloadObject(this.board);
   }
 
   async runFirstTurn() {

@@ -35,6 +35,10 @@ class Home extends Column {
   homeFull() {
     return this.pieces.length == this.maxPieceCount;
   }
+
+  renderInConsole() {
+    return this.color + " Home:" + super.renderInConsole();
+  }
 }
 
 export default Home;

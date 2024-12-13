@@ -1,7 +1,7 @@
 class TurnAction {
   constructor(from, to) {
-    this._from = from;
-    this._to = to;
+    this.from = from;
+    this.to = to;
     this.actionLegal = null;
     this.errorMessage = null;
     this.rollCost = null;
@@ -12,8 +12,8 @@ class TurnAction {
   }
 
   set from(from) {
-    if (from === "jail") {
-      this.fromJail = true;
+    if (from == "jail") {
+      this._from = -1;
     } else {
       this._from = from;
     }
@@ -24,37 +24,19 @@ class TurnAction {
   }
 
   set to(to) {
-    if (to === "home") {
-      this.toHome = true;
+    if (to == "home") {
+      this._to = -2;
     } else {
       this._to = to;
     }
   }
 
   get fromJail() {
-    return this.from == -1;
-  }
-
-  set fromJail(fromJail) {
-    if (fromJail) {
-      this.from = -1;
-    } else {
-      //do nothing
-      return;
-    }
+    return this._from == -1;
   }
 
   get toHome() {
-    return this.to == -2;
-  }
-
-  set toHome(toHome) {
-    if (toHome) {
-      this.to = -2;
-    } else {
-      //do nothing
-      return;
-    }
+    return this._to == -2;
   }
 
   canMove(rollCost) {

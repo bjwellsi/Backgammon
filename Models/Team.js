@@ -40,7 +40,8 @@ class Team {
   }
 
   isInHomeBase(columnIndex) {
-    return this.homeBaseIndex(columnIndex) > 0;
+    const index = this.homeBaseIndex(columnIndex);
+    return index >= this.minHomeBaseIndex() && index <= this.maxHomeBaseIndex();
   }
 
   minHomeBaseIndex() {
@@ -53,7 +54,7 @@ class Team {
 
   incrementHomeBaseIndex(homeBaseIndex) {
     homeBaseIndex++;
-    if (homeBaseSize <= homeBaseIndex) {
+    if (this.homeBaseSize <= homeBaseIndex) {
       return -1;
     }
     return homeBaseIndex;
