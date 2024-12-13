@@ -1,41 +1,15 @@
 import Board from "./Models/Board.js";
 import ConsoleView from "./ConsoleView.js";
+import Storage from "./Storage.js";
 
 class GameControlFlow {
   constructor() {
     this.board = new Board();
     this.view = new ConsoleView();
+    this.storage = new Storage();
   }
 
-  async rollDice() {
-    await this.view.requestDiceRoll();
-    this.board.currentTeam.dice.roll();
-    this.view.reloadObject(this.board.currentTeam.dice);
-  }
-
-  async runTurn() {
-    while (this.board.currentTeam.dice.rollsRemain()) {
-      this.view.reloadObject(this.board);
-      if (!this.board.hasLegalMovesRemaining()) {
-        break;
-      }
-      let action = await this.view.retrieveNextMove();
-      if (action != null) {
-        try {
-          this.board.processTurnAction(action);
-        } catch (error) {
-          await this.view.processError(error);
-        }
-      }
-    }
-
-    this.board.currentTeam.dice.clearRolls();
-    this.view.reloadObject(this.board);
-    await this.view.endTurn();
-    this.board.changeTurn();
-    this.view.reloadObject(this.board);
-  }
-
+  /*
   async runFirstTurn() {
     //initialize the game
     //get a single roll from each team
@@ -75,19 +49,60 @@ class GameControlFlow {
     } while (blackRoll == whiteRoll);
     await this.runTurn(); //gotta do the first turn before starting the loop so you can check win status at the beginning of the loop
   }
+  */
+
+  async performUserAction(command) {
+    if (command === "game") {
+      //just going to return the command to the outer loop for now, let it handle ending the loop
+      //putting it in here so that none of the command processing happens outside this method
+      //right now there's no processing to really do on this command though
+      return command;
+    } else if (command === "roll") {
+      //will throw an error if you've already rolled this turn
+      this.board.rollDice();
+    } else if (command === "turn") {
+      //should end the turn. for now we'll just end it no matter what, instead of checking whether there are moves left
+      this.board.clearDice("team");
+      this.board.changeTurn();
+    } else if (command === "save") {
+      //save the game
+      await this.storage.save(this.board);
+    } else if (command === "load") {
+      //load the save game, for now only one save allowed
+      this.board = await this.storage.load();
+    } else {
+      //assume that we've gotten a move back
+      this.board.processTurnAction(command);
+    }
+  }
 
   async playGame() {
-    await this.runFirstTurn();
+    //have to process first turn in here somewhere
+    //
+    //
+    //
+    //todo
+    //
+    //
+    //
+    //
+    //
     let winner = this.board.winner;
-
     while (winner === undefined) {
-      await this.rollDice();
-      await this.runTurn();
-      winner = this.board.winner; //check if someone has won
+      this.view.reloadObject(this.board);
+      try {
+        let command = await this.view.processInput();
+        if (command != "nothing") {
+          if ((await this.performUserAction(command)) == "game") {
+            winner = "nobody";
+          }
+        }
+      } catch (error) {
+        this.view.processError(error);
+      }
     }
 
-    await this.view.endGame(winner);
-    await this.playGame(); //restart the game
+    this.view.declareWinner(winner);
   }
 }
 

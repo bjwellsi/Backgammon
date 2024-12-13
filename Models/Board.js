@@ -3,6 +3,7 @@ import Jail from "./Jail.js";
 import Home from "./Home.js";
 import Dice from "./Dice.js";
 import Team from "./Team.js";
+import Turn from "./Turn.js";
 import TurnAction from "./TurnAction.js";
 
 class Board {
@@ -13,8 +14,7 @@ class Board {
     this.teams.push(new Team("black", this.piecesPerTeam, -1, 0, 6));
     this.teams.push(new Team("white", this.piecesPerTeam, 1, 23, 6));
 
-    this._currentTeamIndex = null;
-    this._currentOpponentIndex = null;
+    this.turn = new Turn();
 
     this.columns = [];
     for (let i = 0; i < 24; i++) {
@@ -23,6 +23,7 @@ class Board {
 
     //this.populateColumns();
 
+    this.setStartingTurn("black", "white");
     this.populateHomeBase();
   }
 
@@ -133,11 +134,11 @@ class Board {
   }
 
   get currentTeam() {
-    return this.teams[this._currentTeamIndex];
+    return this.teams[this.turn.currentTeamIndex];
   }
 
   get currentOpponent() {
-    return this.teams[this._currentOpponentIndex];
+    return this.teams[this.turn.currentOpponentIndex];
   }
 
   renderInConsole() {
@@ -188,29 +189,48 @@ class Board {
     if (startingTeam == -1 || startingOpponent == -1) {
       throw Error("Invalid team selections\n");
     }
-    this._currentTeamIndex = startingTeam;
-    this._currentOpponentIndex = startingOpponent;
+
+    this.turn.nextTurn(startingTeam, startingOpponent);
   }
 
   changeTurn() {
     //just loop through the team array.
     //this is (needlessly rn) extensibile in that it allows more teams in the future, potentially allowing a way to check for active too
-    if (this._currentTeamIndex == null) {
+    let nextTeam = this.turn.currentTeamIndex;
+    let nextOpp = this.turn.currentTeamIndex;
+    if (nextTeam == null) {
       throw Error("No starting team set!\n");
     } else {
-      if (this._currentTeamIndex == this.teams.length - 1) {
-        this._currentTeamIndex = 0;
+      if (nextTeam == this.teams.length - 1) {
+        nextTeam = 0;
       } else {
-        this._currentTeamIndex++;
+        nextTeam++;
       }
     }
     //just use the same logic for the enemy too. It's going to just trail the currentTeam basically
-    if (this._currentOpponentIndex == null) {
+    if (nextOpp == null) {
       throw Error("No starting opponent set\n]");
-    } else if (this._currentOpponentIndex == this.teams.length - 1) {
-      this._currentOpponentIndex = 0;
+    } else if (nextOpp == this.teams.length - 1) {
+      nextOpp = 0;
     } else {
-      this._currentOpponentIndex++;
+      nextOpp++;
+    }
+
+    this.turn.nextTurn(nextTeam, nextOpp);
+  }
+
+  rollDice() {
+    this.turn.roll();
+    this.currentTeam.dice.roll();
+  }
+
+  clearDice(team) {
+    if (team == "team") {
+      this.currentTeam.dice.clearRolls();
+    } else if (team == "opponent") {
+      this.currentTeam.dice.clearRolls();
+    } else {
+      throw new error("Invalid team selection");
     }
   }
 

@@ -1,8 +1,10 @@
 import GameControlFlow from "./GameControlFlow.js";
 
-function play() {
+async function play() {
   let game = new GameControlFlow();
-  game.playGame();
+  while (1 == 1) {
+    await game.playGame();
+  }
 }
 
 export default play;

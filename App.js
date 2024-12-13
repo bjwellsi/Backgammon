@@ -1,3 +1,3 @@
 import play from "./Play.js";
 
-play();
+await play();
