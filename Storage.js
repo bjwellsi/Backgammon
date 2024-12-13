@@ -1,15 +1,24 @@
 import { promises as fs } from "fs";
+import Board from "./Models/Board.js";
 
 class Storage {
   constructor() {}
   async save(obj) {
     //very basic default behavior for now
-    await fs.writeFile("save.json", JSON.stringify(obj, null, 2));
+    let contents = JSON.stringify(obj, null, 2);
+    await fs.writeFile(
+      "/Users/braiden/Documents/BackgammonSaves/save.json",
+      contents,
+    );
   }
 
   async load() {
     //very basic default behavior for now
-    return await JSON.parse(fs.readFile("save.json", "utf-8"));
+    let content = await fs.readFile(
+      "/Users/braiden/Documents/BackgammonSaves/save.json",
+      "utf-8",
+    );
+    return Object.assign(JSON.parse(content));
   }
 }
 
