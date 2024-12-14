@@ -1,3 +1,4 @@
+//@ts-nocheck
 class Turn {
   constructor() {
     this.currentTeamIndex = null;

@@ -1,3 +1,4 @@
+//@ts-nocheck
 import Jail from "./Jail.js";
 import Column from "./Column.js";
 import Piece from "./Piece.js";

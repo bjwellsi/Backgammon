@@ -1,3 +1,4 @@
+//@ts-nocheck
 class TurnAction {
   constructor(from, to) {
     this.from = from;

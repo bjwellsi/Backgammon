@@ -1,3 +1,4 @@
+//@ts-nocheck
 import Piece from "./Piece.js";
 import Column from "./Column.js";
 

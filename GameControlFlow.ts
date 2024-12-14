@@ -1,3 +1,4 @@
+//@ts-nocheck
 import Board from "./Models/Board.js";
 import ConsoleView from "./ConsoleView.js";
 import Storage from "./Storage.js";

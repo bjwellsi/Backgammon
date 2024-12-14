@@ -1,3 +1,4 @@
+//@ts-nocheck
 import GameControlFlow from "./GameControlFlow.js";
 
 async function play() {

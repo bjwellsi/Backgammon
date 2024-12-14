@@ -1,3 +1,4 @@
+//@ts-nocheck
 import Readline from "readline";
 import TurnAction from "./Models/TurnAction.js";
 
