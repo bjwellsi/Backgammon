@@ -1,6 +1,6 @@
 # Backgammon Game
 
-Running the console app (requires prexisting nodemon installation):
+Running the console app
 
 npm install
 
