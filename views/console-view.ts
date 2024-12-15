@@ -1,6 +1,6 @@
 import Readline from "readline";
-import TurnAction from "../Models/TurnAction";
-import RendersInConsole from "../Models/RendersInConsole";
+import TurnAction from "../models/turn-action";
+import RendersInConsole from "../models/renders-in-console";
 
 class ConsoleView {
   constructor() {}

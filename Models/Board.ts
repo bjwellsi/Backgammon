@@ -1,9 +1,9 @@
-import Column from "./Column";
-import Team from "./Team";
-import Turn from "./Turn";
-import TurnAction from "./TurnAction";
-import RendersInConsole from "./RendersInConsole";
-import Color from "./Color";
+import Column from "./column";
+import Team from "./team";
+import Turn from "./turn";
+import TurnAction from "./turn-action";
+import RendersInConsole from "./renders-in-console";
+import Color from "./color";
 import { Type } from "class-transformer";
 
 class Board implements RendersInConsole {

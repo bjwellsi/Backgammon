@@ -1,7 +1,6 @@
 import { promises as fs } from "fs";
 import { serialize, deserialize } from "class-transformer";
-import Board from "./Models/Board";
-import Color from "./Models/Color";
+import Board from "./models/board";
 
 class Storage {
   constructor() {}

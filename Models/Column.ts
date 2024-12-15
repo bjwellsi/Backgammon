@@ -1,6 +1,6 @@
-import Color from "./Color";
-import Piece from "./Piece";
-import RendersInConsole from "./RendersInConsole";
+import Color from "./color";
+import Piece from "./piece";
+import RendersInConsole from "./renders-in-console";
 import { Type } from "class-transformer";
 
 class Column implements RendersInConsole {

@@ -1,4 +1,4 @@
-import GameControlFlow from "./GameControlFlow";
+import GameControlFlow from "./game-control-flow";
 
 async function play(): Promise<void> {
   let game: GameControlFlow = new GameControlFlow();

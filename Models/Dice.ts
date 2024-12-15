@@ -1,5 +1,5 @@
 import Chance from "chance";
-import RendersInConsole from "./RendersInConsole";
+import RendersInConsole from "./renders-in-console";
 import { Exclude } from "class-transformer";
 
 class Dice implements RendersInConsole {

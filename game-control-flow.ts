@@ -1,8 +1,7 @@
-import Board from "./Models/Board";
-import ConsoleView from "./Views/ConsoleView";
-import Storage from "./Storage";
-import TurnAction from "./Models/TurnAction";
-import Color from "./Models/Color";
+import Board from "./models/board";
+import ConsoleView from "./views/console-view";
+import Storage from "./storage";
+import TurnAction from "./models/turn-action";
 
 class GameControlFlow {
   board: Board;
