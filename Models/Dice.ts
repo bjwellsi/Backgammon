@@ -1,8 +1,10 @@
 import Chance from "chance";
 import RendersInConsole from "./RendersInConsole";
+import { Exclude } from "class-transformer";
 
 class Dice implements RendersInConsole {
   rolls: number[];
+  @Exclude()
   private _chance: Chance;
 
   constructor() {

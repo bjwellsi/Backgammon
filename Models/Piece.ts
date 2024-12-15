@@ -1,5 +1,6 @@
 import Color from "./Color";
 import RendersInConsole from "./RendersInConsole";
+import { Type } from "class-transformer";
 
 class Piece implements RendersInConsole {
   readonly color: Color;

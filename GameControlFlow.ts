@@ -36,7 +36,7 @@ class GameControlFlow {
     } else if (command === "load") {
       //load the save game, for now only one save allowed
       this.board = await this.storage.loadBoard();
-    } else if (typeof command == typeof TurnAction) {
+    } else if (command instanceof TurnAction) {
       //assume that we've gotten a move back
       this.board.processTurnAction(command as TurnAction);
     }

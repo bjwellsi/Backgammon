@@ -4,11 +4,15 @@ import Turn from "./Turn";
 import TurnAction from "./TurnAction";
 import RendersInConsole from "./RendersInConsole";
 import Color from "./Color";
+import { Type } from "class-transformer";
 
 class Board implements RendersInConsole {
   private _piecesPerTeam: number;
+  @Type(() => Team)
   teams: Team[];
+  @Type(() => Turn)
   turn: Turn;
+  @Type(() => Column)
   columns: Column[];
 
   constructor() {
@@ -272,10 +276,10 @@ class Board implements RendersInConsole {
       if (hitPiece != undefined) {
         this.currentOpponent.jail.addPiece(hitPiece);
       }
-      //this can't be null if the action is legal
+      //rollCost can't be null if the action is legal
       this.currentTeam.dice.useRoll(action.rollCost as number);
     } else {
-      //this can't be null if the action is illegal
+      //errorMessage can't be null if the action is illegal
       throw Error(action.errorMessage as string);
     }
   }

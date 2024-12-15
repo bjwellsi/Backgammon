@@ -1,3 +1,4 @@
+import "reflect-metadata";
 import play from "./Play";
 
 async function main(): Promise<void> {

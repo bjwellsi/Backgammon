@@ -1,6 +1,7 @@
 import Piece from "./Piece";
 import Column from "./Column";
 import Color from "./Color";
+import { Type, Expose } from "class-transformer";
 
 class Home extends Column {
   private readonly _color: Color;

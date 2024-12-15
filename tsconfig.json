@@ -1,5 +1,10 @@
 {
   "compilerOptions": {
+    "moduleResolution": "node",
+    "typeRoots": ["node_modules/@types"],
+    "esModuleInterop": true,
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true,
     "module": "esnext",
     "target": "es6",
     "strict": true

@@ -1,6 +1,7 @@
 import Piece from "./Piece";
 import Column from "./Column";
 import Color from "./Color";
+import { Type } from "class-transformer";
 
 class Jail extends Column {
   private readonly _color: Color;

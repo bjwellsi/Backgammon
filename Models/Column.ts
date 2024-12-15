@@ -1,8 +1,10 @@
 import Color from "./Color";
 import Piece from "./Piece";
 import RendersInConsole from "./RendersInConsole";
+import { Type } from "class-transformer";
 
 class Column implements RendersInConsole {
+  @Type(() => Piece)
   pieces: Piece[];
 
   constructor() {

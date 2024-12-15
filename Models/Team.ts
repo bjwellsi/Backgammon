@@ -2,15 +2,19 @@ import Jail from "./Jail";
 import Home from "./Home";
 import Dice from "./Dice";
 import Color from "./Color";
+import { Type } from "class-transformer";
 
 class Team {
   color: Color;
-  private _piecesPerTeam: number;
   directionMultiplier: number;
   private _homeBaseStart: number;
   private _homeBaseSize: number;
+
+  @Type(() => Home)
   home: Home;
+  @Type(() => Jail)
   jail: Jail;
+  @Type(() => Dice)
   dice: Dice;
 
   constructor(
@@ -21,7 +25,6 @@ class Team {
     homeBaseSize: number,
   ) {
     this.color = color;
-    this._piecesPerTeam = piecesPerTeam;
     this.home = new Home(color, piecesPerTeam);
     this.jail = new Jail(color);
     this.dice = new Dice();
