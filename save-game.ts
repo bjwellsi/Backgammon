@@ -2,21 +2,21 @@ import { promises as fs } from "fs";
 import { serialize, deserialize } from "class-transformer";
 import Board from "./models/board";
 
-class Storage {
+class SaveGame {
   constructor() {}
-  async saveBoard(board: Board): Promise<void> {
+  async saveBoard(board: Board, fileName: string): Promise<void> {
     //very basic default behavior for now
     let content = serialize(board);
     await fs.writeFile(
-      "/Users/braiden/Documents/BackgammonSaves/save.json",
+      `/Users/braiden/Documents/BackgammonSaves/${fileName}`,
       content,
     );
   }
 
-  async loadBoard(): Promise<Board> {
+  async loadBoard(fileName: string): Promise<Board> {
     //very basic default behavior for now
     let content = await fs.readFile(
-      "/Users/braiden/Documents/BackgammonSaves/save.json",
+      `/Users/braiden/Documents/BackgammonSaves/${fileName}`,
       "utf-8",
     );
     let board = deserialize(Board, content);
@@ -24,4 +24,4 @@ class Storage {
   }
 }
 
-export default Storage;
+export default SaveGame;

@@ -1,17 +1,17 @@
 import Board from "./models/board";
 import ConsoleView from "./views/console-view";
-import Storage from "./storage";
+import SaveGame from "./save-game";
 import TurnAction from "./models/turn-action";
 
 class GameControlFlow {
   board: Board;
   view: ConsoleView;
-  storage: Storage;
+  saveGame: SaveGame;
 
   constructor() {
     this.board = new Board();
     this.view = new ConsoleView();
-    this.storage = new Storage();
+    this.saveGame = new SaveGame();
   }
 
   async performUserAction(
@@ -31,10 +31,10 @@ class GameControlFlow {
       this.board.changeTurn();
     } else if (command === "save") {
       //save the game
-      await this.storage.saveBoard(this.board);
+      await this.saveGame.saveBoard(this.board, "save.json");
     } else if (command === "load") {
       //load the save game, for now only one save allowed
-      this.board = await this.storage.loadBoard();
+      this.board = await this.saveGame.loadBoard("save.json");
     } else if (command instanceof TurnAction) {
       //assume that we've gotten a move back
       this.board.processTurnAction(command as TurnAction);
