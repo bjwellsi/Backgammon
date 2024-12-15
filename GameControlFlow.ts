@@ -2,6 +2,7 @@ import Board from "./Models/Board";
 import ConsoleView from "./Views/ConsoleView";
 import Storage from "./Storage";
 import TurnAction from "./Models/TurnAction";
+import Color from "./Models/Color";
 
 class GameControlFlow {
   board: Board;
@@ -31,15 +32,13 @@ class GameControlFlow {
       this.board.changeTurn();
     } else if (command === "save") {
       //save the game
-      throw Error("not implemented");
-      //await this.storage.save(this.board);
+      await this.storage.saveBoard(this.board);
     } else if (command === "load") {
       //load the save game, for now only one save allowed
-      throw Error("not implemented");
-      //this.board = await this.storage.load();
-    } else {
+      this.board = await this.storage.loadBoard();
+    } else if (typeof command == typeof TurnAction) {
       //assume that we've gotten a move back
-      this.board.processTurnAction(command);
+      this.board.processTurnAction(command as TurnAction);
     }
   }
 

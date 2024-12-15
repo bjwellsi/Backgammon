@@ -92,8 +92,11 @@ class Board implements RendersInConsole {
     this.columns[5].addPiece(this.teams[0].home.removePiece());
   }
 
-  get winner(): Team | undefined {
-    return this.teams.find((team) => team.hasWon());
+  get winner(): string | undefined {
+    let winner = this.teams.find((team) => team.hasWon());
+    if (typeof winner != "undefined") {
+      return Color[winner.color];
+    }
   }
 
   populateColumns(): void {
@@ -251,26 +254,29 @@ class Board implements RendersInConsole {
     action = this.moveLegal(action);
 
     if (action.actionLegal) {
+      //this is not the right way to do this. I shouldn't have to do so much manual casting on turn action
       let fromColumn;
       let toColumn;
       if (action.fromJail) {
         fromColumn = this.currentTeam.jail;
-        toColumn = this.columns[action.to];
-      } else if (action.toHome) {
-        fromColumn = this.columns[action.from];
+      } else {
+        fromColumn = this.columns[action.from as number];
+      }
+      if (action.toHome) {
         toColumn = this.currentTeam.home;
       } else {
-        fromColumn = this.columns[action.from];
-        toColumn = this.columns[action.to];
+        toColumn = this.columns[action.to as number];
       }
       //move the piece, hit if there's a piece moved
       let hitPiece = toColumn.addPiece(fromColumn.removePiece());
       if (hitPiece != undefined) {
         this.currentOpponent.jail.addPiece(hitPiece);
       }
-      this.currentTeam.dice.useRoll(action.rollCost);
+      //this can't be null if the action is legal
+      this.currentTeam.dice.useRoll(action.rollCost as number);
     } else {
-      throw Error(action.errorMessage);
+      //this can't be null if the action is illegal
+      throw Error(action.errorMessage as string);
     }
   }
 
@@ -293,6 +299,12 @@ class Board implements RendersInConsole {
       return turnAction;
     }
 
+    //check that they are moving to a column
+    if (typeof turnAction.to != "number") {
+      turnAction.cannotMove("Can only leave jail into a normal column\n");
+      return turnAction;
+    }
+
     //check if the colummn they're moving to is in the enemy base
     if (!this.currentOpponent.isInHomeBase(turnAction.to)) {
       turnAction.cannotMove("Can't escape jail except into enemy base\n");
@@ -311,6 +323,12 @@ class Board implements RendersInConsole {
   }
 
   homeReturnLegal(turnAction: TurnAction): TurnAction {
+    //make sure they're going home from a standard column
+    if (typeof turnAction.from != "number") {
+      turnAction.cannotMove("Can only go home from a normal column\n");
+      return turnAction;
+    }
+
     //make sure there's a piece there
     if (this.columns[turnAction.from].empty()) {
       turnAction.cannotMove("Can't move a piece from empty column\n");
@@ -389,6 +407,15 @@ class Board implements RendersInConsole {
   }
 
   standardMoveLegal(turnAction: TurnAction): TurnAction {
+    if (
+      typeof turnAction.from != "number" ||
+      typeof turnAction.to != "number"
+    ) {
+      turnAction.cannotMove(
+        `Standard move has bad format: ${turnAction.from}, ${turnAction.to}`,
+      );
+      return turnAction;
+    }
     //make sure there's a piece there
     if (this.columns[turnAction.from].empty()) {
       turnAction.cannotMove("Can't move a piece from empty column\n");

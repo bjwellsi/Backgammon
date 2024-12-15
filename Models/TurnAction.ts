@@ -54,6 +54,14 @@ class TurnAction {
     }
   }
 
+  get fromJail() {
+    return typeof this._from == "string" && this._from == "jail";
+  }
+
+  get toHome() {
+    return typeof this._to == "string" && this._to == "home";
+  }
+
   get actionLegal(): boolean | null {
     return this._actionLegal;
   }
