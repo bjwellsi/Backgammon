@@ -1,21 +1,27 @@
 import Chance from "chance";
+import RendersInConsole from "./renders-in-console";
+import { Exclude } from "class-transformer";
 
-class Dice {
+class Dice implements RendersInConsole {
+  rolls: number[];
+  @Exclude()
+  private _chance: Chance;
+
   constructor() {
     this.rolls = [];
-    this.chance = new Chance();
+    this._chance = new Chance();
   }
 
-  rollForIniative() {
+  rollForIniative(): number {
     this.clearRolls();
-    let die = this.chance.integer({ min: 1, max: 6 });
+    let die = this._chance.integer({ min: 1, max: 6 });
     this.rolls.push(die);
     return die;
   }
 
-  roll() {
-    let die1 = this.chance.integer({ min: 1, max: 6 });
-    let die2 = this.chance.integer({ min: 1, max: 6 });
+  roll(): number[] {
+    let die1 = this._chance.integer({ min: 1, max: 6 });
+    let die2 = this._chance.integer({ min: 1, max: 6 });
 
     this.rolls.push(die1);
     this.rolls.push(die2);
@@ -28,19 +34,19 @@ class Dice {
     return this.rolls.slice(0, 2);
   }
 
-  clearRolls() {
+  clearRolls(): void {
     this.rolls = [];
   }
 
-  addRoll(roll) {
+  addRoll(roll: number): void {
     this.rolls.push(roll);
   }
 
-  maxRoll() {
-    return this.rolls.sort((a, b) => a - b)[0];
+  maxRoll(): number {
+    return this.rolls.length > 0 ? this.rolls.sort((a, b) => a - b)[0] : 0;
   }
 
-  useRoll(roll) {
+  useRoll(roll: number): void {
     if (!this.rollLegal(roll)) {
       throw Error("roll not available");
     }
@@ -48,15 +54,15 @@ class Dice {
     this.rolls.splice(this.rolls.indexOf(roll), 1);
   }
 
-  rollLegal(roll) {
+  rollLegal(roll: number): boolean {
     return !(this.rolls.indexOf(roll) == -1);
   }
 
-  rollsRemain() {
+  rollsRemain(): boolean {
     return this.rolls.length > 0;
   }
 
-  renderInConsole() {
+  renderInConsole(): string {
     if (this.rolls.length === 0) {
       return "No moves left this turn";
     }
