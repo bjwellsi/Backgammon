@@ -1,19 +1,20 @@
-//@ts-nocheck
-class Piece {
-  //probably wise to make color an enum so you don't have to remember formatting
-  constructor(color) {
-    this._color = color;
+import Color from "./Color";
+import RendersInConsole from "./RendersInConsole";
+
+class Piece implements RendersInConsole {
+  readonly color: Color;
+
+  constructor(color: Color) {
+    this.color = color;
   }
 
-  get color() {
-    return this._color;
-  }
-
-  renderInConsole() {
-    if (this.color == "black") {
+  renderInConsole(): string {
+    if (this.color == Color.Black) {
       return "b";
-    } else {
+    } else if (this.color == Color.White) {
       return "w";
+    } else {
+      return "";
     }
   }
 }

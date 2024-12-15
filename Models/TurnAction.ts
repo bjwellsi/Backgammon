@@ -1,53 +1,79 @@
-//@ts-nocheck
 class TurnAction {
-  constructor(from, to) {
+  private _from: number | string;
+  private _to: number | string;
+  private _actionLegal: boolean | null;
+  private _errorMessage: string | null;
+  private _rollCost: number | null;
+
+  constructor(from: number | string, to: number | string) {
+    //have to manually set them to something incorrect first
+    //so that I can call the proper setters without compile errors for not setting _from and _to in ctor
+    this._from = -1;
+    this._to = -1;
     this.from = from;
     this.to = to;
-    this.actionLegal = null;
-    this.errorMessage = null;
-    this.rollCost = null;
+    this._actionLegal = null;
+    this._errorMessage = null;
+    this._rollCost = null;
   }
 
-  get from() {
+  private validateColumnType(column: string): boolean {
+    const columnTypes = ["jail", "home"];
+    return columnTypes.includes(column);
+  }
+
+  get from(): number | string {
     return this._from;
   }
 
-  set from(from) {
-    if (from == "jail") {
-      this._from = -1;
+  set from(from: number | string) {
+    if (typeof from === "string") {
+      if (this.validateColumnType(from)) {
+        this._from = from;
+      } else {
+        throw Error(`Can't set from column to ${from}`);
+      }
     } else {
       this._from = from;
     }
   }
 
-  get to() {
+  get to(): number | string {
     return this._to;
   }
 
-  set to(to) {
-    if (to == "home") {
-      this._to = -2;
+  set to(to: number | string) {
+    if (typeof to === "string") {
+      if (this.validateColumnType(to)) {
+        this._to = to;
+      } else {
+        throw Error(`Can't set to column to ${to}`);
+      }
     } else {
       this._to = to;
     }
   }
 
-  get fromJail() {
-    return this._from == -1;
+  get actionLegal(): boolean | null {
+    return this._actionLegal;
   }
 
-  get toHome() {
-    return this._to == -2;
+  get errorMessage(): string | null {
+    return this._errorMessage;
   }
 
-  canMove(rollCost) {
-    this.actionLegal = true;
-    this.rollCost = rollCost;
+  get rollCost(): number | null {
+    return this._rollCost;
   }
 
-  cannotMove(errorMessage) {
-    this.actionLegal = false;
-    this.errorMessage = errorMessage;
+  canMove(rollCost: number): void {
+    this._actionLegal = true;
+    this._rollCost = rollCost;
+  }
+
+  cannotMove(errorMessage: string): void {
+    this._actionLegal = false;
+    this._errorMessage = errorMessage;
   }
 }
 

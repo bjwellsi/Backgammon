@@ -1,9 +1,12 @@
-//@ts-nocheck
-import Piece from "./Piece.js";
-import Column from "./Column.js";
+import Piece from "./Piece";
+import Column from "./Column";
+import Color from "./Color";
 
 class Home extends Column {
-  constructor(color, maxPieceCount) {
+  private readonly _color: Color;
+  maxPieceCount: number;
+
+  constructor(color: Color, maxPieceCount: number) {
     super();
     this._color = color;
     this.maxPieceCount = maxPieceCount;
@@ -13,32 +16,34 @@ class Home extends Column {
     }
   }
 
-  addPiece(piece) {
-    if (piece.color == this.color) {
-      this.pieces.push(piece);
-    } else {
-      throw Error("wrong home\n");
-    }
-  }
-
   get color() {
     return this._color;
   }
 
-  approvedForMove(piece) {
-    if (piece.color == this.color) {
+  addPiece(piece: Piece): void {
+    if (piece.color != this.color) {
+      throw Error("Wrong home\n");
+    }
+    if (this.homeFull()) {
+      throw Error("Home is full\n");
+    }
+    this.pieces.push(piece);
+  }
+
+  approvedForMove(piece: Piece): boolean {
+    if (piece.color == this.color && !this.homeFull()) {
       return true;
     } else {
       return false;
     }
   }
 
-  homeFull() {
-    return this.pieces.length == this.maxPieceCount;
+  homeFull(): boolean {
+    return this.pieces.length >= this.maxPieceCount;
   }
 
-  renderInConsole() {
-    return this.color + " Home:" + super.renderInConsole();
+  renderInConsole(): string {
+    return Color[this.color] + " Home:" + super.renderInConsole();
   }
 }
 

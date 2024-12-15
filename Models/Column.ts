@@ -1,20 +1,23 @@
-//@ts-nocheck
-import Piece from "./Piece.js";
+import Color from "./Color";
+import Piece from "./Piece";
+import RendersInConsole from "./RendersInConsole";
 
-class Column {
+class Column implements RendersInConsole {
+  pieces: Piece[];
+
   constructor() {
     this.pieces = [];
   }
 
-  empty() {
+  empty(): boolean {
     return this.pieces.length === 0;
   }
 
-  canBeHit() {
+  canBeHit(): boolean {
     return this.pieces.length === 1;
   }
 
-  approvedForMove(piece) {
+  approvedForMove(piece: Piece): boolean {
     if (this.color == piece.color || this.empty() || this.canBeHit()) {
       return true;
     } else {
@@ -24,13 +27,13 @@ class Column {
 
   get color() {
     if (this.empty()) {
-      return "neutral";
+      return Color.None;
     } else {
       return this.pieces[0].color;
     }
   }
 
-  addPiece(piece) {
+  addPiece(piece: Piece): Piece | void {
     //returns the piece that was hit or nothing if add was successful
     if (this.empty() || this.color == piece.color) {
       this.pieces.push(piece);
@@ -44,15 +47,16 @@ class Column {
     }
   }
 
-  removePiece() {
+  removePiece(): Piece {
     if (this.empty()) {
       throw Error("No pieces to remove\n");
     } else {
-      return this.pieces.pop();
+      //guaranteed to be a piece because it's not empty
+      return this.pieces.pop() as Piece;
     }
   }
 
-  retrieveFirstPiece() {
+  retrieveFirstPiece(): Piece {
     if (this.empty()) {
       throw Error("No pieces present\n");
     } else {
@@ -60,7 +64,7 @@ class Column {
     }
   }
 
-  renderInConsole() {
+  renderInConsole(): string {
     let col = this.pieces.map((piece) => piece.renderInConsole()).join("");
     while (col.length < 7) {
       col += " ";

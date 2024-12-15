@@ -1,8 +1,7 @@
-//@ts-nocheck
-import GameControlFlow from "./GameControlFlow.js";
+import GameControlFlow from "./GameControlFlow";
 
-async function play() {
-  let game = new GameControlFlow();
+async function play(): Promise<void> {
+  let game: GameControlFlow = new GameControlFlow();
   while (1 == 1) {
     await game.playGame();
   }

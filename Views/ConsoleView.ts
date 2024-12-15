@@ -1,11 +1,11 @@
-//@ts-nocheck
 import Readline from "readline";
-import TurnAction from "./Models/TurnAction.js";
+import TurnAction from "../Models/TurnAction";
+import RendersInConsole from "../Models/RendersInConsole";
 
 class ConsoleView {
   constructor() {}
 
-  async consoleInput(question) {
+  async consoleInput(question: string): Promise<string> {
     let readLine = Readline.createInterface({
       input: process.stdin,
       output: process.stdout,
@@ -13,32 +13,35 @@ class ConsoleView {
     });
 
     return new Promise((resolve) => {
-      readLine.question(question, (input) => {
+      readLine.question(question, (input: string) => {
         resolve(input);
         readLine.close();
       });
     });
   }
 
-  consoleOutput(message) {
+  consoleOutput(message: string): void {
     console.log(message);
   }
 
-  reloadObject(object) {
+  reloadObject(object: RendersInConsole): void {
     console.log(object.renderInConsole());
   }
 
-  processError(error) {
-    this.consoleOutput(error);
+  processError(error: unknown): void {
+    if (error instanceof Error) {
+      this.consoleOutput(`${error.stack}`);
+    } else this.consoleOutput(error as string);
   }
 
-  async processInput() {
+  async processInput(): Promise<string | TurnAction> {
     let command = await this.consoleInput(
       "Type your next command. Type h for help\n",
     );
+    console.log(command);
     //this is just going to return a string w/the command or the move that we wanna make
     //I don't like this strategy, feels like I should define an "action" class
-    //but I don't have a particular need rn, and js === lets us do this
+    //but I don't have a particular need rn
     if (command == "END GAME") {
       return "game";
     } else if (command == "h") {
@@ -67,7 +70,7 @@ class ConsoleView {
     }
   }
 
-  async processMove(move) {
+  async processMove(move: string): Promise<TurnAction> {
     let turnAction = null;
     let homeRegex = /^\d+,home$/;
     let jailRegex = /^\jail,\d+$/;
@@ -95,11 +98,11 @@ class ConsoleView {
     return turnAction;
   }
 
-  indexFromString(stringIndex) {
+  indexFromString(stringIndex: string): number {
     return parseInt(stringIndex, 10) - 1;
   }
 
-  declareWinner(winner) {
+  declareWinner(winner: string): void {
     this.consoleOutput(`Congrats ${winner}, you won!\n`);
   }
 }

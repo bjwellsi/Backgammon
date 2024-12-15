@@ -1,19 +1,22 @@
-//@ts-nocheck
-import Column from "./Column.js";
-import Jail from "./Jail.js";
-import Home from "./Home.js";
-import Dice from "./Dice.js";
-import Team from "./Team.js";
-import Turn from "./Turn.js";
-import TurnAction from "./TurnAction.js";
+import Column from "./Column";
+import Team from "./Team";
+import Turn from "./Turn";
+import TurnAction from "./TurnAction";
+import RendersInConsole from "./RendersInConsole";
+import Color from "./Color";
 
-class Board {
+class Board implements RendersInConsole {
+  private _piecesPerTeam: number;
+  teams: Team[];
+  turn: Turn;
+  columns: Column[];
+
   constructor() {
-    this.piecesPerTeam = 15;
+    this._piecesPerTeam = 15;
 
     this.teams = [];
-    this.teams.push(new Team("black", this.piecesPerTeam, -1, 0, 6));
-    this.teams.push(new Team("white", this.piecesPerTeam, 1, 23, 6));
+    this.teams.push(new Team(Color.Black, this._piecesPerTeam, -1, 0, 6));
+    this.teams.push(new Team(Color.White, this._piecesPerTeam, 1, 23, 6));
 
     this.turn = new Turn();
 
@@ -22,13 +25,13 @@ class Board {
       this.columns.push(new Column());
     }
 
-    //this.populateColumns();
-
-    this.setStartingTurn("black", "white");
+    this.setStartingTurn(this.teams[0].color, this.teams[1].color);
     this.populateHomeBase();
+    //this.populateColumns();
+    //this.populateJail();
   }
 
-  populateJail() {
+  populateJail(): void {
     this.columns[7].addPiece(this.teams[0].home.removePiece());
     this.columns[7].addPiece(this.teams[0].home.removePiece());
     this.columns[7].addPiece(this.teams[0].home.removePiece());
@@ -45,7 +48,7 @@ class Board {
     this.teams[1].jail.addPiece(this.teams[1].home.removePiece());
   }
 
-  populateHomeBase() {
+  populateHomeBase(): void {
     this.columns[23].addPiece(this.teams[1].home.removePiece());
     this.columns[23].addPiece(this.teams[1].home.removePiece());
     this.columns[23].addPiece(this.teams[1].home.removePiece());
@@ -89,11 +92,11 @@ class Board {
     this.columns[5].addPiece(this.teams[0].home.removePiece());
   }
 
-  get winner() {
+  get winner(): Team | undefined {
     return this.teams.find((team) => team.hasWon());
   }
 
-  populateColumns() {
+  populateColumns(): void {
     //just braking this out for readability and potentially extensibility
     this.columns[0].addPiece(this.teams[1].home.removePiece());
     this.columns[0].addPiece(this.teams[1].home.removePiece());
@@ -134,15 +137,23 @@ class Board {
     this.columns[5].addPiece(this.teams[0].home.removePiece());
   }
 
-  get currentTeam() {
-    return this.teams[this.turn.currentTeamIndex];
+  get currentTeam(): Team {
+    let index = this.turn.currentTeamIndex;
+    if (index == null) {
+      throw Error("No team set");
+    }
+    return this.teams[index];
   }
 
-  get currentOpponent() {
-    return this.teams[this.turn.currentOpponentIndex];
+  get currentOpponent(): Team {
+    let index = this.turn.currentOpponentIndex;
+    if (index == null) {
+      throw Error("No opponent set");
+    }
+    return this.teams[index];
   }
 
-  renderInConsole() {
+  renderInConsole(): string {
     let topRow = "";
     for (let i = 0; i < 6; i++) {
       topRow += `${i < 9 ? "0" : ""}${i + 1}|${this.columns[i].renderInConsole()}  `;
@@ -162,7 +173,7 @@ class Board {
     }
 
     let board = `
-                                                                       ${this.currentTeam.color}'s turn
+                                                                       ${Color[this.currentTeam.color]}'s turn
                                                                        ${this.currentTeam.dice.renderInConsole()}
 
     ${this.teams[0].home.renderInConsole()} 
@@ -181,7 +192,7 @@ class Board {
     return board;
   }
 
-  setStartingTurn(color, opponentColor) {
+  setStartingTurn(color: Color, opponentColor: Color): void {
     //search the team array for the color, and if it's not present throw err
     let startingTeam = this.teams.findIndex((team) => team.color == color);
     let startingOpponent = this.teams.findIndex(
@@ -194,7 +205,7 @@ class Board {
     this.turn.nextTurn(startingTeam, startingOpponent);
   }
 
-  changeTurn() {
+  changeTurn(): void {
     //just loop through the team array.
     //this is (needlessly rn) extensibile in that it allows more teams in the future, potentially allowing a way to check for active too
     let nextTeam = this.turn.currentTeamIndex;
@@ -220,22 +231,22 @@ class Board {
     this.turn.nextTurn(nextTeam, nextOpp);
   }
 
-  rollDice() {
+  rollDice(): void {
     this.turn.roll();
     this.currentTeam.dice.roll();
   }
 
-  clearDice(team) {
+  clearDice(team: string): void {
     if (team == "team") {
       this.currentTeam.dice.clearRolls();
     } else if (team == "opponent") {
       this.currentTeam.dice.clearRolls();
     } else {
-      throw new error("Invalid team selection");
+      throw Error("Invalid team selection");
     }
   }
 
-  processTurnAction(action) {
+  processTurnAction(action: TurnAction): void {
     //assess the turn action for legality
     action = this.moveLegal(action);
 
@@ -263,7 +274,7 @@ class Board {
     }
   }
 
-  moveLegal(turnAction) {
+  moveLegal(turnAction: TurnAction): TurnAction {
     //going to assume you're calling this as the currentTeam
 
     if (turnAction.fromJail) {
@@ -275,7 +286,7 @@ class Board {
     }
   }
 
-  jailBreakLegal(turnAction) {
+  jailBreakLegal(turnAction: TurnAction): TurnAction {
     //check if there's even a piece in jail
     if (this.currentTeam.jail.empty()) {
       turnAction.cannotMove("Jail is already empty\n");
@@ -283,13 +294,13 @@ class Board {
     }
 
     //check if the colummn they're moving to is in the enemy base
-    if (!currentOpp.isInHomeBase(turnAction.to)) {
+    if (!this.currentOpponent.isInHomeBase(turnAction.to)) {
       turnAction.cannotMove("Can't escape jail except into enemy base\n");
       return turnAction;
     }
 
     //check if they can move that far with the current rolls
-    let rollDistance = currentOpp.homeBaseIndex(turnAction.to) + 1;
+    let rollDistance = this.currentOpponent.homeBaseIndex(turnAction.to) + 1;
     if (!this.currentTeam.dice.rollLegal(rollDistance)) {
       turnAction.cannotMove("Can't move that distance with current roll\n");
       return turnAction;
@@ -299,7 +310,7 @@ class Board {
     return turnAction;
   }
 
-  homeReturnLegal(turnAction) {
+  homeReturnLegal(turnAction: TurnAction): TurnAction {
     //make sure there's a piece there
     if (this.columns[turnAction.from].empty()) {
       turnAction.cannotMove("Can't move a piece from empty column\n");
@@ -377,7 +388,7 @@ class Board {
     }
   }
 
-  standardMoveLegal(turnAction) {
+  standardMoveLegal(turnAction: TurnAction): TurnAction {
     //make sure there's a piece there
     if (this.columns[turnAction.from].empty()) {
       turnAction.cannotMove("Can't move a piece from empty column\n");
@@ -416,7 +427,7 @@ class Board {
     return turnAction;
   }
 
-  hasLegalMovesRemaining() {
+  hasLegalMovesRemaining(): boolean {
     let team = this.currentTeam;
     let opponent = this.currentOpponent;
     let columns = this.columns;
@@ -459,7 +470,7 @@ class Board {
         for (let roll of rolls) {
           for (let i = 0; i < columns.length; i++) {
             if (columns[i].color == color) {
-              let moveTo = i + roll * team.directionMulitplier;
+              let moveTo = i + roll * team.directionMultiplier;
               let action = new TurnAction(i, moveTo);
               if (this.moveLegal(action)) {
                 return true;

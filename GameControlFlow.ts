@@ -1,16 +1,22 @@
-//@ts-nocheck
-import Board from "./Models/Board.js";
-import ConsoleView from "./ConsoleView.js";
-import Storage from "./Storage.js";
+import Board from "./Models/Board";
+import ConsoleView from "./Views/ConsoleView";
+import Storage from "./Storage";
+import TurnAction from "./Models/TurnAction";
 
 class GameControlFlow {
+  board: Board;
+  view: ConsoleView;
+  storage: Storage;
+
   constructor() {
     this.board = new Board();
     this.view = new ConsoleView();
     this.storage = new Storage();
   }
 
-  async performUserAction(command) {
+  async performUserAction(
+    command: string | TurnAction,
+  ): Promise<string | void> {
     if (command === "game") {
       //just going to return the command to the outer loop for now, let it handle ending the loop
       //putting it in here so that none of the command processing happens outside this method
@@ -37,7 +43,7 @@ class GameControlFlow {
     }
   }
 
-  async playGame() {
+  async playGame(): Promise<void> {
     let winner = this.board.winner;
     while (winner === undefined) {
       this.view.reloadObject(this.board);

@@ -4,8 +4,8 @@
   "description": "Backgammon Game",
   "main": "App.ts",
   "scripts": {
-    "start": "npx tsx watch App.ts",
-    "test": "npx tsx watch App.ts"
+    "start": "npx tsx App.ts",
+    "test": "npx tsx App.ts"
   },
   "author": "",
   "license": "ISC",

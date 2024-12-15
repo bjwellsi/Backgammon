@@ -1,5 +1,8 @@
-//@ts-nocheck
 class Turn {
+  currentTeamIndex: number | null;
+  currentOpponentIndex: number | null;
+  private _rolled: boolean | null;
+
   constructor() {
     this.currentTeamIndex = null;
     this.currentOpponentIndex = null;
@@ -7,18 +10,14 @@ class Turn {
     this._rolled = false;
   }
 
-  get rolled() {
-    return _rolled;
-  }
-
-  roll() {
+  roll(): void {
     if (this._rolled == true) {
       throw new Error("Already rolled the dice this turn\n");
     }
     this._rolled = true;
   }
 
-  nextTurn(nextTeam, nextOpponent) {
+  nextTurn(nextTeam: number, nextOpponent: number): void {
     this.currentTeamIndex = nextTeam;
     this.currentOpponentIndex = nextOpponent;
     this._rolled = false;

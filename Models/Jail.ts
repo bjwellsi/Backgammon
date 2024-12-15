@@ -1,9 +1,11 @@
-//@ts-nocheck
-import Piece from "./Piece.js";
-import Column from "./Column.js";
+import Piece from "./Piece";
+import Column from "./Column";
+import Color from "./Color";
 
 class Jail extends Column {
-  constructor(color) {
+  private readonly _color: Color;
+
+  constructor(color: Color) {
     super();
     this._color = color;
   }
@@ -12,7 +14,7 @@ class Jail extends Column {
     return this._color;
   }
 
-  addPiece(piece) {
+  addPiece(piece: Piece): void {
     if (piece.color == this.color) {
       this.pieces.push(piece);
     } else {
@@ -20,7 +22,7 @@ class Jail extends Column {
     }
   }
 
-  approvedForMove(piece) {
+  approvedForMove(piece: Piece): boolean {
     if (piece.color == this.color) {
       return true;
     } else {

@@ -1,4 +1,9 @@
-//@ts-nocheck
-import play from "./Play.js";
+import play from "./Play";
 
-await play();
+async function main(): Promise<void> {
+  await play();
+}
+
+main().catch((error) => {
+  console.error("Error at startup" + error);
+});
