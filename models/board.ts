@@ -30,17 +30,17 @@ class Board implements RendersInConsole {
     }
 
     this.setStartingTurn(this.teams[0].color, this.teams[1].color);
-    this.populateHomeBase();
-    //this.populateColumns();
+    //this.populateHomeBase();
+    this.populateColumns();
     //this.populateJail();
   }
 
   populateJail(): void {
-    this.columns[7].addPiece(this.teams[0].home.removePiece());
-    this.columns[7].addPiece(this.teams[0].home.removePiece());
-    this.columns[7].addPiece(this.teams[0].home.removePiece());
-    this.columns[7].addPiece(this.teams[0].home.removePiece());
-    this.columns[7].addPiece(this.teams[0].home.removePiece());
+    this.columns[3].addPiece(this.teams[0].home.removePiece());
+    this.columns[3].addPiece(this.teams[0].home.removePiece());
+    this.columns[3].addPiece(this.teams[0].home.removePiece());
+    this.columns[3].addPiece(this.teams[0].home.removePiece());
+    this.columns[3].addPiece(this.teams[0].home.removePiece());
 
     this.columns[18].addPiece(this.teams[1].home.removePiece());
     this.columns[18].addPiece(this.teams[1].home.removePiece());
@@ -189,7 +189,7 @@ class Board implements RendersInConsole {
 
                                                                                ${this.teams[0].jail.renderInConsole()}
     ------------------------------------------------------------------------| JAIL |-------------------------------------------------------------------------
-                                                                                ${this.teams[1].jail.renderInConsole()}
+                                                                               ${this.teams[1].jail.renderInConsole()}
 
     ${bottomRow}
 
@@ -216,7 +216,7 @@ class Board implements RendersInConsole {
     //just loop through the team array.
     //this is (needlessly rn) extensibile in that it allows more teams in the future, potentially allowing a way to check for active too
     let nextTeam = this.turn.currentTeamIndex;
-    let nextOpp = this.turn.currentTeamIndex;
+    let nextOpp = this.turn.currentOpponentIndex;
     if (nextTeam == null) {
       throw Error("No starting team set!\n");
     } else {
@@ -247,7 +247,7 @@ class Board implements RendersInConsole {
     if (team == "team") {
       this.currentTeam.dice.clearRolls();
     } else if (team == "opponent") {
-      this.currentTeam.dice.clearRolls();
+      this.currentOpponent.dice.clearRolls();
     } else {
       throw Error("Invalid team selection");
     }

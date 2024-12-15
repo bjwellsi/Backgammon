@@ -1,8 +1,8 @@
 import GameControlFlow from "./game-control-flow";
 
 async function play(): Promise<void> {
-  let game: GameControlFlow = new GameControlFlow();
   while (1 == 1) {
+    let game: GameControlFlow = new GameControlFlow();
     await game.playGame();
   }
 }

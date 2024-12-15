@@ -49,12 +49,14 @@ class GameControlFlow {
         let command = await this.view.processInput();
         if (command != "nothing") {
           if ((await this.performUserAction(command)) == "game") {
-            winner = "nobody";
+            winner = "NOBODY";
+            break;
           }
         }
       } catch (error) {
         this.view.processError(error);
       }
+      winner = this.board.winner;
     }
 
     this.view.declareWinner(winner);
