@@ -1,10 +1,10 @@
 import Readline from "readline";
-import TurnAction from "../models/turn-action";
-import RendersInConsole from "../models/renders-in-console";
-import Command from "./command";
-import UserCommand from "./user-command";
-import MoveCommand from "./move-command";
-import SaveLoadCommand from "./save-load-command";
+import TurnAction from "../../models/turn-action";
+import RendersInConsole from "../../models/renders-in-console";
+import Command from "../../user-commands/command";
+import UserCommand from "../../user-commands/user-command";
+import MoveCommand from "../../user-commands/move-command";
+import SaveLoadCommand from "../../user-commands/save-load-command";
 
 class ConsoleView {
   constructor() {}
@@ -45,10 +45,6 @@ class ConsoleView {
     let args = commands.split(" ");
     let command = args[0];
 
-    console.log("command" + command);
-    console.log("commands" + commands);
-    console.log("args" + args);
-    console.log(command == "r");
     if (command == "ENDGAME") {
       return new UserCommand(Command.EndGame);
     } else if (command == "h") {

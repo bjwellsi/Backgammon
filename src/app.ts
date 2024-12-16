@@ -1,5 +1,5 @@
 import "reflect-metadata";
-import play from "./play";
+import play from "./controllers/play";
 
 async function main(): Promise<void> {
   await play();
