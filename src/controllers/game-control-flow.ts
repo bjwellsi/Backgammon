@@ -1,11 +1,11 @@
-import Board from "./models/board";
-import ConsoleView from "./views/console-view";
+import Board from "../models/board";
+import ConsoleView from "../views/console/console-view";
 import SaveGame from "./save-game";
-import TurnAction from "./models/turn-action";
-import UserCommand from "./views/user-command";
-import Command from "./views/command";
-import MoveCommand from "./views/move-command";
-import SaveLoadCommand from "./views/save-load-command";
+import TurnAction from "../models/turn-action";
+import UserCommand from "../user-commands/user-command";
+import Command from "../user-commands/command";
+import MoveCommand from "../user-commands/move-command";
+import SaveLoadCommand from "../user-commands/save-load-command";
 
 class GameControlFlow {
   board: Board;

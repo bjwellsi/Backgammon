@@ -2,10 +2,10 @@
   "name": "backgammon",
   "version": "1.0.0",
   "description": "Backgammon Game",
-  "main": "app.ts",
+  "main": "src/app.ts",
   "scripts": {
-    "start": "npx tsx app.ts",
-    "test": "npx tsx app.ts"
+    "start": "npx tsx src/app.ts",
+    "test": "npx tsx src/app.ts"
   },
   "author": "",
   "license": "ISC",

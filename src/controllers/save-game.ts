@@ -1,6 +1,6 @@
 import { promises as fs } from "fs";
 import { serialize, deserialize } from "class-transformer";
-import Board from "./models/board";
+import Board from "../models/board";
 
 class SaveGame {
   constructor() {}
