@@ -8,7 +8,7 @@ class SaveGame {
     //very basic default behavior for now
     let content = serialize(board);
     await fs.writeFile(
-      `/Users/braiden/Documents/BackgammonSaves/${fileName}`,
+      `/Users/braiden/Documents/BackgammonSaves/${fileName}.json`,
       content,
     );
   }
@@ -16,7 +16,7 @@ class SaveGame {
   async loadBoard(fileName: string): Promise<Board> {
     //very basic default behavior for now
     let content = await fs.readFile(
-      `/Users/braiden/Documents/BackgammonSaves/${fileName}`,
+      `/Users/braiden/Documents/BackgammonSaves/${fileName}.json`,
       "utf-8",
     );
     let board = deserialize(Board, content);

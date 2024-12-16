@@ -1,6 +1,10 @@
 import Readline from "readline";
 import TurnAction from "../models/turn-action";
 import RendersInConsole from "../models/renders-in-console";
+import Command from "./command";
+import UserCommand from "./user-command";
+import MoveCommand from "./move-command";
+import SaveLoadCommand from "./save-load-command";
 
 class ConsoleView {
   constructor() {}
@@ -34,16 +38,19 @@ class ConsoleView {
     } else this.consoleOutput(error as string);
   }
 
-  async processInput(): Promise<string | TurnAction> {
-    let command = await this.consoleInput(
+  async processInput(): Promise<UserCommand> {
+    let commands = await this.consoleInput(
       "Type your next command. Type h for help\n",
     );
-    console.log(command);
-    //this is just going to return a string w/the command or the move that we wanna make
-    //I don't like this strategy, feels like I should define an "action" class
-    //but I don't have a particular need rn
-    if (command == "END GAME") {
-      return "game";
+    let args = commands.split(" ");
+    let command = args[0];
+
+    console.log("command" + command);
+    console.log("commands" + commands);
+    console.log("args" + args);
+    console.log(command == "r");
+    if (command == "ENDGAME") {
+      return new UserCommand(Command.EndGame);
     } else if (command == "h") {
       this.consoleOutput(
         "\nType a standard move as #,# to indicate the columns you'd like to move from and to\n\n" +
@@ -52,26 +59,29 @@ class ConsoleView {
           "If you're in jail, type jail,# - EX: jail,22\n\n" +
           "Type r to roll the dice\n\n" +
           "Type t to end your turn\n\n" +
-          "Type END GAME to end the game\n\n" +
-          "Type s to save the game\n\n" +
-          "Type LOAD to load the most recent save game\n\n",
+          "Type ENDGAME to end the game\n\n" +
+          "To save or load the game, type s or LOAD\n" +
+          "To name your savefile, type s or LOAD, followed by the filenamen\n",
       );
-      return "nothing";
+      return new UserCommand(Command.None);
     } else if (command == "r") {
-      return "roll";
+      return new UserCommand(Command.Roll);
     } else if (command == "t") {
-      return "turn";
+      return new UserCommand(Command.ChangeTurn);
     } else if (command == "s") {
-      return "save";
+      //parse the save location
+      return new SaveLoadCommand(Command.Save, args[1]);
     } else if (command == "LOAD") {
-      return "load";
+      //parse the load location
+      return new SaveLoadCommand(Command.Load, args[1]);
     } else {
-      return this.processMove(command);
+      let action = await this.processMove(command);
+      return new MoveCommand(action);
     }
   }
 
   async processMove(move: string): Promise<TurnAction> {
-    let turnAction = null;
+    let turnAction: TurnAction | null;
     let homeRegex = /^\d+,home$/;
     let jailRegex = /^\jail,\d+$/;
     let standardRegex = /^\d+,\d+$/;
