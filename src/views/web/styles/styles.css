@@ -2,13 +2,88 @@
   display: flex;
   width: 100%;
   border: 2px solid #000;
+  background-color: darkgray;
 }
 
 .column {
   width: 50px;
   height: 200px;
   border: 1px solid black;
-  background-color: #eaeaea;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+}
+
+.odd {
+  background-color: tan;
+}
+
+.even {
+  background-color: brown;
+}
+
+.row {
+  display: flex;
+  flex-direction: row;
+}
+
+.column-group-top {
+  display: flex;
+  flex-direction: row;
+}
+
+.column-group-bottom {
+  display: flex;
+  flex-direction: row-reverse;
+}
+
+.top-row-container {
+  justify-content: flex-start;
+}
+
+.bottom-row-container {
+  justify-content: flex-end;
+}
+
+.home {
+  width: 100px;
+  height: 200px;
+  background-color: lightgreen;
+  border: 1px solid black;
   display: flex;
   flex-direction: column-reverse;
+  align-items: center;
+  justify-content: center;
+}
+
+.jail {
+  width: 50px;
+  height: 200px;
+  background-color: darkgray;
+  border: 1px solid black;
+  display: flex;
+  flex-direction: column-reverse;
+  justify-content: center;
+  align-items: center;
+}
+
+#black-jail {
+  border-top: 1px solid darkgray;
+}
+#white-jail {
+  border-bottom: 1px solid darkgray;
+}
+
+.piece {
+  width: 35px;
+  height: 35px;
+  border-radius: 50%;
+}
+
+.black {
+  background-color: black;
+}
+
+.white {
+  background-color: white;
 }
