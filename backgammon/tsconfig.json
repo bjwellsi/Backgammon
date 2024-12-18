@@ -1,6 +1,5 @@
 {
   "compilerOptions": {
-    //from vite initialization
     "target": "ES2020",
     "useDefineForClassFields": true,
     "module": "ESNext",
