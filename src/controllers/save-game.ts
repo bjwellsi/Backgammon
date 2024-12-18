@@ -1,4 +1,4 @@
-import { promises as fs } from "fs";
+//import { promises as fs } from "fs";
 import { serialize, deserialize } from "class-transformer";
 import Board from "../models/board";
 
@@ -7,10 +7,11 @@ class SaveGame {
   async saveBoard(board: Board, fileName: string): Promise<void> {
     //very basic default behavior for now
     let content = serialize(board);
-    await fs.writeFile(
-      `/Users/braiden/Documents/BackgammonSaves/${fileName}.json`,
-      content,
-    );
+    return await new Promise<void>();
+    // fs.writeFile(
+    //  `/Users/braiden/Documents/BackgammonSaves/${fileName}.json`,
+    // content,
+    // );
   }
 
   async loadBoard(fileName: string): Promise<Board> {

@@ -1,6 +1,6 @@
 import Board from "../models/board";
 import ConsoleView from "../views/console/console-view";
-import SaveGame from "./save-game";
+//import SaveGame from "./save-game";
 import TurnAction from "../models/turn-action";
 import UserCommand from "../user-commands/user-command";
 import Command from "../user-commands/command";
@@ -10,12 +10,12 @@ import SaveLoadCommand from "../user-commands/save-load-command";
 class GameControlFlow {
   board: Board;
   view: ConsoleView;
-  saveGame: SaveGame;
+  //saveGame: SaveGame;
 
   constructor() {
     this.board = new Board();
     this.view = new ConsoleView();
-    this.saveGame = new SaveGame();
+    //this.saveGame = new SaveGame();
   }
 
   async performUserAction(command: UserCommand): Promise<string | void> {
@@ -37,14 +37,16 @@ class GameControlFlow {
     } else if (command.command == Command.Save) {
       //save the game
       if (command instanceof SaveLoadCommand) {
-        await this.saveGame.saveBoard(this.board, command.saveId);
+        console.log("todo");
+        //await this.saveGame.saveBoard(this.board, command.saveId);
       } else {
         throw Error("Can't save on a non save comman\n");
       }
     } else if (command.command == Command.Load) {
       //load the save game
       if (command instanceof SaveLoadCommand) {
-        this.board = await this.saveGame.loadBoard(command.saveId);
+        console.log("todo");
+        //this.board = await this.saveGame.loadBoard(command.saveId);
       } else {
         throw Error("Can't load on a non load command\n");
       }
