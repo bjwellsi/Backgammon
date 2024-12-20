@@ -40,7 +40,7 @@ class GameControlFlow {
         console.log("todo");
         //await this.saveGame.saveBoard(this.board, command.saveId);
       } else {
-        throw Error("Can't save on a non save comman\n");
+        throw Error("Can't save on a non save command\n");
       }
     } else if (command.command == Command.Load) {
       //load the save game

@@ -37,11 +37,11 @@
   flex-direction: row-reverse;
 }
 
-.top-row-container {
+.top-row {
   justify-content: flex-start;
 }
 
-.bottom-row-container {
+.bottom-row {
   justify-content: flex-end;
 }
 
