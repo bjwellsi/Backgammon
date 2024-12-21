@@ -85,3 +85,7 @@
 .piece.white {
   background-color: white;
 }
+
+.highlighted {
+  background-color: yellow;
+}

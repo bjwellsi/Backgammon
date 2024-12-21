@@ -3,6 +3,7 @@ import TurnAction from "../../../models/turn-action";
 import Color from "../../../models/color";
 import Dice from "../../../models/dice";
 import { populateCommands } from "./command-events";
+import Column from "../../../models/column";
 
 function reloadDice(dice: Dice): void {
   let rollsString;
@@ -26,6 +27,17 @@ function declareWinner(winner: string): void {
   banner.textContent = winner + " wins!";
 }
 
+function populatePieces(board: Board): void {
+  for (let i = 0; i < board.columns.length; i++) {
+    for (let piece of board.columns[i].pieces) {
+      let pieceDisplay = document.createElement("div");
+      pieceDisplay.classList.add("piece");
+      pieceDisplay.classList.add(Color[piece.color].toLowerCase());
+      document.getElementById(`column-${i}`)?.appendChild(pieceDisplay);
+    }
+  }
+}
+
 function displayBoard(board: Board) {
   document.querySelector<HTMLDivElement>(".board")!.innerHTML = `
       <h2 id="turn">${Color[board.currentTeam.color]}</h2>
@@ -33,81 +45,45 @@ function displayBoard(board: Board) {
       <div class="row">
         <div id="black-home" class="home black top-row piece-container"></div>
         <div id="top-left" class="column-group-top">
-          <div id="0" class="column odd top-row-container">
-            <div class="piece white"></div>
-            <div class="piece white"></div>
-          </div>
-          <div id="1" class="column even top-row piece-container"></div>
-          <div id="2" class="column odd top-row piece-container"></div>
-          <div id="3" class="column even top-row piece-container"></div>
-          <div id="4" class="column odd top-row piece-container"></div>
-          <div id="5" class="column even top-row piece-container">
-            <div class="piece black"></div>
-            <div class="piece black"></div>
-            <div class="piece black"></div>
-            <div class="piece black"></div>
-            <div class="piece black"></div>
-          </div>
+          <div id="column-0" class="column odd top-row-container"></div>
+          <div id="column-1" class="column even top-row piece-container"></div>
+          <div id="column-2" class="column odd top-row piece-container"></div>
+          <div id="column-3" class="column even top-row piece-container"></div>
+          <div id="column-4" class="column odd top-row piece-container"></div>
+          <div id="column-5" class="column even top-row piece-container"></div>
         </div>
         <div id="white-jail" class="jail black top-row piece-container"></div>
         <div id="top-right" class="column-group-top">
-          <div id="6" class="column odd top-row piece-container"></div>
-          <div id="7" class="column even top-row piece-container">
-            <div class="piece black"></div>
-            <div class="piece black"></div>
-            <div class="piece black"></div>
-          </div>
-          <div id="8" class="column odd top-row piece-container"></div>
-          <div id="9" class="column even top-row piece-container"></div>
-          <div id="10" class="column odd top-row piece-container"></div>
-          <div id="11" class="column even top-row piece-container">
-            <div class="piece white"></div>
-            <div class="piece white"></div>
-            <div class="piece white"></div>
-            <div class="piece white"></div>
-            <div class="piece white"></div>
-          </div>
+          <div id="column-6" class="column odd top-row piece-container"></div>
+          <div id="column-7" class="column even top-row piece-container"></div>
+          <div id="column-8" class="column odd top-row piece-container"></div>
+          <div id="column-9" class="column even top-row piece-container"></div>
+          <div id="column-10" class="column odd top-row piece-container"></div>
+          <div id="column-11" class="column even top-row piece-container"></div>
         </div>
       </div>
       <div class="row">
         <div id="white-home" class="home white white bottom-row piece-container"></div>
         <div id="bottom-left" class="column-group-bottom">
-          <div id="18" class="column odd bottom-row piece-container">
-            <div class="piece white"></div>
-            <div class="piece white"></div>
-            <div class="piece white"></div>
-            <div class="piece white"></div>
-            <div class="piece white"></div>
-          </div>
-          <div id="19" class="column even bottom-row piece-container"></div>
-          <div id="20" class="column odd bottom-row piece-container"></div>
-          <div id="21" class="column even bottom-row piece-container"></div>
-          <div id="22" class="column odd bottom-row piece-container"></div>
-          <div id="23" class="column even bottom-row piece-container">
-            <div class="piece black"></div>
-            <div class="piece black"></div>
-          </div>
+          <div id="column-18" class="column odd bottom-row piece-container"></div>
+          <div id="column-19" class="column even bottom-row piece-container"></div>
+          <div id="column-20" class="column odd bottom-row piece-container"></div>
+          <div id="column-21" class="column even bottom-row piece-container"></div>
+          <div id="column-22" class="column odd bottom-row piece-container"></div>
+          <div id="column-23" class="column even bottom-row piece-container"></div>
         </div>
         <div id="black-jail" class="jail black bottom-row piece-container"></div>
         <div id="bottom-right" class="column-group-bottom">
-          <div id="12" class="column odd bottom-row piece-container">
-            <div class="piece black"></div>
-            <div class="piece black"></div>
-            <div class="piece black"></div>
-            <div class="piece black"></div>
-            <div class="piece black"></div>
-          </div>
+          <div id="column-12" class="column odd bottom-row piece-container"></div>
           <div id="column-13" class="column even bottom-row piece-container"></div>
           <div id="column-14" class="column odd bottom-row piece-container"></div>
           <div id="column-15" class="column even bottom-row piece-container"></div>
-          <div id="column-16" class="column odd bottom-row piece-container">
-            <div class="piece white"></div>
-            <div class="piece white"></div>
-            <div class="piece white"></div>
-          </div>
+          <div id="column-16" class="column odd bottom-row piece-container"></div>
           <div id="column-17" class="column even bottom-row piece-container"></div>
         </div>
     `;
+
+  populatePieces(board);
   populateCommands();
 }
 

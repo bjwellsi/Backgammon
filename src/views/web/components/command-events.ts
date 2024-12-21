@@ -5,21 +5,28 @@ import MoveCommand from "../../../user-commands/move-command";
 import SaveLoadCommand from "../../../user-commands/save-load-command";
 import getGameEngine from "../../../controllers/game-engine-provider";
 import GameEngine from "../../../controllers/game-engine";
+import { handleError } from "./handle-error";
 
 let selectedDiv: HTMLDivElement | null;
 
 function movePiece(event: MouseEvent): void {
-  let currentDiv = event.currentTarget as HTMLDivElement;
+  try {
+    let currentDiv = event.currentTarget as HTMLDivElement;
 
-  if (selectedDiv == null) {
-    selectedDiv = currentDiv;
-  } else {
-    //create a turn action
-    let from = getContainerID(selectedDiv);
-    let to = getContainerID(currentDiv);
-    let cmd = new MoveCommand(new TurnAction(from, to));
-    getGameEngine().performUserAction(cmd);
-    selectedDiv = null;
+    if (selectedDiv == null) {
+      selectedDiv = currentDiv;
+      selectedDiv.classList.add("highlighted");
+    } else {
+      //create a turn action
+      let from = getContainerID(selectedDiv);
+      let to = getContainerID(currentDiv);
+      let cmd = new MoveCommand(new TurnAction(from, to));
+      getGameEngine().performUserAction(cmd);
+      selectedDiv.classList.remove("highlighted");
+      selectedDiv = null;
+    }
+  } catch (err) {
+    if (err instanceof Error) handleError(err);
   }
 }
 
@@ -29,7 +36,8 @@ function getContainerID(div: HTMLDivElement): number | string {
   } else if (div.classList.contains("home")) {
     return "home";
   } else {
-    let ret = Number(div.id);
+    let id = div.id;
+    let ret = Number(id.charAt(id.length - 1));
     if (isNaN(ret)) {
       throw Error("Invalid container id format\n");
     }
@@ -38,28 +46,48 @@ function getContainerID(div: HTMLDivElement): number | string {
 }
 
 function saveGame(saveName: string): void {
-  let cmd = new SaveLoadCommand(Command.Save, saveName);
-  getGameEngine().performUserAction(cmd);
+  try {
+    let cmd = new SaveLoadCommand(Command.Save, saveName);
+    getGameEngine().performUserAction(cmd);
+  } catch (err) {
+    if (err instanceof Error) displayError(err);
+  }
 }
 
 function loadGame(saveName: string): void {
-  let cmd = new SaveLoadCommand(Command.Load, saveName);
-  getGameEngine().performUserAction(cmd);
+  try {
+    let cmd = new SaveLoadCommand(Command.Load, saveName);
+    getGameEngine().performUserAction(cmd);
+  } catch (err) {
+    if (err instanceof Error) displayError(err);
+  }
 }
 
 function changeTurn(): void {
-  let cmd = new UserCommand(Command.ChangeTurn);
-  getGameEngine().performUserAction(cmd);
+  try {
+    let cmd = new UserCommand(Command.ChangeTurn);
+    getGameEngine().performUserAction(cmd);
+  } catch (err) {
+    if (err instanceof Error) displayError(err);
+  }
 }
 
 function roll(): void {
-  let cmd = new UserCommand(Command.Roll);
-  getGameEngine().performUserAction(cmd);
+  try {
+    let cmd = new UserCommand(Command.Roll);
+    getGameEngine().performUserAction(cmd);
+  } catch (err) {
+    if (err instanceof Error) displayError(err);
+  }
 }
 
 function endGame(): void {
-  let cmd = new UserCommand(Command.Roll);
-  getGameEngine().performUserAction(cmd);
+  try {
+    let cmd = new UserCommand(Command.Roll);
+    getGameEngine().performUserAction(cmd);
+  } catch (err) {
+    if (err instanceof Error) displayError(err);
+  }
 }
 
 function populateCommands(): void {
@@ -69,7 +97,7 @@ function populateCommands(): void {
       div.addEventListener("click", movePiece);
     });
 
-  document.getElementById("dice")?.addEventListener("click", roll);
+  document.getElementById("roll-dice")?.addEventListener("click", roll);
 
   document.getElementById("change-turn")?.addEventListener("click", changeTurn);
 
