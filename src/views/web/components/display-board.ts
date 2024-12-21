@@ -26,7 +26,7 @@ function declareWinner(winner: string): void {
 }
 
 function displayBoard(board: Board) {
-  document.querySelector<HTMLDivElement>("#board")!.innerHTML = `
+  document.querySelector<HTMLDivElement>(".board")!.innerHTML = `
       <h2 id="dice">Dice: 5,2</h2>
       <div class="row">
         <div id="black-home" class="home black top-row piece-container"></div>
