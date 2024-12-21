@@ -1,3 +1,8 @@
+#dice {
+  border: 1px solid black;
+  width: fit-content;
+}
+
 .column {
   width: 50px;
   height: 200px;

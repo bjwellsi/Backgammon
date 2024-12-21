@@ -2,6 +2,7 @@ import Board from "../../../models/board";
 import TurnAction from "../../../models/turn-action";
 import Color from "../../../models/color";
 import Dice from "../../../models/dice";
+import { populateCommands } from "./command-events";
 
 function reloadDice(dice: Dice): void {
   let rollsString;
@@ -27,7 +28,8 @@ function declareWinner(winner: string): void {
 
 function displayBoard(board: Board) {
   document.querySelector<HTMLDivElement>(".board")!.innerHTML = `
-      <h2 id="dice">Dice: 5,2</h2>
+      <h2 id="turn">${Color[board.currentTeam.color]}</h2>
+      <h3 id="dice">${board.currentTeam.dice.renderInConsole()}</h3>
       <div class="row">
         <div id="black-home" class="home black top-row piece-container"></div>
         <div id="top-left" class="column-group-top">
@@ -106,6 +108,7 @@ function displayBoard(board: Board) {
           <div id="column-17" class="column even bottom-row piece-container"></div>
         </div>
     `;
+  populateCommands();
 }
 
 export { displayBoard, reloadDice, declareWinner };

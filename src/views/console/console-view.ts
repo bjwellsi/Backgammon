@@ -6,10 +6,7 @@ import UserCommand from "../../user-commands/user-command";
 import MoveCommand from "../../user-commands/move-command";
 import SaveLoadCommand from "../../user-commands/save-load-command";
 
-class ConsoleView {
-  constructor() {}
-
-  async consoleInput(question: string): Promise<string> {
+  async function consoleInput(question: string): Promise<string> {
     let readLine = Readline.createInterface({
       input: process.stdin,
       output: process.stdout,
@@ -24,22 +21,22 @@ class ConsoleView {
     });
   }
 
-  consoleOutput(message: string): void {
+  function consoleOutput(message: string): void {
     console.log(message);
   }
 
-  reloadObject(object: RendersInConsole): void {
+  function reloadObject(object: RendersInConsole): void {
     console.log(object.renderInConsole());
   }
 
-  processError(error: unknown): void {
+  function processError(error: unknown): void {
     if (error instanceof Error) {
-      this.consoleOutput(`${error.stack}`);
-    } else this.consoleOutput(error as string);
+      consoleOutput(`${error.stack}`);
+    } else consoleOutput(error as string);
   }
 
-  async processInput(): Promise<UserCommand> {
-    let commands = await this.consoleInput(
+  async function processInput(): Promise<UserCommand> {
+    let commands = await consoleInput(
       "Type your next command. Type h for help\n",
     );
     let args = commands.split(" ");
@@ -48,7 +45,7 @@ class ConsoleView {
     if (command == "ENDGAME") {
       return new UserCommand(Command.EndGame);
     } else if (command == "h") {
-      this.consoleOutput(
+      consoleOutput(
         "\nType a standard move as #,# to indicate the columns you'd like to move from and to\n\n" +
           "For example, 6,3 would move a piece from column 6 to column 3, hitting in the process if 3 is occupied by the opponent\n\n" +
           "To move home, simply type #,home - EX: 4,home\n\n" +
@@ -71,12 +68,12 @@ class ConsoleView {
       //parse the load location
       return new SaveLoadCommand(Command.Load, args[1]);
     } else {
-      let action = await this.processMove(command);
+      let action = await processMove(command);
       return new MoveCommand(action);
     }
   }
 
-  async processMove(move: string): Promise<TurnAction> {
+  async function processMove(move: string): Promise<TurnAction> {
     let turnAction: TurnAction | null;
     let homeRegex = /^\d+,home$/;
     let jailRegex = /^\jail,\d+$/;
@@ -84,18 +81,18 @@ class ConsoleView {
     if (homeRegex.test(move)) {
       //parse the first into
       turnAction = new TurnAction(
-        this.indexFromString(move.split(",")[0]),
+        indexFromString(move.split(",")[0]),
         "home",
       );
     } else if (jailRegex.test(move)) {
       //parse out the second int
       turnAction = new TurnAction(
         "jail",
-        this.indexFromString(move.split(",")[1]),
+        indexFromString(move.split(",")[1]),
       );
     } else if (standardRegex.test(move)) {
       //parse both ints
-      let responseMap = move.split(",").map(this.indexFromString);
+      let responseMap = move.split(",").map(indexFromString);
       turnAction = new TurnAction(responseMap[0], responseMap[1]);
     } else {
       //bad format
@@ -104,12 +101,12 @@ class ConsoleView {
     return turnAction;
   }
 
-  indexFromString(stringIndex: string): number {
+  function indexFromString(stringIndex: string): number {
     return parseInt(stringIndex, 10) - 1;
   }
 
-  declareWinner(winner: string): void {
-    this.consoleOutput(`Congrats ${winner}, you won!\n`);
+  function declareWinner(winner: string): void {
+    consoleOutput(`Congrats ${winner}, you won!\n`);
   }
 }
 

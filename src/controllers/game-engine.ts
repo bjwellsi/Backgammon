@@ -1,20 +1,17 @@
 import Board from "../models/board";
-import ConsoleView from "../views/console/console-view";
+import { displayBoard } from "../views/web/components/display-board";
 //import SaveGame from "./save-game";
-import TurnAction from "../models/turn-action";
 import UserCommand from "../user-commands/user-command";
 import Command from "../user-commands/command";
 import MoveCommand from "../user-commands/move-command";
 import SaveLoadCommand from "../user-commands/save-load-command";
 
-class GameControlFlow {
+class GameEngine {
   board: Board;
-  view: ConsoleView;
   //saveGame: SaveGame;
 
   constructor() {
     this.board = new Board();
-    this.view = new ConsoleView();
     //this.saveGame = new SaveGame();
   }
 
@@ -58,12 +55,13 @@ class GameControlFlow {
         throw Error("Can't mave a move without specifying the move\n");
       }
     }
+    displayBoard(this.board);
   }
 
-  async playGame(): Promise<void> {
+  /*8async playGame(): Promise<void> {
     let winner = this.board.winner;
     while (winner === undefined) {
-      this.view.reloadObject(this.board);
+      displayBoard(this.board);
       try {
         let command = await this.view.processInput();
         if ((await this.performUserAction(command)) == "game") {
@@ -77,7 +75,7 @@ class GameControlFlow {
     }
 
     this.view.declareWinner(winner);
-  }
+  }*/
 }
 
-export default GameControlFlow;
+export default GameEngine;

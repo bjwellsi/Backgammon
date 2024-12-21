@@ -1,8 +1,8 @@
-import GameControlFlow from "./game-control-flow";
+import GameEngine from "./game-engine";
 
 async function play(): Promise<void> {
   while (1 == 1) {
-    let game: GameControlFlow = new GameControlFlow();
+    let game: GameEngine = new GameEngine();
     await game.playGame();
   }
 }
