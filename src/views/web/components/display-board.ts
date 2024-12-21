@@ -4,6 +4,7 @@ import Color from "../../../models/color";
 import Dice from "../../../models/dice";
 import { populateCommands } from "./command-events";
 import Column from "../../../models/column";
+import Piece from "../../../models/piece";
 
 function reloadDice(dice: Dice): void {
   let rollsString;
@@ -28,13 +29,34 @@ function declareWinner(winner: string): void {
 }
 
 function populatePieces(board: Board): void {
-  for (let i = 0; i < board.columns.length; i++) {
-    for (let piece of board.columns[i].pieces) {
+  let populateContainer = (pieces: Piece[], container: HTMLElement | null) => {
+    for (let piece of pieces) {
       let pieceDisplay = document.createElement("div");
       pieceDisplay.classList.add("piece");
       pieceDisplay.classList.add(Color[piece.color].toLowerCase());
-      document.getElementById(`column-${i}`)?.appendChild(pieceDisplay);
+      container?.appendChild(pieceDisplay);
     }
+  };
+
+  for (let i = 0; i < board.columns.length; i++) {
+    let containerDiv = document.getElementById(`column-${i}`);
+    populateContainer(board.columns[i].pieces, containerDiv);
+  }
+
+  for (let i = 0; i < board.teams.length; i++) {
+    let jail = board.teams[i].jail;
+    let home = board.teams[i].home;
+    console.log(board.teams[i]);
+    console.log(Color[jail.color]);
+    let containerDiv = document.getElementById(
+      Color[jail.color].toLowerCase() + "-jail",
+    );
+    populateContainer(jail.pieces, containerDiv);
+
+    containerDiv = document.getElementById(
+      Color[jail.color].toLowerCase() + "-home",
+    );
+    populateContainer(home.pieces, containerDiv);
   }
 }
 
@@ -45,7 +67,7 @@ function displayBoard(board: Board) {
       <div class="row">
         <div id="black-home" class="home black top-row piece-container"></div>
         <div id="top-left" class="column-group-top">
-          <div id="column-0" class="column odd top-row-container"></div>
+          <div id="column-0" class="column odd top-row piece-container"></div>
           <div id="column-1" class="column even top-row piece-container"></div>
           <div id="column-2" class="column odd top-row piece-container"></div>
           <div id="column-3" class="column even top-row piece-container"></div>

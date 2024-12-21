@@ -110,4 +110,4 @@ import SaveLoadCommand from "../../user-commands/save-load-command";
   }
 }
 
-export default ConsoleView;
+export {processMove, declareWinner, processInput, processError, };

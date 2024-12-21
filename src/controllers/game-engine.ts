@@ -57,25 +57,6 @@ class GameEngine {
     }
     displayBoard(this.board);
   }
-
-  /*8async playGame(): Promise<void> {
-    let winner = this.board.winner;
-    while (winner === undefined) {
-      displayBoard(this.board);
-      try {
-        let command = await this.view.processInput();
-        if ((await this.performUserAction(command)) == "game") {
-          winner = "NOBODY";
-          break;
-        }
-      } catch (error) {
-        this.view.processError(error);
-      }
-      winner = this.board.winner;
-    }
-
-    this.view.declareWinner(winner);
-  }*/
 }
 
 export default GameEngine;

@@ -4,12 +4,12 @@ import UserCommand from "../../../user-commands/user-command";
 import MoveCommand from "../../../user-commands/move-command";
 import SaveLoadCommand from "../../../user-commands/save-load-command";
 import getGameEngine from "../../../controllers/game-engine-provider";
-import GameEngine from "../../../controllers/game-engine";
 import { handleError } from "./handle-error";
 
 let selectedDiv: HTMLDivElement | null;
 
 function movePiece(event: MouseEvent): void {
+  console.log("eeeee");
   try {
     let currentDiv = event.currentTarget as HTMLDivElement;
 
@@ -37,7 +37,8 @@ function getContainerID(div: HTMLDivElement): number | string {
     return "home";
   } else {
     let id = div.id;
-    let ret = Number(id.charAt(id.length - 1));
+    let ret = Number(id.replace("column-", ""));
+    console.log(ret);
     if (isNaN(ret)) {
       throw Error("Invalid container id format\n");
     }
@@ -50,7 +51,7 @@ function saveGame(saveName: string): void {
     let cmd = new SaveLoadCommand(Command.Save, saveName);
     getGameEngine().performUserAction(cmd);
   } catch (err) {
-    if (err instanceof Error) displayError(err);
+    if (err instanceof Error) handleError(err);
   }
 }
 
@@ -59,7 +60,7 @@ function loadGame(saveName: string): void {
     let cmd = new SaveLoadCommand(Command.Load, saveName);
     getGameEngine().performUserAction(cmd);
   } catch (err) {
-    if (err instanceof Error) displayError(err);
+    if (err instanceof Error) handleError(err);
   }
 }
 
@@ -68,7 +69,7 @@ function changeTurn(): void {
     let cmd = new UserCommand(Command.ChangeTurn);
     getGameEngine().performUserAction(cmd);
   } catch (err) {
-    if (err instanceof Error) displayError(err);
+    if (err instanceof Error) handleError(err);
   }
 }
 
@@ -77,7 +78,7 @@ function roll(): void {
     let cmd = new UserCommand(Command.Roll);
     getGameEngine().performUserAction(cmd);
   } catch (err) {
-    if (err instanceof Error) displayError(err);
+    if (err instanceof Error) handleError(err);
   }
 }
 
@@ -86,7 +87,7 @@ function endGame(): void {
     let cmd = new UserCommand(Command.Roll);
     getGameEngine().performUserAction(cmd);
   } catch (err) {
-    if (err instanceof Error) displayError(err);
+    if (err instanceof Error) handleError(err);
   }
 }
 
