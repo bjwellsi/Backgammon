@@ -46,8 +46,6 @@ function populatePieces(board: Board): void {
   for (let i = 0; i < board.teams.length; i++) {
     let jail = board.teams[i].jail;
     let home = board.teams[i].home;
-    console.log(board.teams[i]);
-    console.log(Color[jail.color]);
     let containerDiv = document.getElementById(
       Color[jail.color].toLowerCase() + "-jail",
     );

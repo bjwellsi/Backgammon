@@ -1,6 +1,6 @@
 import Board from "../models/board";
 import { displayBoard } from "../views/web/components/display-board";
-//import SaveGame from "./save-game";
+import SaveGame from "./save-game";
 import UserCommand from "../user-commands/user-command";
 import Command from "../user-commands/command";
 import MoveCommand from "../user-commands/move-command";
@@ -8,11 +8,11 @@ import SaveLoadCommand from "../user-commands/save-load-command";
 
 class GameEngine {
   board: Board;
-  //saveGame: SaveGame;
+  saveGame: SaveGame;
 
   constructor() {
     this.board = new Board();
-    //this.saveGame = new SaveGame();
+    this.saveGame = new SaveGame();
   }
 
   async performUserAction(command: UserCommand): Promise<string | void> {
@@ -35,7 +35,7 @@ class GameEngine {
       //save the game
       if (command instanceof SaveLoadCommand) {
         console.log("todo");
-        //await this.saveGame.saveBoard(this.board, command.saveId);
+        this.saveGame.saveBoard(this.board, command.saveId);
       } else {
         throw Error("Can't save on a non save command\n");
       }
@@ -43,7 +43,10 @@ class GameEngine {
       //load the save game
       if (command instanceof SaveLoadCommand) {
         console.log("todo");
-        //this.board = await this.saveGame.loadBoard(command.saveId);
+        let board = this.saveGame.loadBoard(command.saveId);
+        if (board) {
+          this.board = board;
+        }
       } else {
         throw Error("Can't load on a non load command\n");
       }

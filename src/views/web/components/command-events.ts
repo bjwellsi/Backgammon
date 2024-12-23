@@ -9,7 +9,6 @@ import { handleError } from "./handle-error";
 let selectedDiv: HTMLDivElement | null;
 
 function movePiece(event: MouseEvent): void {
-  console.log("eeeee");
   try {
     let currentDiv = event.currentTarget as HTMLDivElement;
 
@@ -38,7 +37,6 @@ function getContainerID(div: HTMLDivElement): number | string {
   } else {
     let id = div.id;
     let ret = Number(id.replace("column-", ""));
-    console.log(ret);
     if (isNaN(ret)) {
       throw Error("Invalid container id format\n");
     }
@@ -104,15 +102,13 @@ function populateCommands(): void {
 
   document.getElementById("end-game")?.addEventListener("click", endGame);
 
-  /*
   document
     .getElementById("load-game")
-    ?.addEventListener("click", loadGame("testSave"));
+    ?.addEventListener("click", () => loadGame("testSave"));
 
   document
     .getElementById("save-game")
-    ?.addEventListener("click", saveGame("testSave"));
-*/
+    ?.addEventListener("click", () => saveGame("testSave"));
 }
 
 export { populateCommands };
