@@ -6,6 +6,7 @@ import { populateCommands } from "./command-events";
 import Column from "../../../models/column";
 import Piece from "../../../models/piece";
 import { displaySaves } from "./display-save-options";
+import { clearError } from "./handle-error";
 
 function reloadDice(dice: Dice): void {
   let rollsString;
@@ -63,6 +64,7 @@ function displayBoard(board: Board) {
   document.querySelector<HTMLDivElement>(".board")!.innerHTML = `
       <h2 id="turn">${Color[board.currentTeam.color]}</h2>
       <h3 id="dice">${board.currentTeam.dice.renderInConsole()}</h3>
+    <h3 id="error-display"></h3>
       <div class="row">
         <div id="black-home" class="home black top-row piece-container"></div>
         <div id="top-left" class="column-group-top">
@@ -107,6 +109,7 @@ function displayBoard(board: Board) {
   populatePieces(board);
   displaySaves();
   populateCommands();
+  clearError();
 }
 
 export { displayBoard, reloadDice, declareWinner };

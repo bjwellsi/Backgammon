@@ -9,23 +9,19 @@ import { handleError } from "./handle-error";
 let selectedDiv: HTMLDivElement | null;
 
 function movePiece(event: MouseEvent): void {
-  try {
-    let currentDiv = event.currentTarget as HTMLDivElement;
+  let currentDiv = event.currentTarget as HTMLDivElement;
 
-    if (selectedDiv == null) {
-      selectedDiv = currentDiv;
-      selectedDiv.classList.add("highlighted");
-    } else {
-      //create a turn action
-      let from = getContainerID(selectedDiv);
-      let to = getContainerID(currentDiv);
-      let cmd = new MoveCommand(new TurnAction(from, to));
-      getGameEngine().performUserAction(cmd);
-      selectedDiv.classList.remove("highlighted");
-      selectedDiv = null;
-    }
-  } catch (err) {
-    if (err instanceof Error) handleError(err);
+  if (selectedDiv == null) {
+    selectedDiv = currentDiv;
+    selectedDiv.classList.add("highlighted");
+  } else {
+    //create a turn action
+    let from = getContainerID(selectedDiv);
+    let to = getContainerID(currentDiv);
+    let cmd = new MoveCommand(new TurnAction(from, to));
+    getGameEngine().performUserAction(cmd);
+    selectedDiv.classList.remove("highlighted");
+    selectedDiv = null;
   }
 }
 
@@ -45,54 +41,34 @@ function getContainerID(div: HTMLDivElement): number | string {
 }
 
 function saveGame(): void {
-  try {
-    let saveName = (
-      document.getElementById("save-name") as HTMLInputElement
-    ).value.trim();
-    let cmd = new SaveLoadCommand(Command.Save, saveName);
-    getGameEngine().performUserAction(cmd);
-  } catch (err) {
-    if (err instanceof Error) handleError(err);
-  }
+  let saveName = (
+    document.getElementById("save-name") as HTMLInputElement
+  ).value.trim();
+  let cmd = new SaveLoadCommand(Command.Save, saveName);
+  getGameEngine().performUserAction(cmd);
 }
 
 function loadGame(): void {
-  try {
-    let saveName = (
-      document.getElementById("save-name") as HTMLInputElement
-    ).value.trim();
-    let cmd = new SaveLoadCommand(Command.Load, saveName);
-    getGameEngine().performUserAction(cmd);
-  } catch (err) {
-    if (err instanceof Error) handleError(err);
-  }
+  let saveName = (
+    document.getElementById("save-name") as HTMLInputElement
+  ).value.trim();
+  let cmd = new SaveLoadCommand(Command.Load, saveName);
+  getGameEngine().performUserAction(cmd);
 }
 
 function changeTurn(): void {
-  try {
-    let cmd = new UserCommand(Command.ChangeTurn);
-    getGameEngine().performUserAction(cmd);
-  } catch (err) {
-    if (err instanceof Error) handleError(err);
-  }
+  let cmd = new UserCommand(Command.ChangeTurn);
+  getGameEngine().performUserAction(cmd);
 }
 
 function roll(): void {
-  try {
-    let cmd = new UserCommand(Command.Roll);
-    getGameEngine().performUserAction(cmd);
-  } catch (err) {
-    if (err instanceof Error) handleError(err);
-  }
+  let cmd = new UserCommand(Command.Roll);
+  getGameEngine().performUserAction(cmd);
 }
 
 function endGame(): void {
-  try {
-    let cmd = new UserCommand(Command.EndGame);
-    getGameEngine().performUserAction(cmd);
-  } catch (err) {
-    if (err instanceof Error) handleError(err);
-  }
+  let cmd = new UserCommand(Command.EndGame);
+  getGameEngine().performUserAction(cmd);
 }
 
 function populateCommands(): void {
