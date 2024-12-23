@@ -5,6 +5,7 @@ import Dice from "../../../models/dice";
 import { populateCommands } from "./command-events";
 import Column from "../../../models/column";
 import Piece from "../../../models/piece";
+import { displaySaves } from "./display-save-options";
 
 function reloadDice(dice: Dice): void {
   let rollsString;
@@ -104,6 +105,7 @@ function displayBoard(board: Board) {
     `;
 
   populatePieces(board);
+  displaySaves();
   populateCommands();
 }
 

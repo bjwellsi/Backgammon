@@ -19,6 +19,17 @@ class SaveGame {
     }
     return board;
   }
+
+  listSaves(): string[] {
+    let saves = [];
+    for (let i = 0; i < localStorage.length; i++) {
+      let key = localStorage.key(i);
+      if (key) {
+        saves.push(key);
+      }
+    }
+    return saves;
+  }
 }
 
 export default SaveGame;
