@@ -9,7 +9,7 @@ import { displaySaves } from "./display-save-options";
 import { clearError } from "./handle-error";
 
 function reloadDice(dice: Dice): void {
-  let rollsString;
+  let rollsString: string;
   let rolls = dice.rolls;
   if (rolls.length == 0) {
     rollsString = "No rolls remaining";
