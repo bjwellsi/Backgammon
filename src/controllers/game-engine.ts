@@ -20,10 +20,7 @@ class GameEngine {
       //do nothing.
       return;
     } else if (command.command == Command.EndGame) {
-      //just going to return the command to the outer loop for now, let it handle ending the loop
-      //putting it in here so that none of the command processing happens outside this method
-      //right now there's no processing to really do on this command though
-      return "end";
+      this.board = new Board();
     } else if (command.command == Command.Roll) {
       //will throw an error if you've already rolled this turn
       this.board.rollDice();
@@ -34,7 +31,6 @@ class GameEngine {
     } else if (command.command == Command.Save) {
       //save the game
       if (command instanceof SaveLoadCommand) {
-        console.log("todo");
         this.saveGame.saveBoard(this.board, command.saveId);
       } else {
         throw Error("Can't save on a non save command\n");
@@ -42,7 +38,6 @@ class GameEngine {
     } else if (command.command == Command.Load) {
       //load the save game
       if (command instanceof SaveLoadCommand) {
-        console.log("todo");
         let board = this.saveGame.loadBoard(command.saveId);
         if (board) {
           this.board = board;

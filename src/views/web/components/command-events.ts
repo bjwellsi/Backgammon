@@ -44,8 +44,11 @@ function getContainerID(div: HTMLDivElement): number | string {
   }
 }
 
-function saveGame(saveName: string): void {
+function saveGame(): void {
   try {
+    let saveName = (
+      document.getElementById("save-name") as HTMLInputElement
+    ).value.trim();
     let cmd = new SaveLoadCommand(Command.Save, saveName);
     getGameEngine().performUserAction(cmd);
   } catch (err) {
@@ -53,8 +56,11 @@ function saveGame(saveName: string): void {
   }
 }
 
-function loadGame(saveName: string): void {
+function loadGame(): void {
   try {
+    let saveName = (
+      document.getElementById("save-name") as HTMLInputElement
+    ).value.trim();
     let cmd = new SaveLoadCommand(Command.Load, saveName);
     getGameEngine().performUserAction(cmd);
   } catch (err) {
@@ -82,7 +88,7 @@ function roll(): void {
 
 function endGame(): void {
   try {
-    let cmd = new UserCommand(Command.Roll);
+    let cmd = new UserCommand(Command.EndGame);
     getGameEngine().performUserAction(cmd);
   } catch (err) {
     if (err instanceof Error) handleError(err);
@@ -102,13 +108,9 @@ function populateCommands(): void {
 
   document.getElementById("end-game")?.addEventListener("click", endGame);
 
-  document
-    .getElementById("load-game")
-    ?.addEventListener("click", () => loadGame("testSave"));
+  document.getElementById("load-game")?.addEventListener("click", loadGame);
 
-  document
-    .getElementById("save-game")
-    ?.addEventListener("click", () => saveGame("testSave"));
+  document.getElementById("save-game")?.addEventListener("click", saveGame);
 }
 
 export { populateCommands };
