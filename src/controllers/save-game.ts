@@ -4,23 +4,31 @@ import Board from "../models/board";
 
 class SaveGame {
   constructor() {}
-  async saveBoard(board: Board, fileName: string): Promise<void> {
+  saveBoard(board: Board, fileName: string): void {
     //very basic default behavior for now
     let content = serialize(board);
-    await fs.writeFile(
-      `/Users/braiden/Documents/BackgammonSaves/${fileName}.json`,
-      content,
-    );
+    localStorage.setItem(fileName, content);
   }
 
-  async loadBoard(fileName: string): Promise<Board> {
+  loadBoard(fileName: string): Board | null {
     //very basic default behavior for now
-    let content = await fs.readFile(
-      `/Users/braiden/Documents/BackgammonSaves/${fileName}.json`,
-      "utf-8",
-    );
-    let board = deserialize(Board, content);
+    let content = localStorage.getItem(fileName);
+    let board = null;
+    if (content) {
+      board = deserialize(Board, content);
+    }
     return board;
+  }
+
+  listSaves(): string[] {
+    let saves = [];
+    for (let i = 0; i < localStorage.length; i++) {
+      let key = localStorage.key(i);
+      if (key) {
+        saves.push(key);
+      }
+    }
+    return saves;
   }
 }
 

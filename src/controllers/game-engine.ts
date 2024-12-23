@@ -1,20 +1,17 @@
 import Board from "../models/board";
-import ConsoleView from "../views/console/console-view";
+import { displayBoard } from "../views/web/components/display-board";
 import SaveGame from "./save-game";
-import TurnAction from "../models/turn-action";
 import UserCommand from "../user-commands/user-command";
 import Command from "../user-commands/command";
 import MoveCommand from "../user-commands/move-command";
 import SaveLoadCommand from "../user-commands/save-load-command";
 
-class GameControlFlow {
+class GameEngine {
   board: Board;
-  view: ConsoleView;
   saveGame: SaveGame;
 
   constructor() {
     this.board = new Board();
-    this.view = new ConsoleView();
     this.saveGame = new SaveGame();
   }
 
@@ -23,10 +20,7 @@ class GameControlFlow {
       //do nothing.
       return;
     } else if (command.command == Command.EndGame) {
-      //just going to return the command to the outer loop for now, let it handle ending the loop
-      //putting it in here so that none of the command processing happens outside this method
-      //right now there's no processing to really do on this command though
-      return "end";
+      this.board = new Board();
     } else if (command.command == Command.Roll) {
       //will throw an error if you've already rolled this turn
       this.board.rollDice();
@@ -37,14 +31,17 @@ class GameControlFlow {
     } else if (command.command == Command.Save) {
       //save the game
       if (command instanceof SaveLoadCommand) {
-        await this.saveGame.saveBoard(this.board, command.saveId);
+        this.saveGame.saveBoard(this.board, command.saveId);
       } else {
-        throw Error("Can't save on a non save comman\n");
+        throw Error("Can't save on a non save command\n");
       }
     } else if (command.command == Command.Load) {
       //load the save game
       if (command instanceof SaveLoadCommand) {
-        this.board = await this.saveGame.loadBoard(command.saveId);
+        let board = this.saveGame.loadBoard(command.saveId);
+        if (board) {
+          this.board = board;
+        }
       } else {
         throw Error("Can't load on a non load command\n");
       }
@@ -56,26 +53,8 @@ class GameControlFlow {
         throw Error("Can't mave a move without specifying the move\n");
       }
     }
-  }
-
-  async playGame(): Promise<void> {
-    let winner = this.board.winner;
-    while (winner === undefined) {
-      this.view.reloadObject(this.board);
-      try {
-        let command = await this.view.processInput();
-        if ((await this.performUserAction(command)) == "game") {
-          winner = "NOBODY";
-          break;
-        }
-      } catch (error) {
-        this.view.processError(error);
-      }
-      winner = this.board.winner;
-    }
-
-    this.view.declareWinner(winner);
+    displayBoard(this.board);
   }
 }
 
-export default GameControlFlow;
+export default GameEngine;
