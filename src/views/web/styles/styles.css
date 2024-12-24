@@ -188,3 +188,7 @@ button:hover {
 .highlighted {
   background-color: yellow;
 }
+
+.error-display {
+  position: absolute;
+}
