@@ -39,8 +39,12 @@ function populatePieces(board: Board): void {
   };
 
   for (let i = 0; i < board.columns.length; i++) {
-    let containerDiv = document.getElementById(`column-${i}`);
-    populateContainer(board.columns[i].pieces, containerDiv);
+    let containerDiv = document
+      .getElementById(`column-${i}`)
+      ?.querySelector<HTMLDivElement>(".piece-list");
+    if (containerDiv) {
+      populateContainer(board.columns[i].pieces, containerDiv);
+    }
   }
 
   for (let i = 0; i < board.teams.length; i++) {
@@ -58,6 +62,36 @@ function populatePieces(board: Board): void {
   }
 }
 
+function createColumn(columnIndex: number, inverted: boolean): HTMLDivElement {
+  let col = document.createElement("div");
+  col.classList.add("column", "piece-container");
+  col.id = `column-${columnIndex}`;
+
+  let oddOrEven = "odd";
+  if (columnIndex % 2 > 0) {
+    oddOrEven = "even";
+  }
+  let topOrBottom = "bottom";
+  if (inverted) {
+    topOrBottom = "top";
+  }
+
+  //now add the actual piece row
+  let pieces = document.createElement("div");
+  pieces.classList.add("piece-list");
+  pieces.classList.add(oddOrEven, topOrBottom);
+  col.appendChild(pieces);
+
+  let triangle = document.createElement("div");
+  triangle.classList.add("triangle");
+  triangle.classList.add(oddOrEven, topOrBottom);
+  col.appendChild(triangle);
+
+  col.classList.add(oddOrEven, topOrBottom);
+
+  return col;
+}
+
 function displayBoard(board: Board) {
   document.querySelector<HTMLDivElement>(".play-area")!.innerHTML = `
       <h2 id="turn">${Color[board.currentTeam.color]}'s turn</h2>
@@ -65,46 +99,44 @@ function displayBoard(board: Board) {
     <h3 id="error-display"></h3>
       <div class="board">
       <div class="row">
-        <div id="black-home" class="home black top-row piece-container"></div>
-        <div id="top-left" class="column-group-top">
-          <div id="column-0" class="column odd top-row piece-container"></div>
-          <div id="column-1" class="column even top-row piece-container"></div>
-          <div id="column-2" class="column odd top-row piece-container"></div>
-          <div id="column-3" class="column even top-row piece-container"></div>
-          <div id="column-4" class="column odd top-row piece-container"></div>
-          <div id="column-5" class="column even top-row piece-container"></div>
-        </div>
-        <div id="white-jail" class="jail black top-row piece-container"></div>
-        <div id="top-right" class="column-group-top">
-          <div id="column-6" class="column odd top-row piece-container"></div>
-          <div id="column-7" class="column even top-row piece-container"></div>
-          <div id="column-8" class="column odd top-row piece-container"></div>
-          <div id="column-9" class="column even top-row piece-container"></div>
-          <div id="column-10" class="column odd top-row piece-container"></div>
-          <div id="column-11" class="column even top-row piece-container"></div>
-        </div>
+        <div id="black-home" class="home black piece-container"></div>
+        <div id="top-left" class="column-group-top"></div>
+        <div id="white-jail" class="jail black piece-container"></div>
+        <div id="top-right" class="column-group-top"></div>
       </div>
       <div class="row">
-        <div id="white-home" class="home white white bottom-row piece-container"></div>
-        <div id="bottom-left" class="column-group-bottom">
-          <div id="column-18" class="column odd bottom-row piece-container"></div>
-          <div id="column-19" class="column even bottom-row piece-container"></div>
-          <div id="column-20" class="column odd bottom-row piece-container"></div>
-          <div id="column-21" class="column even bottom-row piece-container"></div>
-          <div id="column-22" class="column odd bottom-row piece-container"></div>
-          <div id="column-23" class="column even bottom-row piece-container"></div>
-        </div>
-        <div id="black-jail" class="jail black bottom-row piece-container"></div>
-        <div id="bottom-right" class="column-group-bottom">
-          <div id="column-12" class="column odd bottom-row piece-container"></div>
-          <div id="column-13" class="column even bottom-row piece-container"></div>
-          <div id="column-14" class="column odd bottom-row piece-container"></div>
-          <div id="column-15" class="column even bottom-row piece-container"></div>
-          <div id="column-16" class="column odd bottom-row piece-container"></div>
-          <div id="column-17" class="column even bottom-row piece-container"></div>
-        </div>
+        <div id="white-home" class="home white piece-container"></div>
+        <div id="bottom-left" class="column-group-bottom"></div>
+        <div id="black-jail" class="jail black piece-container"></div>
+        <div id="bottom-right" class="column-group-bottom"></div>
      </div> 
     `;
+
+  let topLeft = document.getElementById("top-left");
+  if (topLeft) {
+    for (let i = 0; i < 6; i++) {
+      topLeft.appendChild(createColumn(i, true));
+    }
+  }
+  let topRight = document.getElementById("top-right");
+  if (topRight) {
+    for (let i = 6; i < 12; i++) {
+      topRight.appendChild(createColumn(i, true));
+    }
+  }
+  let bottomLeft = document.getElementById("bottom-left");
+  if (bottomLeft) {
+    for (let i = 18; i < 24; i++) {
+      bottomLeft.appendChild(createColumn(i, false));
+    }
+  }
+
+  let bottomRight = document.getElementById("bottom-right");
+  if (bottomRight) {
+    for (let i = 12; i < 18; i++) {
+      bottomRight.appendChild(createColumn(i, false));
+    }
+  }
 
   populatePieces(board);
   displaySaves();
