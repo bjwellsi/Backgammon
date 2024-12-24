@@ -73,28 +73,38 @@ button:hover {
   width: 0;
   height: 0;
   z-index: 1;
+  border-left: 25px solid transparent;
+  border-right: 25px solid transparent;
 }
 
 .triangle.top {
   left: 0;
   bottom: 0;
-  border-left: 25px solid transparent;
-  border-right: 25px solid transparent;
 }
 
 .triangle.bottom {
-  right: 0;
+  left: 0;
   top: 0;
-  border-left: 25px solid transparent;
-  border-right: 25px solid transparent;
 }
 
-.triangle.odd {
+.triangle.top.odd {
   border-top: 200px solid tan;
+  border-bottom: none;
 }
 
-.triangle.even {
+.triangle.top.even {
   border-top: 200px solid brown;
+  border-bottom: none;
+}
+
+.triangle.bottom.odd {
+  border-top: none;
+  border-bottom: 200px solid tan;
+}
+
+.triangle.bottom.even {
+  border-top: none;
+  border-bottom: 200px solid brown;
 }
 
 .piece-list {
