@@ -24,11 +24,11 @@
 }
 
 .board {
-  border: 2px solid black;
+  border: 20px solid #5b4416;
   -webkit-border-radius: 5px;
   border-radius: 5px;
   display: fit-content;
-  background-color: #e7b864;
+  background-color: #a77e29;
 }
 
 .control-row {
@@ -145,19 +145,33 @@ button:hover {
 .home {
   width: 100px;
   height: 200px;
-  background-color: lightgreen;
-  border: 1px solid black;
+  background-color: #6a501a;
+  border: 2px solid black;
+  border-top: 1px solid black;
+  border-bottom: 1px solid black;
   display: flex;
   flex-direction: column-reverse;
   align-items: center;
   justify-content: center;
 }
 
+#black-home {
+  border-bottom: 2px solid black;
+}
+
+#white-home {
+  border-bottom: 2px solid black;
+}
+
 .jail {
   width: 50px;
   height: 200px;
-  background-color: darkgray;
-  border: 1px solid black;
+  background-color: #6a501a;
+  border-top: 2px solid #6a501a;
+  border-bottom: 2px solid #6a501a;
+  border-left: 1px solid black;
+  border-right: 1px solid black;
+  padding: none;
   display: flex;
   flex-direction: column-reverse;
   justify-content: center;
@@ -167,6 +181,7 @@ button:hover {
 #black-jail {
   border-top: 1px solid darkgray;
 }
+
 #white-jail {
   border-bottom: 1px solid darkgray;
 }

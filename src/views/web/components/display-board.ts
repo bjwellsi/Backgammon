@@ -6,20 +6,20 @@ import Piece from "../../../models/piece";
 import { displaySaves } from "./display-save-options";
 import { clearError } from "./handle-error";
 
-function reloadDice(dice: Dice): void {
-  let rollsString: string;
-  let rolls = dice.rolls;
-  if (rolls.length == 0) {
-    rollsString = "No rolls remaining";
-  } else {
-    rollsString = "Dice: " + rolls.join(", ");
-  }
+function displayDice(board: Board): void {
+  let diceDiv = document.getElementById("dice");
+  if (diceDiv) {
+    diceDiv.id = "dice";
+    let dice = board.currentTeam.dice;
+    let rollsString = "";
+    let rolls = dice.rolls;
+    if (rolls.length > 0) {
+      rollsString = rolls.join(", ");
+    }
 
-  let diceHeader = document.getElementById("dice");
-  if (diceHeader) {
+    let diceHeader = document.createElement("h3");
     diceHeader.textContent = rollsString;
-  } else {
-    throw Error("Dice not found\n");
+    diceDiv.appendChild(diceHeader);
   }
 }
 
@@ -95,7 +95,7 @@ function createColumn(columnIndex: number, inverted: boolean): HTMLDivElement {
 function displayBoard(board: Board) {
   document.querySelector<HTMLDivElement>(".play-area")!.innerHTML = `
       <h2 id="turn">${Color[board.currentTeam.color]}'s turn</h2>
-      <h3 id="dice">${board.currentTeam.dice.renderInConsole()}</h3>
+      <div id="dice"></div>
     <h3 id="error-display"></h3>
       <div class="board">
       <div class="row">
@@ -115,7 +115,7 @@ function displayBoard(board: Board) {
   let topLeft = document.getElementById("top-left");
   if (topLeft) {
     for (let i = 0; i < 6; i++) {
-      topLeft.appendChild(createColumn(i, true));
+      topLeft.appendChild(createColumn(i, false));
     }
   }
   let topRight = document.getElementById("top-right");
@@ -139,6 +139,7 @@ function displayBoard(board: Board) {
   }
 
   populatePieces(board);
+  displayDice(board);
   displaySaves();
   populateCommands();
   clearError();
