@@ -59,10 +59,6 @@ function deleteSave(save: string): void {
   localStorage.removeItem(save);
 }
 
-function deleteAllSaves(): void {
-  localStorage.clear();
-}
-
 function changeSaveName(save: string, newName: string): void {
   let saveData = loadBoard(save);
   if (saveData instanceof Board) {
