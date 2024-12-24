@@ -110,6 +110,8 @@ button:hover {
 
 .piece-list {
   z-index: 2;
+  border: none;
+  padding: none;
 }
 
 .piece-list.top {
@@ -178,14 +180,6 @@ button:hover {
   flex-direction: column-reverse;
   justify-content: center;
   align-items: center;
-}
-
-#black-jail {
-  border-top: 1px solid darkgray;
-}
-
-#white-jail {
-  border-bottom: 1px solid darkgray;
 }
 
 .piece {

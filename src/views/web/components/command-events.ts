@@ -20,9 +20,9 @@ function move(event: MouseEvent): void {
     let from = getContainerID(selectedDiv);
     let to = getContainerID(currentDiv);
     let action = new TurnAction(from, to);
-    movePiece(action);
     selectedDiv.classList.remove("highlighted");
     selectedDiv = null;
+    movePiece(action);
     displayBoard();
   }
 }
