@@ -61,10 +61,11 @@ function populatePieces(board: Board): void {
 }
 
 function displayBoard(board: Board) {
-  document.querySelector<HTMLDivElement>(".board")!.innerHTML = `
-      <h2 id="turn">${Color[board.currentTeam.color]}</h2>
+  document.querySelector<HTMLDivElement>(".play-area")!.innerHTML = `
+      <h2 id="turn">${Color[board.currentTeam.color]}'s turn</h2>
       <h3 id="dice">${board.currentTeam.dice.renderInConsole()}</h3>
     <h3 id="error-display"></h3>
+      <div class="board">
       <div class="row">
         <div id="black-home" class="home black top-row piece-container"></div>
         <div id="top-left" class="column-group-top">
@@ -104,6 +105,7 @@ function displayBoard(board: Board) {
           <div id="column-16" class="column odd bottom-row piece-container"></div>
           <div id="column-17" class="column even bottom-row piece-container"></div>
         </div>
+     </div> 
     `;
 
   populatePieces(board);
