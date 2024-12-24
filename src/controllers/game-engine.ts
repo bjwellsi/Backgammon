@@ -1,10 +1,11 @@
 import Board from "../models/board";
 import { displayBoard } from "../views/web/components/display-board";
-import { saveBoard, loadBoard, newSave } from "./save-game";
+import { saveBoard, loadBoard } from "./save-game";
 import UserCommand from "../user-commands/user-command";
 import Command from "../user-commands/command";
 import MoveCommand from "../user-commands/move-command";
 import SaveLoadCommand from "../user-commands/save-load-command";
+import LoadCommand from "../user-commands/load-command";
 
 class GameEngine {
   board: Board;
@@ -26,22 +27,15 @@ class GameEngine {
       //should end the turn. for now we'll just end it no matter what, instead of checking whether there are moves left
       this.board.clearDice("team");
       this.board.changeTurn();
-    } else if (command.command == Command.Save) {
-      //save the game
-      if (command instanceof SaveLoadCommand) {
-        newSave(this.board);
-      } else {
-        throw Error("Can't save on a non save command\n");
-      }
     } else if (command.command == Command.Load) {
       //load the save game
-      if (command instanceof SaveLoadCommand) {
-        let board = loadBoard(command.saveId);
+      if (command instanceof LoadCommand) {
+        let board = command.board;
         if (board) {
           this.board = board;
         }
       } else {
-        throw Error("Can't load on a non load command\n");
+        throw Error("Invalid board\n");
       }
     } else if (command.command == Command.Move) {
       //assume that we've gotten a move back

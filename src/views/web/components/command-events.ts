@@ -2,8 +2,9 @@ import TurnAction from "../../../models/turn-action";
 import Command from "../../../user-commands/command";
 import UserCommand from "../../../user-commands/user-command";
 import MoveCommand from "../../../user-commands/move-command";
-import SaveLoadCommand from "../../../user-commands/save-load-command";
 import getGameEngine from "../../../controllers/game-engine-provider";
+import { loadBoard, newSave } from "../../../controllers/save-game";
+import LoadCommand from "../../../user-commands/load-command";
 
 let selectedDiv: HTMLDivElement | null;
 
@@ -39,16 +40,13 @@ function getContainerID(div: HTMLDivElement): number | string {
   }
 }
 
-function newSave(): void {
-  let cmd = new SaveLoadCommand(Command.Save);
-  getGameEngine().performUserAction(cmd);
+function makeNewSave(): void {
+  newSave(getGameEngine().board);
 }
 
 function loadGame(): void {
-  let saveName = (
-    document.getElementById("save-name") as HTMLInputElement
-  ).value.trim();
-  let cmd = new SaveLoadCommand(Command.Load, saveName);
+  //todo
+  let cmd = new LoadCommand(loadBoard("Save1"));
   getGameEngine().performUserAction(cmd);
 }
 
@@ -82,7 +80,7 @@ function populateCommands(): void {
 
   document.getElementById("load-game")?.addEventListener("click", loadGame);
 
-  document.getElementById("new-save")?.addEventListener("click", newSave);
+  document.getElementById("new-save")?.addEventListener("click", makeNewSave);
 }
 
 export { populateCommands };
