@@ -1,4 +1,11 @@
-import { deleteSave, listSaves } from "../../../controllers/save-game";
+import { getBoard, updateBoard } from "../../../controllers/board-provider";
+import {
+  deleteSave,
+  listSaves,
+  loadBoard,
+  newSave,
+} from "../../../controllers/save-game";
+import { displayBoard } from "./display-board";
 
 function displaySaves() {
   let saves = document.getElementById("save-names");
@@ -20,4 +27,26 @@ function displaySaves() {
   }
 }
 
-export { displaySaves };
+function makeNewSave(): void {
+  newSave();
+  displayBoard();
+}
+
+function loadGame(): void {
+  let board = loadBoard("Save1");
+  if (!board) {
+    throw Error("No board loaded\n");
+  }
+  updateBoard(board);
+  displayBoard();
+}
+
+function populateSaveFunctions() {
+  displaySaves();
+
+  document.getElementById("load-game")?.addEventListener("click", loadGame);
+
+  document.getElementById("new-save")?.addEventListener("click", makeNewSave);
+}
+
+export { populateSaveFunctions };

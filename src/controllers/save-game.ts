@@ -1,14 +1,14 @@
 import { serialize, deserialize } from "class-transformer";
 import Board from "../models/board";
+import { getBoard } from "./board-provider";
 
-function saveBoard(board: Board, saveName: string): void {
-  //very basic default behavior for now
+function saveBoard(saveName: string): void {
+  let board = getBoard();
   let content = serialize(board);
   localStorage.setItem(saveName, content);
 }
 
 function loadBoard(saveName: string): Board | null {
-  //very basic default behavior for now
   let content = localStorage.getItem(saveName);
   let board = null;
   if (content) {
@@ -17,7 +17,8 @@ function loadBoard(saveName: string): Board | null {
   return board;
 }
 
-function newSave(board: Board): void {
+function newSave(): void {
+  let board = getBoard();
   let saves = listSaves();
   let saveName;
   let i = 0;
@@ -26,6 +27,7 @@ function newSave(board: Board): void {
     if (saves.indexOf(newName) < 0) {
       saveName = newName;
     }
+    i++;
   }
   saveBoard(board, saveName);
 }

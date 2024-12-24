@@ -1,12 +1,12 @@
-import Board from "../../../models/board";
 import Color from "../../../models/color";
-import Dice from "../../../models/dice";
 import { populateCommands } from "./command-events";
 import Piece from "../../../models/piece";
-import { displaySaves } from "./display-save-options";
 import { clearError } from "./handle-error";
+import { getBoard } from "../../../controllers/board-provider";
+import { populateSaveFunctions } from "./display-save-options";
 
-function displayDice(board: Board): void {
+function displayDice(): void {
+  let board = getBoard();
   let diceDiv = document.getElementById("dice");
   if (diceDiv) {
     diceDiv.id = "dice";
@@ -28,7 +28,8 @@ function declareWinner(winner: string): void {
   banner.textContent = winner + " wins!";
 }
 
-function populatePieces(board: Board): void {
+function populatePieces(): void {
+  let board = getBoard();
   let populateContainer = (pieces: Piece[], container: HTMLElement | null) => {
     for (let piece of pieces) {
       let pieceDisplay = document.createElement("div");
@@ -92,7 +93,8 @@ function createColumn(columnIndex: number, inverted: boolean): HTMLDivElement {
   return col;
 }
 
-function displayBoard(board: Board) {
+function displayBoard(): void {
+  let board = getBoard();
   document.querySelector<HTMLDivElement>(".play-area")!.innerHTML = `
       <h2 id="turn">${Color[board.currentTeam.color]}'s turn</h2>
       <div id="dice"></div>
@@ -115,7 +117,7 @@ function displayBoard(board: Board) {
   let topLeft = document.getElementById("top-left");
   if (topLeft) {
     for (let i = 0; i < 6; i++) {
-      topLeft.appendChild(createColumn(i, false));
+      topLeft.appendChild(createColumn(i, true));
     }
   }
   let topRight = document.getElementById("top-right");
@@ -138,11 +140,11 @@ function displayBoard(board: Board) {
     }
   }
 
-  populatePieces(board);
-  displayDice(board);
-  displaySaves();
+  populatePieces();
+  displayDice();
+  populateSaveFunctions();
   populateCommands();
   clearError();
 }
 
-export { displayBoard, reloadDice, declareWinner };
+export { displayBoard, declareWinner };

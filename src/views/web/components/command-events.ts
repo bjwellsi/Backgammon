@@ -1,10 +1,6 @@
 import TurnAction from "../../../models/turn-action";
-import Command from "../../../user-commands/command";
-import UserCommand from "../../../user-commands/user-command";
-import MoveCommand from "../../../user-commands/move-command";
-import getGameEngine from "../../../controllers/game-engine-provider";
-import { loadBoard, newSave } from "../../../controllers/save-game";
-import LoadCommand from "../../../user-commands/load-command";
+import { resetBoard } from "../../../controllers/board-provider";
+import { move } from "../../../controllers/game-engine";
 
 let selectedDiv: HTMLDivElement | null;
 
@@ -18,8 +14,8 @@ function movePiece(event: MouseEvent): void {
     //create a turn action
     let from = getContainerID(selectedDiv);
     let to = getContainerID(currentDiv);
-    let cmd = new MoveCommand(new TurnAction(from, to));
-    getGameEngine().performUserAction(cmd);
+    let action = new TurnAction(from, to);
+    move(action);
     selectedDiv.classList.remove("highlighted");
     selectedDiv = null;
   }
@@ -40,29 +36,16 @@ function getContainerID(div: HTMLDivElement): number | string {
   }
 }
 
-function makeNewSave(): void {
-  newSave(getGameEngine().board);
-}
-
-function loadGame(): void {
-  //todo
-  let cmd = new LoadCommand(loadBoard("Save1"));
-  getGameEngine().performUserAction(cmd);
-}
-
 function changeTurn(): void {
-  let cmd = new UserCommand(Command.ChangeTurn);
-  getGameEngine().performUserAction(cmd);
+  changeTurn();
 }
 
 function roll(): void {
-  let cmd = new UserCommand(Command.Roll);
-  getGameEngine().performUserAction(cmd);
+  roll();
 }
 
 function endGame(): void {
-  let cmd = new UserCommand(Command.EndGame);
-  getGameEngine().performUserAction(cmd);
+  resetBoard();
 }
 
 function populateCommands(): void {
@@ -77,10 +60,6 @@ function populateCommands(): void {
   document.getElementById("change-turn")?.addEventListener("click", changeTurn);
 
   document.getElementById("end-game")?.addEventListener("click", endGame);
-
-  document.getElementById("load-game")?.addEventListener("click", loadGame);
-
-  document.getElementById("new-save")?.addEventListener("click", makeNewSave);
 }
 
 export { populateCommands };

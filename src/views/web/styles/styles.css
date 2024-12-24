@@ -32,20 +32,18 @@
 }
 
 .control-row {
-  border: none;
+  border: 8px solid transparent;
   place-items: center;
 }
 
 button {
-  border: 10px transparent;
+  border: 9px transparent;
   border-radius: 7px;
-  padding: 0.6em 1.2em;
+  padding: 0.7em 1.5em;
   cursor: pointer;
   font-weight: 500;
   background: #1a1a1a;
   transition: border-color 0.25s;
-  -webkit-box-shadow: inset 3px 3px 13px 0px rgba(0, 0, 0, 0.55);
-  box-shadow: inset 3px 3px 13px 0px rgba(0, 0, 0, 0.55);
 }
 
 button:hover {
