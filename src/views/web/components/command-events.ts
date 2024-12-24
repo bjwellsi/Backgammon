@@ -39,11 +39,8 @@ function getContainerID(div: HTMLDivElement): number | string {
   }
 }
 
-function saveGame(): void {
-  let saveName = (
-    document.getElementById("save-name") as HTMLInputElement
-  ).value.trim();
-  let cmd = new SaveLoadCommand(Command.Save, saveName);
+function newSave(): void {
+  let cmd = new SaveLoadCommand(Command.Save);
   getGameEngine().performUserAction(cmd);
 }
 
@@ -85,7 +82,7 @@ function populateCommands(): void {
 
   document.getElementById("load-game")?.addEventListener("click", loadGame);
 
-  document.getElementById("save-game")?.addEventListener("click", saveGame);
+  document.getElementById("new-save")?.addEventListener("click", newSave);
 }
 
 export { populateCommands };

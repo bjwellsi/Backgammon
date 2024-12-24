@@ -1,6 +1,6 @@
 import Board from "../models/board";
 import { displayBoard } from "../views/web/components/display-board";
-import { saveBoard, loadBoard } from "./save-game";
+import { saveBoard, loadBoard, newSave } from "./save-game";
 import UserCommand from "../user-commands/user-command";
 import Command from "../user-commands/command";
 import MoveCommand from "../user-commands/move-command";
@@ -29,7 +29,7 @@ class GameEngine {
     } else if (command.command == Command.Save) {
       //save the game
       if (command instanceof SaveLoadCommand) {
-        saveBoard(this.board, command.saveId);
+        newSave(this.board);
       } else {
         throw Error("Can't save on a non save command\n");
       }

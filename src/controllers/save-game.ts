@@ -17,6 +17,28 @@ function loadBoard(saveName: string): Board | null {
   return board;
 }
 
+function newSave(board: Board): void {
+  let saves = listSaves();
+  let saveName;
+  let i = 0;
+  while (!saveName) {
+    let newName = `Save${i}`;
+    if (saves.indexOf(newName) < 0) {
+      saveName = newName;
+    }
+  }
+  saveBoard(board, saveName);
+}
+
+function renameSave(save: string, newName: string): void {
+  let saveVal = loadBoard(save);
+  if (!saveVal) {
+    throw Error("Save doesn't exist\n");
+  }
+  deleteSave(save);
+  saveBoard(saveVal, newName);
+}
+
 function listSaves(): string[] {
   let saves = [];
   for (let i = 0; i < localStorage.length; i++) {
@@ -51,4 +73,6 @@ export {
   deleteSave,
   deleteAllSaves,
   changeSaveName,
+  newSave,
+  renameSave,
 };
