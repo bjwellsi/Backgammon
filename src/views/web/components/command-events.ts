@@ -1,10 +1,15 @@
 import TurnAction from "../../../models/turn-action";
 import { resetBoard } from "../../../controllers/board-provider";
-import { move } from "../../../controllers/game-engine";
+import {
+  rollDice,
+  nextTurn,
+  movePiece,
+} from "../../../controllers/game-engine";
+import { displayBoard } from "./display-board";
 
 let selectedDiv: HTMLDivElement | null;
 
-function movePiece(event: MouseEvent): void {
+function move(event: MouseEvent): void {
   let currentDiv = event.currentTarget as HTMLDivElement;
 
   if (selectedDiv == null) {
@@ -15,9 +20,10 @@ function movePiece(event: MouseEvent): void {
     let from = getContainerID(selectedDiv);
     let to = getContainerID(currentDiv);
     let action = new TurnAction(from, to);
-    move(action);
+    movePiece(action);
     selectedDiv.classList.remove("highlighted");
     selectedDiv = null;
+    displayBoard();
   }
 }
 
@@ -37,22 +43,25 @@ function getContainerID(div: HTMLDivElement): number | string {
 }
 
 function changeTurn(): void {
-  changeTurn();
+  nextTurn();
+  displayBoard();
 }
 
 function roll(): void {
-  roll();
+  rollDice();
+  displayBoard();
 }
 
 function endGame(): void {
   resetBoard();
+  displayBoard();
 }
 
 function populateCommands(): void {
   document
     .querySelectorAll<HTMLDivElement>(".piece-container")
     .forEach((div) => {
-      div.addEventListener("click", movePiece);
+      div.addEventListener("click", move);
     });
 
   document.getElementById("roll-dice")?.addEventListener("click", roll);

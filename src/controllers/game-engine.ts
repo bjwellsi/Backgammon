@@ -2,7 +2,7 @@ import Board from "../models/board";
 import { getBoard } from "./board-provider";
 import TurnAction from "../models/turn-action";
 
-function move(move: TurnAction): void {
+function movePiece(move: TurnAction): void {
   getBoard().processTurnAction(move);
 }
 
@@ -11,12 +11,12 @@ function endGame(): void {
   board = new Board();
 }
 
-function roll(): void {
+function rollDice(): void {
   getBoard().rollDice();
 }
 
-function changeTurn(): void {
+function nextTurn(): void {
   getBoard().changeTurn();
 }
 
-export { endGame, roll, changeTurn, move };
+export { endGame, rollDice, nextTurn, movePiece };

@@ -2,10 +2,13 @@ import { serialize, deserialize } from "class-transformer";
 import Board from "../models/board";
 import { getBoard } from "./board-provider";
 
-function saveBoard(saveName: string): void {
-  let board = getBoard();
+function saveSomeBoard(board: Board, saveName: string) {
   let content = serialize(board);
   localStorage.setItem(saveName, content);
+}
+
+function saveBoard(saveName: string): void {
+  saveSomeBoard(getBoard(), saveName);
 }
 
 function loadBoard(saveName: string): Board | null {
@@ -29,7 +32,7 @@ function newSave(): void {
     }
     i++;
   }
-  saveBoard(board, saveName);
+  saveBoard(saveName);
 }
 
 function renameSave(save: string, newName: string): void {
@@ -38,7 +41,7 @@ function renameSave(save: string, newName: string): void {
     throw Error("Save doesn't exist\n");
   }
   deleteSave(save);
-  saveBoard(saveVal, newName);
+  saveSomeBoard(saveVal, newName);
 }
 
 function listSaves(): string[] {
@@ -64,7 +67,7 @@ function changeSaveName(save: string, newName: string): void {
   let saveData = loadBoard(save);
   if (saveData instanceof Board) {
     deleteSave(save);
-    saveBoard(saveData, newName);
+    saveSomeBoard(saveData, newName);
   }
 }
 
