@@ -30,70 +30,7 @@ class Board implements RendersInConsole {
     }
 
     this.setStartingTurn(this.teams[0].color, this.teams[1].color);
-    //this.populateHomeBase();
     this.populateColumns();
-    //this.populateJail();
-  }
-
-  populateJail(): void {
-    this.columns[3].addPiece(this.teams[0].home.removePiece());
-    this.columns[3].addPiece(this.teams[0].home.removePiece());
-    this.columns[3].addPiece(this.teams[0].home.removePiece());
-    this.columns[3].addPiece(this.teams[0].home.removePiece());
-    this.columns[3].addPiece(this.teams[0].home.removePiece());
-
-    this.columns[18].addPiece(this.teams[1].home.removePiece());
-    this.columns[18].addPiece(this.teams[1].home.removePiece());
-    this.columns[18].addPiece(this.teams[1].home.removePiece());
-    this.columns[18].addPiece(this.teams[1].home.removePiece());
-    this.columns[18].addPiece(this.teams[1].home.removePiece());
-
-    this.teams[0].jail.addPiece(this.teams[0].home.removePiece());
-    this.teams[1].jail.addPiece(this.teams[1].home.removePiece());
-  }
-
-  populateHomeBase(): void {
-    this.columns[23].addPiece(this.teams[1].home.removePiece());
-    this.columns[23].addPiece(this.teams[1].home.removePiece());
-    this.columns[23].addPiece(this.teams[1].home.removePiece());
-
-    this.columns[22].addPiece(this.teams[1].home.removePiece());
-    this.columns[22].addPiece(this.teams[1].home.removePiece());
-    this.columns[22].addPiece(this.teams[1].home.removePiece());
-
-    this.columns[21].addPiece(this.teams[1].home.removePiece());
-    this.columns[21].addPiece(this.teams[1].home.removePiece());
-    this.columns[21].addPiece(this.teams[1].home.removePiece());
-
-    this.columns[20].addPiece(this.teams[1].home.removePiece());
-    this.columns[20].addPiece(this.teams[1].home.removePiece());
-
-    this.columns[19].addPiece(this.teams[1].home.removePiece());
-    this.columns[19].addPiece(this.teams[1].home.removePiece());
-
-    this.columns[18].addPiece(this.teams[1].home.removePiece());
-    this.columns[18].addPiece(this.teams[1].home.removePiece());
-
-    this.columns[0].addPiece(this.teams[0].home.removePiece());
-    this.columns[0].addPiece(this.teams[0].home.removePiece());
-    this.columns[0].addPiece(this.teams[0].home.removePiece());
-
-    this.columns[1].addPiece(this.teams[0].home.removePiece());
-    this.columns[1].addPiece(this.teams[0].home.removePiece());
-    this.columns[1].addPiece(this.teams[0].home.removePiece());
-
-    this.columns[2].addPiece(this.teams[0].home.removePiece());
-    this.columns[2].addPiece(this.teams[0].home.removePiece());
-    this.columns[2].addPiece(this.teams[0].home.removePiece());
-
-    this.columns[3].addPiece(this.teams[0].home.removePiece());
-    this.columns[3].addPiece(this.teams[0].home.removePiece());
-
-    this.columns[4].addPiece(this.teams[0].home.removePiece());
-    this.columns[4].addPiece(this.teams[0].home.removePiece());
-
-    this.columns[5].addPiece(this.teams[0].home.removePiece());
-    this.columns[5].addPiece(this.teams[0].home.removePiece());
   }
 
   get winner(): string | undefined {

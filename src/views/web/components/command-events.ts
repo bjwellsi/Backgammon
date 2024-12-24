@@ -4,7 +4,6 @@ import UserCommand from "../../../user-commands/user-command";
 import MoveCommand from "../../../user-commands/move-command";
 import SaveLoadCommand from "../../../user-commands/save-load-command";
 import getGameEngine from "../../../controllers/game-engine-provider";
-import { handleError } from "./handle-error";
 
 let selectedDiv: HTMLDivElement | null;
 
