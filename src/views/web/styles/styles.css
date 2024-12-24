@@ -66,6 +66,7 @@ button:hover {
   align-items: center;
   flex-direction: column;
   position: relative;
+  padding: none;
 }
 
 .triangle {
@@ -154,29 +155,22 @@ button:hover {
   width: 100px;
   height: 200px;
   background-color: #6a501a;
-  border: 2px solid black;
-  border-top: 1px solid black;
-  border-bottom: 1px solid black;
+  border: none;
+  border-top: none;
+  border-bottom: none;
   display: flex;
   flex-direction: column-reverse;
   align-items: center;
   justify-content: center;
-}
-
-#black-home {
-  border-bottom: 2px solid black;
-}
-
-#white-home {
-  border-bottom: 2px solid black;
+  padding: none;
 }
 
 .jail {
   width: 50px;
   height: 200px;
   background-color: #6a501a;
-  border-top: 2px solid #6a501a;
-  border-bottom: 2px solid #6a501a;
+  border-top: none;
+  border-bottom: none;
   border-left: 1px solid black;
   border-right: 1px solid black;
   padding: none;
@@ -214,4 +208,18 @@ button:hover {
 
 .error-display {
   position: absolute;
+}
+
+#none-home {
+  height: 100px;
+  width: 100px;
+}
+
+#none-jail {
+  height: 100px;
+}
+
+.empty-space {
+  width: 300px;
+  height: 100px;
 }

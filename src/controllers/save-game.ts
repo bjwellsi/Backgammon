@@ -72,7 +72,6 @@ export {
   loadBoard,
   listSaves,
   deleteSave,
-  deleteAllSaves,
   changeSaveName,
   newSave,
   renameSave,
