@@ -1,15 +1,15 @@
 import { serialize, deserialize } from "class-transformer";
 import Board from "../models/board";
 
-function saveBoard(board: Board, fileName: string): void {
+function saveBoard(board: Board, saveName: string): void {
   //very basic default behavior for now
   let content = serialize(board);
-  localStorage.setItem(fileName, content);
+  localStorage.setItem(saveName, content);
 }
 
-function loadBoard(fileName: string): Board | null {
+function loadBoard(saveName: string): Board | null {
   //very basic default behavior for now
-  let content = localStorage.getItem(fileName);
+  let content = localStorage.getItem(saveName);
   let board = null;
   if (content) {
     board = deserialize(Board, content);
@@ -28,4 +28,27 @@ function listSaves(): string[] {
   return saves;
 }
 
-export { saveBoard, loadBoard, listSaves };
+function deleteSave(save: string): void {
+  localStorage.removeItem(save);
+}
+
+function deleteAllSaves(): void {
+  localStorage.clear();
+}
+
+function changeSaveName(save: string, newName: string): void {
+  let saveData = loadBoard(save);
+  if (saveData instanceof Board) {
+    deleteSave(save);
+    saveBoard(saveData, newName);
+  }
+}
+
+export {
+  saveBoard,
+  loadBoard,
+  listSaves,
+  deleteSave,
+  deleteAllSaves,
+  changeSaveName,
+};
