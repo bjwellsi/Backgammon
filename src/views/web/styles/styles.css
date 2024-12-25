@@ -179,10 +179,7 @@ button:hover {
   width: 50px;
   height: 200px;
   background-color: #6a501a;
-  border-top: none;
-  border-bottom: none;
-  border-left: 1px solid black;
-  border-right: 1px solid black;
+  border: none;
   padding: none;
   display: flex;
   flex-direction: column-reverse;
@@ -220,7 +217,7 @@ button:hover {
   top: 314px;
 }
 
-#none-home {
+.none-home {
   height: 100px;
   width: 100px;
 }

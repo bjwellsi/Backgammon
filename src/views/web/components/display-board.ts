@@ -104,20 +104,23 @@ function displayBoard(): void {
         <div id="top-left" class="column-group-top"></div>
         <div id="white-jail" class="jail black piece-container"></div>
         <div id="top-right" class="column-group-top"></div>
+        <div class="home empty-home"></div>
       </div>
       <div class="row">
-        <div id="none-home" class="home"></div>
+        <div class="home none-home"></div>
         <div class="empty-space">
           <div id="dice"></div>
         </div>
         <div id="none-jail" class="jail"></div>
         <div class="empty-space"></div>
+        <div class="home none-home"></div>
       </div>
       <div class="row">
         <div id="white-home" class="home white piece-container"></div>
         <div id="bottom-left" class="column-group-bottom"></div>
         <div id="black-jail" class="jail black piece-container"></div>
         <div id="bottom-right" class="column-group-bottom"></div>
+        <div class="home empty-home"></div>
      </div> 
     `;
 
