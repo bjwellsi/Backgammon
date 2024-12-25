@@ -54,8 +54,16 @@ button:hover {
   border: 1px transparent;
   width: fit-content;
   border-radius: 5px;
-  background-color: white;
   color: black;
+  height: auto;
+}
+
+#dice h3 {
+  align-self: start;
+  flex-grow: 0;
+  background-color: white;
+  border-radius: 5px;
+  border: 1px transparent;
 }
 
 .column {
@@ -200,8 +208,16 @@ button:hover {
   background-color: yellow;
 }
 
-.error-display {
+#error-display {
+  border: 1px solid red;
+  background-color: #242424;
   position: absolute;
+  color: red;
+  z-index: 100;
+  border-radius: 5px;
+  padding: 5px solid transparent;
+  right: 100px;
+  top: 314px;
 }
 
 #none-home {
@@ -216,4 +232,26 @@ button:hover {
 .empty-space {
   width: 300px;
   height: 100px;
+}
+
+ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  padding-top: 3px;
+}
+
+li {
+  padding: 1px;
+}
+
+#save-section {
+  text-align: center;
+  padding: 20px;
+}
+
+.empty-space {
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }

@@ -97,7 +97,6 @@ function displayBoard(): void {
   let board = getBoard();
   document.querySelector<HTMLDivElement>(".play-area")!.innerHTML = `
       <h2 id="turn">${Color[board.currentTeam.color]}'s turn</h2>
-      <div id="dice"></div>
     <h3 id="error-display"></h3>
       <div class="board">
       <div class="row">
@@ -108,10 +107,11 @@ function displayBoard(): void {
       </div>
       <div class="row">
         <div id="none-home" class="home"></div>
-        <div class="empty-space"></div>
-        <div id="none-jail" class="jail">
-        <div class="empty-space"></div>
+        <div class="empty-space">
+          <div id="dice"></div>
         </div>
+        <div id="none-jail" class="jail"></div>
+        <div class="empty-space"></div>
       </div>
       <div class="row">
         <div id="white-home" class="home white piece-container"></div>

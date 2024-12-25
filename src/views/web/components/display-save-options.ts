@@ -14,13 +14,18 @@ function displaySaves() {
     let saveList = listSaves();
     for (let save of saveList) {
       let li = document.createElement("li");
-      li.textContent = save;
+      let loadBtn = document.createElement("button");
+      loadBtn.textContent = save;
       let deleteBtn = document.createElement("button");
-      deleteBtn.textContent = "Delete";
+      deleteBtn.textContent = "Delete Save";
       deleteBtn.addEventListener("click", () => {
         deleteSave(save);
         saves.removeChild(li);
       });
+      loadBtn.addEventListener("click", () => {
+        loadGame(save);
+      });
+      li.appendChild(loadBtn);
       li.appendChild(deleteBtn);
       saves.appendChild(li);
     }
@@ -32,8 +37,8 @@ function makeNewSave(): void {
   displayBoard();
 }
 
-function loadGame(): void {
-  let board = loadBoard("Save1");
+function loadGame(save: string): void {
+  let board = loadBoard(save);
   if (!board) {
     throw Error("No board loaded\n");
   }
@@ -43,8 +48,6 @@ function loadGame(): void {
 
 function populateSaveFunctions() {
   displaySaves();
-
-  document.getElementById("load-game")?.addEventListener("click", loadGame);
 
   document.getElementById("new-save")?.addEventListener("click", makeNewSave);
 }
