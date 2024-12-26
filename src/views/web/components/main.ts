@@ -1,8 +1,10 @@
 import "reflect-metadata";
 import { displayBoard } from "./display-board";
-import { handleError } from "./handle-error";
+import { clearError, handleError } from "./handle-error";
 
 displayBoard();
+
+document.getElementById("error-overlay")?.addEventListener("click", clearError);
 
 window.addEventListener("error", (event: ErrorEvent) => {
   handleError(event.error);

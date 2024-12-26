@@ -205,18 +205,6 @@ button:hover {
   background-color: yellow;
 }
 
-#error-display {
-  border: 1px solid red;
-  background-color: #242424;
-  position: absolute;
-  color: red;
-  z-index: 100;
-  border-radius: 5px;
-  padding: 5px solid transparent;
-  right: 100px;
-  top: 314px;
-}
-
 .none-home {
   height: 100px;
   width: 100px;
@@ -251,4 +239,48 @@ li {
   display: flex;
   align-items: center;
   justify-content: center;
+}
+
+#error-display {
+  border: 1px solid red;
+  background-color: #242424;
+  position: absolute;
+  color: black;
+  border-radius: 5px;
+  padding: 5px solid transparent;
+  right: 500px;
+  top: 314px;
+}
+
+.popup {
+  display: none;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  border: 1px solid black;
+  border-radius: 5px;
+  padding: 20px;
+  z-index: 1000;
+  background-color: red;
+  color: black;
+}
+
+.overlay {
+  display: none;
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  z-index: 999;
+  border: 1px solid black;
+  border-radius: 20px;
+  background-color: rgba(0, 0, 0, 0.4);
+}
+
+.show-popup {
+  display: block;
+}
+
+.show-overlay {
+  display: block;
 }

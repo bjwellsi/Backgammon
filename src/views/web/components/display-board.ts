@@ -1,7 +1,6 @@
 import Color from "../../../models/color";
 import { populateCommands } from "./command-events";
 import Piece from "../../../models/piece";
-import { clearError } from "./handle-error";
 import { getBoard } from "../../../controllers/board-provider";
 import { populateSaveFunctions } from "./display-save-options";
 
@@ -97,7 +96,6 @@ function displayBoard(): void {
   let board = getBoard();
   document.querySelector<HTMLDivElement>(".play-area")!.innerHTML = `
       <h2 id="turn">${Color[board.currentTeam.color]}'s turn</h2>
-    <h3 id="error-display"></h3>
       <div class="board">
       <div class="row">
         <div id="black-home" class="home black piece-container"></div>
@@ -150,11 +148,14 @@ function displayBoard(): void {
     }
   }
 
+  let errOverlay = document.getElementById("error-overlay");
+  if (errOverlay) {
+  }
+
   populatePieces();
   displayDice();
   populateSaveFunctions();
   populateCommands();
-  clearError();
 }
 
 export { displayBoard, declareWinner };
