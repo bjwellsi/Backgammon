@@ -20,19 +20,30 @@ function loadBoard(saveName: string): Board | null {
   return board;
 }
 
-function newSave(): void {
-  let board = getBoard();
+function genSaveName(prefix: string): void {
   let saves = listSaves();
   let saveName;
   let i = 0;
   while (!saveName) {
-    let newName = `Save${i}`;
+    let newName = `${prefix}${i}`;
     if (saves.indexOf(newName) < 0) {
       saveName = newName;
     }
     i++;
   }
   saveBoard(saveName);
+}
+
+function manualSave(): void {
+  genSaveName("Save ");
+}
+
+function autoSave(): void {
+  saveBoard("auto");
+}
+
+function loadAutoSave(): Board | null {
+  return loadBoard("auto");
 }
 
 function renameSave(save: string, newName: string): void {
@@ -48,7 +59,7 @@ function listSaves(): string[] {
   let saves = [];
   for (let i = 0; i < localStorage.length; i++) {
     let key = localStorage.key(i);
-    if (key) {
+    if (key && key != "auto") {
       saves.push(key);
     }
   }
@@ -73,6 +84,8 @@ export {
   listSaves,
   deleteSave,
   changeSaveName,
-  newSave,
+  manualSave,
+  autoSave,
+  loadAutoSave,
   renameSave,
 };

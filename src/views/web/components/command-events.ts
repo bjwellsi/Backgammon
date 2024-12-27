@@ -6,6 +6,7 @@ import {
   movePiece,
 } from "../../../controllers/game-engine";
 import { displayBoard } from "./display-board";
+import { autoSave, loadAutoSave } from "../../../controllers/save-game";
 
 let selectedDiv: HTMLDivElement | null;
 
@@ -44,11 +45,13 @@ function getContainerID(div: HTMLDivElement): number | string {
 
 function changeTurn(): void {
   nextTurn();
+  autoSave();
   displayBoard();
 }
 
 function roll(): void {
   rollDice();
+  autoSave();
   displayBoard();
 }
 

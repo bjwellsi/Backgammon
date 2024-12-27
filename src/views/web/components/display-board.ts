@@ -27,6 +27,15 @@ function declareWinner(winner: string): void {
   banner.textContent = winner + " wins!";
 }
 
+function displayTurnStatus(): void {
+  let board = getBoard();
+  if (board.turnOver) {
+    showPopup("change-turn");
+  } else {
+    hidePopup("change-turn");
+  }
+}
+
 function populatePieces(): void {
   let board = getBoard();
   let populateContainer = (pieces: Piece[], container: HTMLElement | null) => {
@@ -59,6 +68,24 @@ function populatePieces(): void {
       Color[jail.color].toLowerCase() + "-home",
     );
     populateContainer(home.pieces, containerDiv);
+  }
+}
+
+function hidePopup(popupIdPrefix: string): void {
+  let popup = document.getElementById(`${popupIdPrefix}-popup`);
+  let overlay = document.getElementById(`${popupIdPrefix}-overlay`);
+  if (popup && overlay) {
+    popup.classList.remove("show-popup");
+    overlay.classList.remove("show-overlay");
+  }
+}
+
+function showPopup(popupIdPrefix: string): void {
+  let popup = document.getElementById(`${popupIdPrefix}-popup`);
+  let overlay = document.getElementById(`${popupIdPrefix}-overlay`);
+  if (popup && overlay) {
+    popup.classList.add("show-popup");
+    overlay.classList.add("show-overlay");
   }
 }
 
@@ -148,14 +175,11 @@ function displayBoard(): void {
     }
   }
 
-  let errOverlay = document.getElementById("error-overlay");
-  if (errOverlay) {
-  }
-
   populatePieces();
   displayDice();
   populateSaveFunctions();
   populateCommands();
+  displayTurnStatus();
 }
 
-export { displayBoard, declareWinner };
+export { displayBoard, declareWinner, showPopup, hidePopup };

@@ -97,6 +97,14 @@ class Board implements RendersInConsole {
     return this.teams[index];
   }
 
+  get turnOver(): boolean {
+    if (this.turn.rolled && this.currentTeam.dice.rolls.length == 0) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
   renderInConsole(): string {
     let topRow = "";
     for (let i = 0; i < 6; i++) {

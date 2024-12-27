@@ -2,8 +2,9 @@ import { getBoard, updateBoard } from "../../../controllers/board-provider";
 import {
   deleteSave,
   listSaves,
+  loadAutoSave,
   loadBoard,
-  newSave,
+  manualSave,
 } from "../../../controllers/save-game";
 import { displayBoard } from "./display-board";
 
@@ -33,7 +34,7 @@ function displaySaves() {
 }
 
 function makeNewSave(): void {
-  newSave();
+  manualSave();
   displayBoard();
 }
 
@@ -46,10 +47,21 @@ function loadGame(save: string): void {
   displayBoard();
 }
 
+function resetTurn(): void {
+  let board = loadAutoSave();
+  if (!board) {
+    throw Error("Auto save missing\n");
+  }
+  updateBoard(board);
+  displayBoard();
+}
+
 function populateSaveFunctions() {
   displaySaves();
 
   document.getElementById("new-save")?.addEventListener("click", makeNewSave);
+
+  document.getElementById("reset-turn")?.addEventListener("click", resetTurn);
 }
 
 export { populateSaveFunctions };

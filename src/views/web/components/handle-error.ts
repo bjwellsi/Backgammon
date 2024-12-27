@@ -1,20 +1,18 @@
+import { hidePopup, showPopup } from "./display-board";
+
 function clearError() {
   let errPopup = document.getElementById("error-popup");
-  let errOverlay = document.getElementById("error-overlay");
-  if (errPopup && errOverlay) {
+  if (errPopup) {
     errPopup.textContent = "";
-    errPopup.classList.remove("show-popup");
-    errOverlay.classList.remove("show-overlay");
   }
+  hidePopup("error");
 }
 
 function handleError(err: Error) {
+  showPopup("error");
   let errPopup = document.getElementById("error-popup");
-  let errOverlay = document.getElementById("error-overlay");
-  if (errPopup && errOverlay) {
+  if (errPopup) {
     errPopup.textContent = err.message;
-    errPopup.classList.add("show-popup");
-    errOverlay.classList.add("show-overlay");
   }
 }
 
