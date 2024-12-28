@@ -4,29 +4,9 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Backgammon</title>
-    <link rel="stylesheet" href="/src/views/web/styles/styles.css" />
-    <script type="module" src="/src/views/web/components/main.ts"></script>
   </head>
   <body>
-    <div id="error-overlay" class="overlay">
-      <div id="error-popup" class="popup"></div>
-    </div>
-    <div id="change-turn-overlay" class="overlay">
-      <div id="change-turn-popup" class="popup">
-        <button id="change-turn">Change Turn</button>
-        <button id="reset-turn">Reset Turn</button>
-      </div>
-    </div>
-    <div class="play-area"></div>
-    <div class="control-row">
-      <button id="roll-dice">Roll</button>
-      <button id="reset-turn">Reset Turn</button>
-      <button id="end-game">End Game</button>
-      <br />
-      <div id="save-section">
-        <button id="new-save">New Save</button>
-        <ul id="save-names"></ul>
-      </div>
-    </div>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>

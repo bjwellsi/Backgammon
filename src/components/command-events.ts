@@ -1,12 +1,7 @@
-import TurnAction from "../../../models/turn-action";
-import { resetBoard } from "../../../controllers/board-provider";
-import {
-  rollDice,
-  nextTurn,
-  movePiece,
-} from "../../../controllers/game-engine";
-import { displayBoard } from "./display-board";
-import { autoSave, loadAutoSave } from "../../../controllers/save-game";
+import TurnAction from "../models/turn-action";
+import { resetBoard } from "../controllers/board-provider";
+import { rollDice, nextTurn, movePiece } from "../controllers/game-engine";
+import { autoSave, loadAutoSave } from "../controllers/save-game";
 
 let selectedDiv: HTMLDivElement | null;
 
@@ -24,7 +19,6 @@ function move(event: MouseEvent): void {
     selectedDiv.classList.remove("highlighted");
     selectedDiv = null;
     movePiece(action);
-    displayBoard();
   }
 }
 
@@ -46,18 +40,15 @@ function getContainerID(div: HTMLDivElement): number | string {
 function changeTurn(): void {
   nextTurn();
   autoSave();
-  displayBoard();
 }
 
 function roll(): void {
   rollDice();
   autoSave();
-  displayBoard();
 }
 
 function endGame(): void {
   resetBoard();
-  displayBoard();
 }
 
 function populateCommands(): void {
