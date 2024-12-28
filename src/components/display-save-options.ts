@@ -60,4 +60,4 @@ function populateSaveFunctions() {
   document.getElementById("reset-turn")?.addEventListener("click", resetTurn);
 }
 
-export { populateSaveFunctions };
+export { populateSaveFunctions, resetTurn, loadGame, makeNewSave };
