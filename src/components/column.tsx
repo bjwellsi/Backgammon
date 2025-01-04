@@ -23,7 +23,7 @@ const Column: React.FC<{ columnIndex: number }> = ({ columnIndex }) => {
         <PieceList pieceList={column.pieces} />
         <div
           key="triangle"
-          className={`triangle piece-contaier ${oddOrEven} ${topOrBottom}`}
+          className={`triangle ${oddOrEven} ${topOrBottom}`}
         ></div>
       </div>
     </>

@@ -122,14 +122,6 @@ button:hover {
   padding: none;
 }
 
-.piece-list.top {
-  justify-content: flex-start;
-}
-
-.piece-list.bottom {
-  justify-content: flex-end;
-}
-
 .row {
   display: flex;
   flex-direction: row;

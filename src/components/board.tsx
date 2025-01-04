@@ -1,45 +1,6 @@
-import { Color } from "../models/color";
-import { Piece } from "../models/piece";
-import { getBoard } from "../controllers/board-provider";
 import { Dice } from "./dice";
 import { CurrentTurn } from "./current-turn";
 import { Column } from "./column";
-
-function populatePieces(): void {
-  //todo
-  let board = getBoard();
-  let populateContainer = (pieces: Piece[], container: HTMLElement | null) => {
-    for (let piece of pieces) {
-      let pieceDisplay = document.createElement("div");
-      pieceDisplay.classList.add("piece");
-      pieceDisplay.classList.add(Color[piece.color].toLowerCase());
-      container?.appendChild(pieceDisplay);
-    }
-  };
-
-  for (let i = 0; i < board.columns.length; i++) {
-    let containerDiv = document
-      .getElementById(`column-${i}`)
-      ?.querySelector<HTMLDivElement>(".piece-list");
-    if (containerDiv) {
-      populateContainer(board.columns[i].pieces, containerDiv);
-    }
-  }
-
-  for (let i = 0; i < board.teams.length; i++) {
-    let jail = board.teams[i].jail;
-    let home = board.teams[i].home;
-    let containerDiv = document.getElementById(
-      Color[jail.color].toLowerCase() + "-jail",
-    );
-    populateContainer(jail.pieces, containerDiv);
-
-    containerDiv = document.getElementById(
-      Color[jail.color].toLowerCase() + "-home",
-    );
-    populateContainer(home.pieces, containerDiv);
-  }
-}
 
 const Board: React.FC = () => {
   let topLeft = [];

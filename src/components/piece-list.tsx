@@ -1,4 +1,3 @@
-import { Color } from "../models/color";
 import { Piece } from "./piece";
 import { Piece as PieceModel } from "../models/piece";
 
