@@ -4,4 +4,4 @@ enum Color {
   White = 1,
 }
 
-export default Color;
+export { Color };

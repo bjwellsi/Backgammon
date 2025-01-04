@@ -1,5 +1,5 @@
-import Color from "./Color";
-import RendersInConsole from "./renders-in-console";
+import { Color } from "./color";
+import { RendersInConsole } from "./renders-in-console";
 
 class Piece implements RendersInConsole {
   readonly color: Color;
@@ -19,4 +19,4 @@ class Piece implements RendersInConsole {
   }
 }
 
-export default Piece;
+export { Piece };

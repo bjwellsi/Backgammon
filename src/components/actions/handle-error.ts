@@ -1,4 +1,4 @@
-import { hidePopup, showPopup } from "./display-board";
+import { hidePopup, showPopup } from "./board-actions";
 
 function clearError() {
   let errPopup = document.getElementById("error-popup");

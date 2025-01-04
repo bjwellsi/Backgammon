@@ -1,7 +1,7 @@
-import TurnAction from "../models/turn-action";
-import { resetBoard } from "../controllers/board-provider";
-import { rollDice, nextTurn, movePiece } from "../controllers/game-engine";
-import { autoSave, loadAutoSave } from "../controllers/save-game";
+import { TurnAction } from "../../models/turn-action";
+import { resetBoard } from "../../controllers/board-provider";
+import { rollDice, nextTurn, movePiece } from "../../controllers/game-engine";
+import { autoSave, loadAutoSave } from "../../controllers/save-game";
 
 let selectedDiv: HTMLDivElement | null;
 
@@ -65,4 +65,4 @@ function populateCommands(): void {
   document.getElementById("end-game")?.addEventListener("click", endGame);
 }
 
-export { populateCommands };
+export { populateCommands, rollDice, changeTurn, endGame };

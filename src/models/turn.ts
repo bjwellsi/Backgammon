@@ -24,4 +24,4 @@ class Turn {
   }
 }
 
-export default Turn;
+export { Turn };

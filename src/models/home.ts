@@ -1,6 +1,6 @@
-import Piece from "./Piece";
-import Column from "./Column";
-import Color from "./Color";
+import { Piece } from "./piece";
+import { Column } from "./Column";
+import { Color } from "./Color";
 
 class Home extends Column {
   private readonly _color: Color;
@@ -47,4 +47,4 @@ class Home extends Column {
   }
 }
 
-export default Home;
+export { Home };

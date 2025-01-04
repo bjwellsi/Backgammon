@@ -1,37 +1,12 @@
-import Color from "../models/color";
-import { populateCommands } from "./command-events";
-import Piece from "../models/piece";
+import { Color } from "../models/color";
+import { Piece } from "../models/piece";
 import { getBoard } from "../controllers/board-provider";
-import { populateSaveFunctions } from "./display-save-options";
-import { ReactElement, ReactNode } from "react";
-
-function displayDice(): ReactElement | null {
-  let board = getBoard();
-  let dice = board.currentTeam.dice;
-  let rollsString = "";
-  let rolls = dice.rolls;
-  if (rolls.length > 0) {
-    rollsString = rolls.join(", ");
-    return (
-      <>
-        <h3>{rollsString}</h3>
-      </>
-    );
-  } else {
-    return null;
-  }
-}
-
-function displayTurnStatus(): void {
-  let board = getBoard();
-  if (board.turnOver) {
-    showPopup("change-turn");
-  } else {
-    hidePopup("change-turn");
-  }
-}
+import { Dice } from "./dice";
+import { CurrentTurn } from "./current-turn";
+import { Column } from "./column";
 
 function populatePieces(): void {
+  //todo
   let board = getBoard();
   let populateContainer = (pieces: Piece[], container: HTMLElement | null) => {
     for (let piece of pieces) {
@@ -66,83 +41,31 @@ function populatePieces(): void {
   }
 }
 
-function hidePopup(popupIdPrefix: string): void {
-  let popup = document.getElementById(`${popupIdPrefix}-popup`);
-  let overlay = document.getElementById(`${popupIdPrefix}-overlay`);
-  if (popup && overlay) {
-    popup.classList.remove("show-popup");
-    overlay.classList.remove("show-overlay");
-  }
-}
-
-function showPopup(popupIdPrefix: string): void {
-  let popup = document.getElementById(`${popupIdPrefix}-popup`);
-  let overlay = document.getElementById(`${popupIdPrefix}-overlay`);
-  if (popup && overlay) {
-    popup.classList.add("show-popup");
-    overlay.classList.add("show-overlay");
-  }
-}
-
-const createColumn = (columnIndex: number, inverted: boolean): ReactNode => {
-  let id = `column-${columnIndex}`;
-
-  let oddOrEven = "odd";
-  if (columnIndex % 2 > 0) {
-    oddOrEven = "even";
-  }
-  let topOrBottom = "bottom";
-  if (inverted) {
-    topOrBottom = "top";
-  }
-
-  return (
-    <>
-      <div
-        key={id}
-        id={id}
-        className={`column piece-contaier ${oddOrEven} ${topOrBottom}`}
-      >
-        <div
-          key="piece-list"
-          className={`piece-list piece-contaier ${oddOrEven} ${topOrBottom}`}
-        ></div>
-        <div
-          key="triangle"
-          className={`triangle piece-contaier ${oddOrEven} ${topOrBottom}`}
-        ></div>
-      </div>
-    </>
-  );
-};
-
-const DisplayBoard: React.FC = () => {
-  let board = getBoard();
-
+const Board: React.FC = () => {
   let topLeft = [];
   for (let i = 0; i < 6; i++) {
-    topLeft.push(createColumn(i, true));
+    topLeft.push(<Column columnIndex={i} />);
   }
 
   let topRight = [];
   for (let i = 6; i < 12; i++) {
-    topRight.push(createColumn(i, true));
+    topRight.push(<Column columnIndex={i} />);
   }
 
   let bottomLeft = [];
   for (let i = 18; i < 24; i++) {
-    bottomLeft.push(createColumn(i, false));
+    bottomLeft.push(<Column columnIndex={i} />);
   }
 
   let bottomRight = [];
   for (let i = 12; i < 18; i++) {
-    bottomRight.push(createColumn(i, false));
+    bottomRight.push(<Column columnIndex={i} />);
   }
 
   let ret = (
     <>
       <div className="play-area">
-        <h2 id="turn">{Color[board.currentTeam.color]}'s turn</h2>
+        <CurrentTurn />
         <div className="board">
           <div className="row">
             <div id="black-home" className="home black piece-container"></div>
@@ -158,7 +81,7 @@ const DisplayBoard: React.FC = () => {
           <div className="row">
             <div className="home none-home"></div>
             <div className="empty-space">
-              <div id="dice">{displayDice()}</div>
+              <Dice />
             </div>
             <div id="none-jail" className="jail"></div>
             <div className="empty-space"></div>
@@ -180,12 +103,7 @@ const DisplayBoard: React.FC = () => {
     </>
   );
 
-  populatePieces();
-  displayDice();
-  populateSaveFunctions();
-  populateCommands();
-  displayTurnStatus();
   return ret;
 };
 
-export { DisplayBoard, showPopup, hidePopup };
+export { Board };

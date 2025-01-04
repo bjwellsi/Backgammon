@@ -1,6 +1,6 @@
-import Board from "../models/board";
+import { Board } from "../models/board";
 import { getBoard } from "./board-provider";
-import TurnAction from "../models/turn-action";
+import { TurnAction } from "../models/turn-action";
 
 function movePiece(move: TurnAction): void {
   getBoard().processTurnAction(move);

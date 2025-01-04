@@ -85,4 +85,4 @@ class TurnAction {
   }
 }
 
-export default TurnAction;
+export { TurnAction };

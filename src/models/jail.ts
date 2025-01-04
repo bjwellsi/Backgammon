@@ -1,6 +1,6 @@
-import Piece from "./Piece";
-import Column from "./Column";
-import Color from "./Color";
+import { Piece } from "./Piece";
+import { Column } from "./Column";
+import { Color } from "./Color";
 
 class Jail extends Column {
   private readonly _color: Color;
@@ -31,4 +31,4 @@ class Jail extends Column {
   }
 }
 
-export default Jail;
+export { Jail };

@@ -1,7 +1,7 @@
-import Jail from "./jail";
-import Home from "./home";
-import Dice from "./dice";
-import Color from "./color";
+import { Jail } from "./jail";
+import { Home } from "./home";
+import { Dice } from "./dice";
+import { Color } from "./color";
 import { Type } from "class-transformer";
 
 class Team {
@@ -85,4 +85,4 @@ class Team {
   }
 }
 
-export default Team;
+export { Team };

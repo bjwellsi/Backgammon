@@ -1,5 +1,5 @@
 import { serialize, deserialize } from "class-transformer";
-import Board from "../models/board";
+import { Board } from "../models/board";
 import { getBoard } from "./board-provider";
 
 function saveSomeBoard(board: Board, saveName: string) {
