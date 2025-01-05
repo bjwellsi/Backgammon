@@ -1,10 +1,13 @@
 import { useBoard } from "../controllers/board-provider";
+import { Column } from "../models/column";
 import { PieceList } from "./piece-list";
 
-const Column: React.FC<{ columnIndex: number }> = ({ columnIndex }) => {
-  const { board, movePiece } = useBoard();
-  const column = board.columns[columnIndex];
-  const id = `column-${columnIndex}`;
+const Column: React.FC<{ column: Column; columnIndex: number }> = ({
+  column,
+  columnIndex,
+}) => {
+  const { movePiece } = useBoard();
+  const id = column.id;
 
   let oddOrEven = "odd";
   if (columnIndex % 2 > 0) {
@@ -17,7 +20,6 @@ const Column: React.FC<{ columnIndex: number }> = ({ columnIndex }) => {
   let ret = (
     <>
       <div
-        key={id}
         id={id}
         className={`column piece-contaier ${oddOrEven} ${topOrBottom}`}
         onClick={(event) => {

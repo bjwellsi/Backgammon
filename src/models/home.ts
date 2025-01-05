@@ -7,12 +7,12 @@ class Home extends Column {
   maxPieceCount: number;
 
   constructor(color: Color, maxPieceCount: number) {
-    super();
+    super(Color[color] + "-home");
     this._color = color;
     this.maxPieceCount = maxPieceCount;
 
     for (let i = 0; i < maxPieceCount; i++) {
-      this.addPiece(new Piece(color));
+      this.addPiece(new Piece(color, Color[color] + i));
     }
   }
 

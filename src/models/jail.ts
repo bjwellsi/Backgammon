@@ -6,7 +6,7 @@ class Jail extends Column {
   private readonly _color: Color;
 
   constructor(color: Color) {
-    super();
+    super(Color[color] + "-jail");
     this._color = color;
   }
 

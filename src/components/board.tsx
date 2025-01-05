@@ -1,26 +1,34 @@
 import { Dice } from "./dice";
 import { CurrentTurn } from "./current-turn";
 import { Column } from "./column";
+import { useBoard } from "../controllers/board-provider";
 
 const Board: React.FC = () => {
+  const { board } = useBoard();
   let topLeft = [];
   for (let i = 0; i < 6; i++) {
-    topLeft.push(<Column columnIndex={i} />);
+    const column = board.columns[i];
+    topLeft.push(<Column key={column.id} column={column} columnIndex={i} />);
   }
 
   let topRight = [];
   for (let i = 6; i < 12; i++) {
-    topRight.push(<Column columnIndex={i} />);
+    const column = board.columns[i];
+    topRight.push(<Column key={column.id} column={column} columnIndex={i} />);
   }
 
   let bottomLeft = [];
   for (let i = 18; i < 24; i++) {
-    bottomLeft.push(<Column columnIndex={i} />);
+    const column = board.columns[i];
+    bottomLeft.push(<Column key={column.id} column={column} columnIndex={i} />);
   }
 
   let bottomRight = [];
   for (let i = 12; i < 18; i++) {
-    bottomRight.push(<Column columnIndex={i} />);
+    const column = board.columns[i];
+    bottomRight.push(
+      <Column key={column.id} column={column} columnIndex={i} />,
+    );
   }
 
   let ret = (

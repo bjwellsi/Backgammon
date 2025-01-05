@@ -7,8 +7,11 @@ class Column implements RendersInConsole {
   @Type(() => Piece)
   pieces: Piece[];
 
-  constructor() {
+  readonly id: string;
+
+  constructor(id: string) {
     this.pieces = [];
+    this.id = id;
   }
 
   empty(): boolean {

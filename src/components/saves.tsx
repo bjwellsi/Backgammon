@@ -31,7 +31,7 @@ const DisplaySaves: React.FC = () => {
       <ul id="save-names">
         {saves.map((save) => {
           return (
-            <li>
+            <li key={save}>
               <button onClick={() => loadGame(save)}>{save}</button>
               <button onClick={() => deleteSave(save)}>Delete</button>
             </li>

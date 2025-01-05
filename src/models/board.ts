@@ -20,11 +20,14 @@ class Board implements RendersInConsole {
     this._piecesPerTeam = init?._piecesPerTeam ?? 15; // Default to 15 if not provided
     this.teams = init?.teams ?? [];
     this.turn = init?.turn ?? new Turn();
+    let columnIndex = 0;
     this.columns =
       init?.columns ??
       Array(24)
         .fill(null)
-        .map(() => new Column());
+        .map(() => {
+          return new Column(`column-${columnIndex++}`);
+        });
 
     if (!init) {
       this.teams.push(new Team(Color.Black, this._piecesPerTeam, -1, 0, 6));

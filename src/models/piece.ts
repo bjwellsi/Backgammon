@@ -3,9 +3,11 @@ import { RendersInConsole } from "./renders-in-console";
 
 class Piece implements RendersInConsole {
   readonly color: Color;
+  readonly id: string;
 
-  constructor(color: Color) {
+  constructor(color: Color, id: string) {
     this.color = color;
+    this.id = id;
   }
 
   renderInConsole(): string {
