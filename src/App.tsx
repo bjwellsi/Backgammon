@@ -6,6 +6,17 @@ import { ControlRow } from "./components/control-row";
 import { BoardProvider } from "./controllers/board-provider";
 
 const App: React.FC = () => {
+  window.addEventListener("error", (event: ErrorEvent) => {
+    event.preventDefault();
+  });
+
+  window.addEventListener(
+    "unhandledrejection",
+    (event: PromiseRejectionEvent) => {
+      event.preventDefault();
+    },
+  );
+
   return (
     <>
       <ErrorBoundary>

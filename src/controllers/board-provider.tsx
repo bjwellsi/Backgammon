@@ -17,8 +17,6 @@ type BoardContextType = {
 
 const BoardContext = createContext<BoardContextType | undefined>(undefined);
 
-let selectedDiv: HTMLDivElement | null;
-
 function getContainerID(div: HTMLDivElement): number | string {
   if (div.classList.contains("jail")) {
     return "jail";
@@ -42,6 +40,8 @@ const BoardProvider: React.FC<{ children: React.ReactNode }> = ({
     setBoard(new BoardModel());
   };
 
+  let selectedDiv: HTMLDivElement | null;
+
   const handleMovePiece = (currentDiv: HTMLDivElement) => {
     if (selectedDiv == null) {
       selectedDiv = currentDiv;
@@ -54,8 +54,6 @@ const BoardProvider: React.FC<{ children: React.ReactNode }> = ({
       selectedDiv.classList.remove("highlighted");
       selectedDiv = null;
 
-      console.log(action);
-      console.log(board);
       setBoard((prevBoard) => movePieceEngine(prevBoard, action));
     }
   };
