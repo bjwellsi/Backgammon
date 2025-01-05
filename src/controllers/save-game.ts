@@ -1,14 +1,9 @@
 import { serialize, deserialize } from "class-transformer";
 import { Board } from "../models/board";
 
-function saveSomeBoard(board: Board, saveName: string) {
+function saveBoard(board: Board, saveName: string) {
   let content = serialize(board);
   localStorage.setItem(saveName, content);
-}
-
-function saveBoard(saveName: string): void {
-  //saveSomeBoard(getBoard(), saveName);
-  console.log("todo");
 }
 
 function loadBoard(saveName: string): Board | null {
@@ -20,7 +15,7 @@ function loadBoard(saveName: string): Board | null {
   return board;
 }
 
-function genSaveName(prefix: string): void {
+function genSaveName(prefix: string): string {
   let saves = listSaves();
   let saveName;
   let i = 0;
@@ -31,15 +26,16 @@ function genSaveName(prefix: string): void {
     }
     i++;
   }
-  saveBoard(saveName);
+  return saveName;
 }
 
-function manualSave(): void {
-  genSaveName("Save ");
+function manualSave(board: Board): void {
+  let saveName = genSaveName("Save ");
+  saveBoard(board, saveName);
 }
 
-function autoSave(): void {
-  saveBoard("auto");
+function autoSave(board: Board): void {
+  saveBoard(board, "auto");
 }
 
 function loadAutoSave(): Board | null {
@@ -52,7 +48,7 @@ function renameSave(save: string, newName: string): void {
     throw Error("Save doesn't exist\n");
   }
   deleteSave(save);
-  saveSomeBoard(saveVal, newName);
+  saveBoard(saveVal, newName);
 }
 
 function listSaves(): string[] {
@@ -70,20 +66,11 @@ function deleteSave(save: string): void {
   localStorage.removeItem(save);
 }
 
-function changeSaveName(save: string, newName: string): void {
-  let saveData = loadBoard(save);
-  if (saveData instanceof Board) {
-    deleteSave(save);
-    saveSomeBoard(saveData, newName);
-  }
-}
-
 export {
   saveBoard,
   loadBoard,
   listSaves,
   deleteSave,
-  changeSaveName,
   manualSave,
   autoSave,
   loadAutoSave,

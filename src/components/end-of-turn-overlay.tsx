@@ -9,7 +9,7 @@ const EndOfTurnOverlay: React.FC = () => {
           <button id="change-turn" onClick={changeTurn}>
             Change Turn
           </button>
-          <button id="reset-turn" onClick={resetBoard}>
+          <button id="reset-turn" onClick={() => console.log("todo")}>
             Reset Turn
           </button>
         </div>

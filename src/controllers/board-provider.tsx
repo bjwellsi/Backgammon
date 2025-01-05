@@ -10,6 +10,7 @@ import {
 type BoardContextType = {
   board: BoardModel;
   resetBoard: () => void;
+  updateBoard: (board: BoardModel) => void;
   movePiece: (currentDiv: HTMLDivElement) => void;
   rollDice: () => void;
   changeTurn: () => void;
@@ -66,11 +67,16 @@ const BoardProvider: React.FC<{ children: React.ReactNode }> = ({
     setBoard((prevBoard) => nextTurnEngine(prevBoard));
   };
 
+  const updateBoard = (board: BoardModel) => {
+    setBoard(board);
+  };
+
   return (
     <BoardContext.Provider
       value={{
         board,
         resetBoard,
+        updateBoard,
         movePiece: handleMovePiece,
         rollDice: handleDiceRoll,
         changeTurn: handleTurnChange,

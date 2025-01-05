@@ -1,5 +1,4 @@
 import { Component, ErrorInfo, ReactNode } from "react";
-import { hidePopup, showPopup } from "./actions/board-actions";
 
 interface ErrorBoundaryProps {
   children: ReactNode;
@@ -30,8 +29,7 @@ class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
     if (errPopup) {
       errPopup.textContent = "";
     }
-    hidePopup("error");
-    this.state = { hasError: false, errorMessage: null };
+    this.setState({ hasError: false, errorMessage: null });
   }
 
   render() {

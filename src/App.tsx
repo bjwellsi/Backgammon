@@ -7,12 +7,14 @@ import { BoardProvider } from "./controllers/board-provider";
 
 const App: React.FC = () => {
   window.addEventListener("error", (event: ErrorEvent) => {
+    console.error(event.error);
     event.preventDefault();
   });
 
   window.addEventListener(
     "unhandledrejection",
     (event: PromiseRejectionEvent) => {
+      console.error(event.reason);
       event.preventDefault();
     },
   );
