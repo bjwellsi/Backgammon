@@ -22,7 +22,6 @@ const App: React.FC = () => {
       <ErrorBoundary>
         <BoardProvider>
           <Board />
-          <EndOfTurnOverlay />
           <ControlRow />
         </BoardProvider>
       </ErrorBoundary>
