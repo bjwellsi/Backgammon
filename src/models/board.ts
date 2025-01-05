@@ -1,3 +1,4 @@
+import cloneDeep from "lodash/cloneDeep";
 import { Column } from "./column";
 import { Team } from "./team";
 import { Turn } from "./turn";
@@ -7,7 +8,7 @@ import { Color } from "./color";
 import { Type } from "class-transformer";
 
 class Board implements RendersInConsole {
-  private _piecesPerTeam: number;
+  _piecesPerTeam: number;
   @Type(() => Team)
   teams: Team[];
   @Type(() => Turn)
@@ -15,22 +16,26 @@ class Board implements RendersInConsole {
   @Type(() => Column)
   columns: Column[];
 
-  constructor() {
-    this._piecesPerTeam = 15;
+  constructor(init?: Partial<Board>) {
+    this._piecesPerTeam = init?._piecesPerTeam ?? 15; // Default to 15 if not provided
+    this.teams = init?.teams ?? [];
+    this.turn = init?.turn ?? new Turn();
+    this.columns =
+      init?.columns ??
+      Array(24)
+        .fill(null)
+        .map(() => new Column());
 
-    this.teams = [];
-    this.teams.push(new Team(Color.Black, this._piecesPerTeam, -1, 0, 6));
-    this.teams.push(new Team(Color.White, this._piecesPerTeam, 1, 23, 6));
-
-    this.turn = new Turn();
-
-    this.columns = [];
-    for (let i = 0; i < 24; i++) {
-      this.columns.push(new Column());
+    if (!init) {
+      this.teams.push(new Team(Color.Black, this._piecesPerTeam, -1, 0, 6));
+      this.teams.push(new Team(Color.White, this._piecesPerTeam, 1, 23, 6));
+      this.setStartingTurn(this.teams[0].color, this.teams[1].color);
+      this.populateColumns();
     }
+  }
 
-    this.setStartingTurn(this.teams[0].color, this.teams[1].color);
-    this.populateColumns();
+  clone(): Board {
+    return cloneDeep(this);
   }
 
   get winner(): string | undefined {
@@ -198,7 +203,7 @@ class Board implements RendersInConsole {
     }
   }
 
-  processTurnAction(action: TurnAction): void {
+  processTurnAction(action: TurnAction): Board {
     //assess the turn action for legality
     action = this.moveLegal(action);
 
@@ -227,6 +232,7 @@ class Board implements RendersInConsole {
       //errorMessage can't be null if the action is illegal
       throw Error(action.errorMessage as string);
     }
+    return new Board({ ...this });
   }
 
   moveLegal(turnAction: TurnAction): TurnAction {

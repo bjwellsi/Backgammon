@@ -1,4 +1,3 @@
-import { getBoard, updateBoard } from "../../controllers/board-provider";
 import {
   deleteSave,
   listSaves,
@@ -42,7 +41,8 @@ function loadGame(save: string): void {
   if (!board) {
     throw Error("No board loaded\n");
   }
-  updateBoard(board);
+  //updateBoard(board);
+  console.log("todo");
 }
 
 function resetTurn(): void {
@@ -50,7 +50,8 @@ function resetTurn(): void {
   if (!board) {
     throw Error("Auto save missing\n");
   }
-  updateBoard(board);
+  //updateBoard(board);
+  console.log("todo");
 }
 
 function populateSaveFunctions() {

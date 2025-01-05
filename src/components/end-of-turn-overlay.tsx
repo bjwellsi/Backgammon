@@ -1,15 +1,15 @@
-import { resetBoard } from "../controllers/board-provider";
-import { changeTurn } from "./actions/command-events";
+import { useBoard } from "../controllers/board-provider";
 
 const EndOfTurnOverlay: React.FC = () => {
+  const { resetBoard, changeTurn } = useBoard();
   let ret = (
     <>
       <div id="change-turn-overlay" className="overlay">
         <div id="change-turn-popup" className="popup">
-          <button id="change-turn" onClick={() => changeTurn()}>
+          <button id="change-turn" onClick={changeTurn}>
             Change Turn
           </button>
-          <button id="reset-turn" onClick={() => resetBoard()}>
+          <button id="reset-turn" onClick={resetBoard}>
             Reset Turn
           </button>
         </div>

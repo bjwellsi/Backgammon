@@ -1,6 +1,5 @@
 import { serialize, deserialize } from "class-transformer";
 import { Board } from "../models/board";
-import { getBoard } from "./board-provider";
 
 function saveSomeBoard(board: Board, saveName: string) {
   let content = serialize(board);
@@ -8,7 +7,8 @@ function saveSomeBoard(board: Board, saveName: string) {
 }
 
 function saveBoard(saveName: string): void {
-  saveSomeBoard(getBoard(), saveName);
+  //saveSomeBoard(getBoard(), saveName);
+  console.log("todo");
 }
 
 function loadBoard(saveName: string): Board | null {

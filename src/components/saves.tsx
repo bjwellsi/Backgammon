@@ -1,4 +1,4 @@
-import { makeNewSave, resetTurn } from "./actions/display-save-options";
+import { makeNewSave } from "./actions/display-save-options";
 
 const Saves: React.FC = () => {
   let ret = (

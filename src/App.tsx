@@ -1,28 +1,20 @@
 import "reflect-metadata";
 import { Board } from "./components/board";
-import { handleError } from "./components/actions/handle-error";
-import { ErrorOverlay } from "./components/error-overlay";
+import { ErrorBoundary } from "./components/error-boundary";
 import { EndOfTurnOverlay } from "./components/end-of-turn-overlay";
 import { ControlRow } from "./components/control-row";
+import { BoardProvider } from "./controllers/board-provider";
 
 const App: React.FC = () => {
-  window.addEventListener("error", (event: ErrorEvent) => {
-    handleError(event.error);
-  });
-
-  window.addEventListener(
-    "unhandledrejection",
-    (event: PromiseRejectionEvent) => {
-      handleError(event.reason);
-    },
-  );
-
   return (
     <>
-      <ErrorOverlay />
-      <Board />
-      <EndOfTurnOverlay />
-      <ControlRow />
+      <ErrorBoundary>
+        <BoardProvider>
+          <Board />
+          <EndOfTurnOverlay />
+          <ControlRow />
+        </BoardProvider>
+      </ErrorBoundary>
     </>
   );
 };

@@ -1,22 +1,22 @@
 import { Board } from "../models/board";
-import { getBoard } from "./board-provider";
 import { TurnAction } from "../models/turn-action";
 
-function movePiece(move: TurnAction): void {
-  getBoard().processTurnAction(move);
+function movePiece(board: Board, move: TurnAction): Board {
+  const newBoard = board.clone();
+  newBoard.processTurnAction(move);
+  return newBoard;
 }
 
-function endGame(): void {
-  let board = getBoard();
-  board = new Board();
+function rollDice(board: Board): Board {
+  const newBoard = board.clone();
+  newBoard.rollDice();
+  return newBoard;
 }
 
-function rollDice(): void {
-  getBoard().rollDice();
+function nextTurn(board: Board): Board {
+  const newBoard = board.clone();
+  newBoard.changeTurn();
+  return newBoard;
 }
 
-function nextTurn(): void {
-  getBoard().changeTurn();
-}
-
-export { endGame, rollDice, nextTurn, movePiece };
+export { rollDice, nextTurn, movePiece };
