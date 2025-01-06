@@ -25,7 +25,7 @@ class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
   }
 
   clearError(): void {
-    let errPopup = document.getElementById("error-popup");
+    const errPopup = document.getElementById("error-popup");
     if (errPopup) {
       errPopup.textContent = "";
     }

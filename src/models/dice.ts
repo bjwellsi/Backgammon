@@ -14,14 +14,14 @@ class Dice implements RendersInConsole {
 
   rollForIniative(): number {
     this.clearRolls();
-    let die = this._chance.integer({ min: 1, max: 6 });
+    const die = this._chance.integer({ min: 1, max: 6 });
     this.rolls.push(die);
     return die;
   }
 
   roll(): number[] {
-    let die1 = this._chance.integer({ min: 1, max: 6 });
-    let die2 = this._chance.integer({ min: 1, max: 6 });
+    const die1 = this._chance.integer({ min: 1, max: 6 });
+    const die2 = this._chance.integer({ min: 1, max: 6 });
 
     this.rolls.push(die1);
     this.rolls.push(die2);

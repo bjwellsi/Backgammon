@@ -3,7 +3,7 @@ import { Saves } from "./saves";
 
 const ControlRow: React.FC = () => {
   const { rollDice, resetBoard } = useBoard();
-  let ret = (
+  const ret = (
     <>
       <div className="control-row">
         <button id="roll-dice" onClick={rollDice}>

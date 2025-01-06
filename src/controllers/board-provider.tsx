@@ -24,8 +24,8 @@ function getContainerID(div: HTMLDivElement): number | string {
   } else if (div.classList.contains("home")) {
     return "home";
   } else {
-    let id = div.id;
-    let ret = Number(id.replace("column-", ""));
+    const id = div.id;
+    const ret = Number(id.replace("column-", ""));
     if (isNaN(ret)) {
       throw Error("Invalid container id format\n");
     }
@@ -49,9 +49,9 @@ const BoardProvider: React.FC<{ children: React.ReactNode }> = ({
       selectedDiv.classList.add("highlighted");
     } else {
       //create a turn action
-      let from = getContainerID(selectedDiv);
-      let to = getContainerID(currentDiv);
-      let action = new TurnAction(from, to);
+      const from = getContainerID(selectedDiv);
+      const to = getContainerID(currentDiv);
+      const action = new TurnAction(from, to);
       selectedDiv.classList.remove("highlighted");
       selectedDiv = null;
 

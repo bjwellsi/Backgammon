@@ -3,7 +3,7 @@ import { Piece as PieceModel } from "../models/piece";
 
 const Piece: React.FC<{ piece: PieceModel }> = ({ piece }) => {
   const id = piece.id;
-  let ret = (
+  const ret = (
     <>
       <div
         id={id}

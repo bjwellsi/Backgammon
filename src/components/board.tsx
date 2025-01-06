@@ -5,25 +5,25 @@ import { useBoard } from "../controllers/board-provider";
 
 const Board: React.FC = () => {
   const { board } = useBoard();
-  let topLeft = [];
+  const topLeft = [];
   for (let i = 0; i < 6; i++) {
     const column = board.columns[i];
     topLeft.push(<Column key={column.id} column={column} columnIndex={i} />);
   }
 
-  let topRight = [];
+  const topRight = [];
   for (let i = 6; i < 12; i++) {
     const column = board.columns[i];
     topRight.push(<Column key={column.id} column={column} columnIndex={i} />);
   }
 
-  let bottomLeft = [];
+  const bottomLeft = [];
   for (let i = 18; i < 24; i++) {
     const column = board.columns[i];
     bottomLeft.push(<Column key={column.id} column={column} columnIndex={i} />);
   }
 
-  let bottomRight = [];
+  const bottomRight = [];
   for (let i = 12; i < 18; i++) {
     const column = board.columns[i];
     bottomRight.push(
@@ -31,7 +31,7 @@ const Board: React.FC = () => {
     );
   }
 
-  let ret = (
+  const ret = (
     <>
       <div className="play-area">
         <CurrentTurn />

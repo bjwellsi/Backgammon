@@ -44,7 +44,7 @@ class Column implements RendersInConsole {
       this.pieces.push(piece);
     } else if (this.pieces.length === 1) {
       //hit
-      let victim = this.pieces.pop();
+      const victim = this.pieces.pop();
       this.pieces.push(piece);
       return victim;
     } else {

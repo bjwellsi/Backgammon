@@ -2,7 +2,7 @@ import { useBoard } from "../controllers/board-provider";
 
 const Dice: React.FC = () => {
   const { board } = useBoard();
-  let rolls = board.currentTeam.dice.rolls;
+  const rolls = board.currentTeam.dice.rolls;
   let ret = <></>;
   let rollsString = "";
 

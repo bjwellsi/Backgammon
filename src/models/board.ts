@@ -42,7 +42,7 @@ class Board implements RendersInConsole {
   }
 
   get winner(): string | undefined {
-    let winner = this.teams.find((team) => team.hasWon());
+    const winner = this.teams.find((team) => team.hasWon());
     if (typeof winner != "undefined") {
       return Color[winner.color];
     }
@@ -90,7 +90,7 @@ class Board implements RendersInConsole {
   }
 
   get currentTeam(): Team {
-    let index = this.turn.currentTeamIndex;
+    const index = this.turn.currentTeamIndex;
     if (index == null) {
       throw Error("No team set");
     }
@@ -98,7 +98,7 @@ class Board implements RendersInConsole {
   }
 
   get currentOpponent(): Team {
-    let index = this.turn.currentOpponentIndex;
+    const index = this.turn.currentOpponentIndex;
     if (index == null) {
       throw Error("No opponent set");
     }
@@ -132,7 +132,7 @@ class Board implements RendersInConsole {
       bottomRow += `${i + 1}|${this.columns[i].renderInConsole()}  `;
     }
 
-    let board = `
+    const board = `
                                                                        ${Color[this.currentTeam.color]}'s turn
                                                                        ${this.currentTeam.dice.renderInConsole()}
 
@@ -154,8 +154,8 @@ class Board implements RendersInConsole {
 
   setStartingTurn(color: Color, opponentColor: Color): void {
     //search the team array for the color, and if it's not present throw err
-    let startingTeam = this.teams.findIndex((team) => team.color == color);
-    let startingOpponent = this.teams.findIndex(
+    const startingTeam = this.teams.findIndex((team) => team.color == color);
+    const startingOpponent = this.teams.findIndex(
       (team) => team.color == opponentColor,
     );
     if (startingTeam == -1 || startingOpponent == -1) {
@@ -225,7 +225,7 @@ class Board implements RendersInConsole {
         toColumn = this.columns[action.to as number];
       }
       //move the piece, hit if there's a piece moved
-      let hitPiece = toColumn.addPiece(fromColumn.removePiece());
+      const hitPiece = toColumn.addPiece(fromColumn.removePiece());
       if (hitPiece != undefined) {
         this.currentOpponent.jail.addPiece(hitPiece);
       }
@@ -270,7 +270,7 @@ class Board implements RendersInConsole {
     }
 
     //check if they can move that far with the current rolls
-    let rollDistance = this.currentOpponent.homeBaseIndex(turnAction.to) + 1;
+    const rollDistance = this.currentOpponent.homeBaseIndex(turnAction.to) + 1;
     if (!this.currentTeam.dice.rollLegal(rollDistance)) {
       turnAction.cannotMove("Can't move that distance with current roll\n");
       return turnAction;
@@ -294,7 +294,7 @@ class Board implements RendersInConsole {
     }
 
     //make sure the piece is the right color
-    let piece = this.columns[turnAction.from].retrieveFirstPiece();
+    const piece = this.columns[turnAction.from].retrieveFirstPiece();
     if (piece.color != this.currentTeam.color) {
       turnAction.cannotMove("Can't move the other team's piece\n");
       return turnAction;
@@ -324,7 +324,7 @@ class Board implements RendersInConsole {
     }
 
     //confirm piece is in home base. Redundant check based on other logic but doing to be explicit
-    let fromHomeIndex = this.currentTeam.homeBaseIndex(turnAction.from);
+    const fromHomeIndex = this.currentTeam.homeBaseIndex(turnAction.from);
     if (fromHomeIndex < 0) {
       turnAction.cannotMove("Can't move home from outside home base\n");
       return turnAction;
@@ -347,7 +347,8 @@ class Board implements RendersInConsole {
       //now check if there are any columns that are larger than this index that are populated
       let nextHomeIndex =
         this.currentTeam.incrementHomeBaseIndex(fromHomeIndex);
-      let nextColumn = this.currentTeam.homeBaseIndexToColumnNum(nextHomeIndex);
+      const nextColumn =
+        this.currentTeam.homeBaseIndexToColumnNum(nextHomeIndex);
       while (nextHomeIndex >= 0) {
         if (this.columns[nextColumn].color == this.currentTeam.color) {
           turnAction.cannotMove(
@@ -381,7 +382,7 @@ class Board implements RendersInConsole {
     }
 
     //make sure the piece is the right color
-    let piece = this.columns[turnAction.from].retrieveFirstPiece();
+    const piece = this.columns[turnAction.from].retrieveFirstPiece();
     if (piece.color != this.currentTeam.color) {
       turnAction.cannotMove("Can't move the other team's piece\n");
       return turnAction;
@@ -413,15 +414,15 @@ class Board implements RendersInConsole {
   }
 
   hasLegalMovesRemaining(): boolean {
-    let team = this.currentTeam;
-    let opponent = this.currentOpponent;
-    let columns = this.columns;
-    let rolls = team.dice.rolls;
-    let color = team.color;
+    const team = this.currentTeam;
+    const opponent = this.currentOpponent;
+    const columns = this.columns;
+    const rolls = team.dice.rolls;
+    const color = team.color;
     if (!team.jail.empty()) {
       //check if any of the enemy base indexes that match the current rolls are legal moves
-      for (let roll of rolls) {
-        let columnIndex = opponent.homeBaseIndexToColumnNum(roll);
+      for (const roll of rolls) {
+        const columnIndex = opponent.homeBaseIndexToColumnNum(roll);
         if (this.moveLegal(new TurnAction("jail", columnIndex))) {
           return true;
         }
@@ -437,11 +438,11 @@ class Board implements RendersInConsole {
       }
       if (readyForHome) {
         //you just have to check every index in this case, since home moves have special privileges
-        let homeIndex = team.minHomeBaseIndex();
+        const homeIndex = team.minHomeBaseIndex();
         while (homeIndex != -1) {
-          let colIndex = team.homeBaseIndexToColumnNum(homeIndex);
+          const colIndex = team.homeBaseIndexToColumnNum(homeIndex);
           if (columns[colIndex].color == color) {
-            let action = new TurnAction(colIndex, "home");
+            const action = new TurnAction(colIndex, "home");
             if (this.moveLegal(action)) {
               return true;
             }
@@ -452,11 +453,11 @@ class Board implements RendersInConsole {
       } else {
         //typical case, there's nobody in jail but there are pieces outside home base
         //have to check each roll against each populated column, see if the column it could move to would be a legal move
-        for (let roll of rolls) {
+        for (const roll of rolls) {
           for (let i = 0; i < columns.length; i++) {
             if (columns[i].color == color) {
-              let moveTo = i + roll * team.directionMultiplier;
-              let action = new TurnAction(i, moveTo);
+              const moveTo = i + roll * team.directionMultiplier;
+              const action = new TurnAction(i, moveTo);
               if (this.moveLegal(action)) {
                 return true;
               }

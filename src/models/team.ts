@@ -35,7 +35,7 @@ class Team {
 
   homeBaseIndex(columnIndex: number): number {
     //returns -1 if the index is out of bounds of the home base
-    let index = Math.abs(this._homeBaseStart - columnIndex);
+    const index = Math.abs(this._homeBaseStart - columnIndex);
     if (index < this._homeBaseSize) {
       return index;
     } else {

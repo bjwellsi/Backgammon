@@ -2,7 +2,7 @@ import { useBoard } from "../controllers/board-provider";
 
 const EndOfTurnOverlay: React.FC = () => {
   const { resetBoard, changeTurn } = useBoard();
-  let ret = (
+  const ret = (
     <>
       <div id="change-turn-overlay" className="overlay show-overlay">
         <div id="change-turn-popup" className="popup show-popup">

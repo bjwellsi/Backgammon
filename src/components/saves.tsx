@@ -11,7 +11,7 @@ const DisplaySaves: React.FC = () => {
   const saves = listSaves();
   const { updateBoard } = useBoard();
   const loadGame = (save: string) => {
-    let board = loadBoard(save);
+    const board = loadBoard(save);
     if (!board) {
       throw Error("No board loaded\n");
     }
@@ -19,7 +19,7 @@ const DisplaySaves: React.FC = () => {
   };
 
   const resetTurn = () => {
-    let board = loadAutoSave();
+    const board = loadAutoSave();
     if (!board) {
       throw Error("Auto save missing\n");
     }
@@ -49,7 +49,7 @@ const Saves: React.FC = () => {
     manualSave(board);
   };
 
-  let ret = (
+  const ret = (
     <>
       <div id="save-section">
         <button id="new-save" onClick={makeNewSave}>

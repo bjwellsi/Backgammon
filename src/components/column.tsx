@@ -17,7 +17,7 @@ const Column: React.FC<{ column: Column; columnIndex: number }> = ({
   if (columnIndex > 11) {
     topOrBottom = "bottom";
   }
-  let ret = (
+  const ret = (
     <>
       <div
         id={id}

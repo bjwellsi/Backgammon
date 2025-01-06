@@ -2,12 +2,12 @@ import { serialize, deserialize } from "class-transformer";
 import { Board } from "../models/board";
 
 function saveBoard(board: Board, saveName: string) {
-  let content = serialize(board);
+  const content = serialize(board);
   localStorage.setItem(saveName, content);
 }
 
 function loadBoard(saveName: string): Board | null {
-  let content = localStorage.getItem(saveName);
+  const content = localStorage.getItem(saveName);
   let board = null;
   if (content) {
     board = deserialize(Board, content);
@@ -16,11 +16,11 @@ function loadBoard(saveName: string): Board | null {
 }
 
 function genSaveName(prefix: string): string {
-  let saves = listSaves();
+  const saves = listSaves();
   let saveName;
   let i = 0;
   while (!saveName) {
-    let newName = `${prefix}${i}`;
+    const newName = `${prefix}${i}`;
     if (saves.indexOf(newName) < 0) {
       saveName = newName;
     }
@@ -30,7 +30,7 @@ function genSaveName(prefix: string): string {
 }
 
 function manualSave(board: Board): void {
-  let saveName = genSaveName("Save ");
+  const saveName = genSaveName("Save ");
   saveBoard(board, saveName);
 }
 
@@ -43,7 +43,7 @@ function loadAutoSave(): Board | null {
 }
 
 function renameSave(save: string, newName: string): void {
-  let saveVal = loadBoard(save);
+  const saveVal = loadBoard(save);
   if (!saveVal) {
     throw Error("Save doesn't exist\n");
   }
@@ -52,9 +52,9 @@ function renameSave(save: string, newName: string): void {
 }
 
 function listSaves(): string[] {
-  let saves = [];
+  const saves = [];
   for (let i = 0; i < localStorage.length; i++) {
-    let key = localStorage.key(i);
+    const key = localStorage.key(i);
     if (key && key != "auto") {
       saves.push(key);
     }
