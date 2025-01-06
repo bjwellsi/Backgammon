@@ -23,12 +23,12 @@ const App: React.FC = () => {
   return (
     <>
       <ErrorBoundary>
-        <BoardProvider>
-          <SaveProvider>
+        <SaveProvider>
+          <BoardProvider>
             <Board />
             <ControlRow />
-          </SaveProvider>
-        </BoardProvider>
+          </BoardProvider>
+        </SaveProvider>
       </ErrorBoundary>
     </>
   );

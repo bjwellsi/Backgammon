@@ -2,8 +2,8 @@ import { useBoard } from "../controllers/board-provider";
 import { useSaves } from "../controllers/save-provider";
 
 const EndOfTurnOverlay: React.FC = () => {
-  const { changeTurn } = useBoard();
-  const { loadAutoSave } = useSaves();
+  const { changeTurn, updateBoard } = useBoard();
+  const { loadTurnStart } = useSaves();
 
   const ret = (
     <>
@@ -12,7 +12,17 @@ const EndOfTurnOverlay: React.FC = () => {
           <button id="change-turn" onClick={changeTurn}>
             Change Turn
           </button>
-          <button id="reset-turn" onClick={loadAutoSave}>
+          <button
+            id="reset-turn"
+            onClick={() => {
+              const board = loadTurnStart();
+              if (!board) {
+                throw Error("Save not loading\n");
+              } else {
+                updateBoard(board);
+              }
+            }}
+          >
             Reset Turn
           </button>
         </div>

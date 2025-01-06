@@ -1,8 +1,8 @@
 import { useBoard } from "../controllers/board-provider";
-import { Column } from "../models/column";
+import { Column as ColumnModel } from "../models/column";
 import { PieceList } from "./piece-list";
 
-const Column: React.FC<{ column: Column; columnIndex: number }> = ({
+const Column: React.FC<{ column: ColumnModel; columnIndex: number }> = ({
   column,
   columnIndex,
 }) => {

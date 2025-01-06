@@ -6,6 +6,7 @@ import {
   rollDice as rollDiceEngine,
   nextTurn as nextTurnEngine,
 } from "./game-engine";
+import { useSaves } from "./save-provider";
 
 type BoardContextType = {
   board: BoardModel;
@@ -32,10 +33,16 @@ function getContainerID(div: HTMLDivElement): number | string {
     return ret;
   }
 }
+
 const BoardProvider: React.FC<{ children: React.ReactNode }> = ({
   children,
 }) => {
-  const [board, setBoard] = useState(new BoardModel());
+  const { autoSave, loadAutoSave, saveTurnStart } = useSaves();
+  let initialBoard = loadAutoSave();
+  if (!initialBoard) {
+    initialBoard = new BoardModel();
+  }
+  const [board, setBoard] = useState(initialBoard);
 
   const resetBoard = () => {
     setBoard(new BoardModel());
@@ -56,19 +63,25 @@ const BoardProvider: React.FC<{ children: React.ReactNode }> = ({
       selectedDiv = null;
 
       setBoard((prevBoard) => movePieceEngine(prevBoard, action));
+      autoSave(board);
     }
   };
 
   const handleDiceRoll = () => {
     setBoard((prevBoard) => rollDiceEngine(prevBoard));
+    autoSave(board);
+    saveTurnStart(board);
   };
 
   const handleTurnChange = () => {
     setBoard((prevBoard) => nextTurnEngine(prevBoard));
+    autoSave(board);
+    saveTurnStart(board);
   };
 
   const updateBoard = (board: BoardModel) => {
     setBoard(board);
+    autoSave(board);
   };
 
   return (
