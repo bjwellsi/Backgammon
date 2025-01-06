@@ -4,6 +4,7 @@ import { ErrorBoundary } from "./components/error-boundary";
 import { EndOfTurnOverlay } from "./components/end-of-turn-overlay";
 import { ControlRow } from "./components/control-row";
 import { BoardProvider } from "./controllers/board-provider";
+import { SaveProvider } from "./controllers/save-provider";
 
 const App: React.FC = () => {
   window.addEventListener("error", (event: ErrorEvent) => {
@@ -23,8 +24,10 @@ const App: React.FC = () => {
     <>
       <ErrorBoundary>
         <BoardProvider>
-          <Board />
-          <ControlRow />
+          <SaveProvider>
+            <Board />
+            <ControlRow />
+          </SaveProvider>
         </BoardProvider>
       </ErrorBoundary>
     </>
