@@ -5,7 +5,6 @@ import { PieceList } from "./piece-list";
 class Column extends PieceList {
   constructor(id: string) {
     super(id);
-    console.log(this.id);
   }
 
   canBeHit(): boolean {
