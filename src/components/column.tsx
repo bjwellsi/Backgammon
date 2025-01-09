@@ -1,13 +1,10 @@
 import { selectPieceList } from "../controllers/ui-functions";
-import { Column as ColumnModel } from "../models/column";
 import { useBoardStore } from "../stores/game-store";
 import { useUIStore } from "../stores/ui-store";
 import { PieceList } from "./piece-list";
 
-const Column: React.FC<{ column: ColumnModel; columnIndex: number }> = ({
-  column,
-  columnIndex,
-}) => {
+const Column: React.FC<{ columnIndex: number }> = ({ columnIndex }) => {
+  const column = useBoardStore((state) => state.board.columns[columnIndex]);
   const id = column.id;
   const selected = useUIStore((state) => state.action.from);
 
