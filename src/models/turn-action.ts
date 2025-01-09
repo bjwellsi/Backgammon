@@ -1,15 +1,13 @@
+import cloneDeep from "lodash/cloneDeep";
+
 class TurnAction {
-  private _from: number | string;
-  private _to: number | string;
+  from: string | null;
+  to: string | null;
   private _actionLegal: boolean | null;
   private _errorMessage: string | null;
   private _rollCost: number | null;
 
-  constructor(from: number | string, to: number | string) {
-    //have to manually set them to something incorrect first
-    //so that I can call the proper setters without compile errors for not setting _from and _to in ctor
-    this._from = -1;
-    this._to = -1;
+  constructor(from: string | null, to: string | null) {
     this.from = from;
     this.to = to;
     this._actionLegal = null;
@@ -17,49 +15,18 @@ class TurnAction {
     this._rollCost = null;
   }
 
-  private validateColumnType(column: string): boolean {
-    const columnTypes = ["jail", "home"];
-    return columnTypes.includes(column);
-  }
-
-  get from(): number | string {
-    return this._from;
-  }
-
-  set from(from: number | string) {
-    if (typeof from === "string") {
-      if (this.validateColumnType(from)) {
-        this._from = from;
-      } else {
-        throw Error(`Can't set from column to ${from}`);
-      }
-    } else {
-      this._from = from;
-    }
-  }
-
-  get to(): number | string {
-    return this._to;
-  }
-
-  set to(to: number | string) {
-    if (typeof to === "string") {
-      if (this.validateColumnType(to)) {
-        this._to = to;
-      } else {
-        throw Error(`Can't set to column to ${to}`);
-      }
-    } else {
-      this._to = to;
-    }
+  clone(): TurnAction {
+    return cloneDeep(this);
   }
 
   get fromJail() {
-    return typeof this._from == "string" && this._from == "jail";
+    console.log("todo");
+    return false;
   }
 
   get toHome() {
-    return typeof this._to == "string" && this._to == "home";
+    console.log("todo");
+    return false;
   }
 
   get actionLegal(): boolean | null {

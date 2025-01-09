@@ -38,7 +38,7 @@ const BoardProvider: React.FC<{ children: React.ReactNode }> = ({
   children,
 }) => {
   const { autoSave, loadAutoSave, saveTurnStart } = useSaves();
-  let initialBoard = loadAutoSave();
+  let initialBoard = new BoardModel(); //loadAutoSave();
   if (!initialBoard) {
     initialBoard = new BoardModel();
   }

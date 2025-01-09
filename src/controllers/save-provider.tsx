@@ -64,7 +64,6 @@ const SaveProvider: React.FC<{ children: React.ReactNode }> = ({
 
   const manualSave = (board: Board): void => {
     const saveName = genSaveName("Save ");
-    console.log(saveName);
     saveBoard(saveName, board);
   };
 

@@ -1,10 +1,7 @@
-import { useBoard } from "../controllers/board-provider";
-import { useSaves } from "../controllers/save-provider";
+import { rollDice } from "../controllers/game-engine";
 import { Saves } from "./saves";
 
 const ControlRow: React.FC = () => {
-  const { rollDice, resetBoard, updateBoard } = useBoard();
-  const { loadTurnStart } = useSaves();
   const ret = (
     <>
       <div className="control-row">
@@ -14,17 +11,12 @@ const ControlRow: React.FC = () => {
         <button
           id="reset-turn"
           onClick={() => {
-            const board = loadTurnStart();
-            if (!board) {
-              throw Error("Save not loading\n");
-            } else {
-              updateBoard(board);
-            }
+            console.log("todo");
           }}
         >
           Reset Turn
         </button>
-        <button id="end-game" onClick={resetBoard}>
+        <button id="end-game" onClick={() => console.log("todo")}>
           End Game
         </button>
         <br />

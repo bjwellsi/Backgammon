@@ -3,11 +3,10 @@ import { Column } from "./column";
 import { Team } from "./team";
 import { Turn } from "./turn";
 import { TurnAction } from "./turn-action";
-import { RendersInConsole } from "./renders-in-console";
 import { Color } from "./color";
 import { Type } from "class-transformer";
 
-class Board implements RendersInConsole {
+class Board {
   _piecesPerTeam: number;
   @Type(() => Team)
   teams: Team[];
@@ -113,45 +112,6 @@ class Board implements RendersInConsole {
     }
   }
 
-  renderInConsole(): string {
-    let topRow = "";
-    for (let i = 0; i < 6; i++) {
-      topRow += `${i < 9 ? "0" : ""}${i + 1}|${this.columns[i].renderInConsole()}  `;
-    }
-    topRow += "| JAIL |     ";
-    for (let i = 6; i < 12; i++) {
-      topRow += `${i < 9 ? "0" : ""}${i + 1}|${this.columns[i].renderInConsole()}  `;
-    }
-
-    let bottomRow = "";
-    for (let i = 23; i > 17; i--) {
-      bottomRow += `${i + 1}|${this.columns[i].renderInConsole()}  `;
-    }
-    bottomRow += "| JAIL |     ";
-    for (let i = 17; i > 11; i--) {
-      bottomRow += `${i + 1}|${this.columns[i].renderInConsole()}  `;
-    }
-
-    const board = `
-                                                                       ${Color[this.currentTeam.color]}'s turn
-                                                                       ${this.currentTeam.dice.renderInConsole()}
-
-    ${this.teams[0].home.renderInConsole()} 
-
-    ${topRow}
-
-                                                                               ${this.teams[0].jail.renderInConsole()}
-    ------------------------------------------------------------------------| JAIL |-------------------------------------------------------------------------
-                                                                               ${this.teams[1].jail.renderInConsole()}
-
-    ${bottomRow}
-
-    ${this.teams[1].home.renderInConsole()} 
-    `;
-
-    return board;
-  }
-
   setStartingTurn(color: Color, opponentColor: Color): void {
     //search the team array for the color, and if it's not present throw err
     const startingTeam = this.teams.findIndex((team) => team.color == color);
@@ -206,24 +166,35 @@ class Board implements RendersInConsole {
     }
   }
 
+  getColumn(columnId: string) {
+    return this.columns.find((col) => col.id == columnId);
+  }
+
   processTurnAction(action: TurnAction): Board {
     //assess the turn action for legality
     action = this.moveLegal(action);
 
-    if (action.actionLegal) {
+    if (action.actionLegal && action.to && action.from) {
       //this is not the right way to do this. I shouldn't have to do so much manual casting on turn action
       let fromColumn;
       let toColumn;
       if (action.fromJail) {
         fromColumn = this.currentTeam.jail;
       } else {
-        fromColumn = this.columns[action.from as number];
+        fromColumn = this.getColumn(action.from);
+      }
+      if (!fromColumn) {
+        throw Error(`No pieceList with id ${action.to}`);
       }
       if (action.toHome) {
         toColumn = this.currentTeam.home;
       } else {
-        toColumn = this.columns[action.to as number];
+        toColumn = this.getColumn(action.to);
       }
+      if (!toColumn) {
+        throw Error(`No pieceList with id ${action.from}`);
+      }
+
       //move the piece, hit if there's a piece moved
       const hitPiece = toColumn.addPiece(fromColumn.removePiece());
       if (hitPiece != undefined) {
@@ -366,51 +337,56 @@ class Board implements RendersInConsole {
   }
 
   standardMoveLegal(turnAction: TurnAction): TurnAction {
-    if (
-      typeof turnAction.from != "number" ||
-      typeof turnAction.to != "number"
-    ) {
+    if (!turnAction.from || !turnAction.to) {
       turnAction.cannotMove(
         `Standard move has bad format: ${turnAction.from}, ${turnAction.to}`,
       );
       return turnAction;
-    }
-    //make sure there's a piece there
-    if (this.columns[turnAction.from].empty()) {
-      turnAction.cannotMove("Can't move a piece from empty column\n");
-      return turnAction;
-    }
+    } else {
+      const fromColumn = this.getColumn(turnAction.from);
+      const toColumn = this.getColumn(turnAction.to);
+      if (!fromColumn || !toColumn) {
+        turnAction.cannotMove(`Couldn't find columns\n`);
+        return turnAction;
+      }
+      //make sure there's a piece there
+      if (fromColumn.empty) {
+        turnAction.cannotMove("Can't move a piece from empty column\n");
+        return turnAction;
+      }
 
-    //make sure the piece is the right color
-    const piece = this.columns[turnAction.from].retrieveFirstPiece();
-    if (piece.color != this.currentTeam.color) {
-      turnAction.cannotMove("Can't move the other team's piece\n");
-      return turnAction;
-    }
+      //make sure the piece is the right color
+      const piece = fromColumn.retrieveFirstPiece();
+      if (piece.color != this.currentTeam.color) {
+        turnAction.cannotMove("Can't move the other team's piece\n");
+        return turnAction;
+      }
 
-    //can't move with a piece in jail
-    if (!this.currentTeam.jail.empty()) {
-      turnAction.cannotMove("Can't move with a piece in jail\n");
-      return turnAction;
-    }
+      //can't move with a piece in jail
+      if (!this.currentTeam.jail.empty) {
+        turnAction.cannotMove("Can't move with a piece in jail\n");
+        return turnAction;
+      }
 
-    //make sure it's moving the right way
-    const distanceVertex =
-      this.currentTeam.directionMultiplier * (turnAction.to - turnAction.from);
-    if (distanceVertex < 0) {
-      turnAction.cannotMove("Can't move backward\n");
-      return turnAction;
-    }
+      //make sure it's moving the right way
+      const distanceVertex =
+        this.currentTeam.directionMultiplier *
+        (this.columns.indexOf(toColumn) - this.columns.indexOf(fromColumn));
+      if (distanceVertex < 0) {
+        turnAction.cannotMove("Can't move backward\n");
+        return turnAction;
+      }
 
-    //make sure the distance is available
-    const distance = Math.abs(distanceVertex);
-    if (!this.currentTeam.dice.rollLegal(distance)) {
-      turnAction.cannotMove("Can't move that distance with current rolls\n");
+      //make sure the distance is available
+      const distance = Math.abs(distanceVertex);
+      if (!this.currentTeam.dice.rollLegal(distance)) {
+        turnAction.cannotMove("Can't move that distance with current rolls\n");
+        return turnAction;
+      }
+      //you're allowed to move
+      turnAction.canMove(distance);
       return turnAction;
     }
-    //you're allowed to move
-    turnAction.canMove(distance);
-    return turnAction;
   }
 
   hasLegalMovesRemaining(): boolean {

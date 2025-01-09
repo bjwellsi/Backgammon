@@ -1,26 +1,17 @@
-import { useBoard } from "../controllers/board-provider";
-import { useSaves } from "../controllers/save-provider";
+import { nextTurn } from "../controllers/game-engine";
 
 const EndOfTurnOverlay: React.FC = () => {
-  const { changeTurn, updateBoard } = useBoard();
-  const { loadTurnStart } = useSaves();
-
   const ret = (
     <>
       <div id="change-turn-overlay" className="overlay show-overlay">
         <div id="change-turn-popup" className="popup show-popup">
-          <button id="change-turn" onClick={changeTurn}>
+          <button id="change-turn" onClick={nextTurn}>
             Change Turn
           </button>
           <button
             id="reset-turn"
             onClick={() => {
-              const board = loadTurnStart();
-              if (!board) {
-                throw Error("Save not loading\n");
-              } else {
-                updateBoard(board);
-              }
+              console.log("todo");
             }}
           >
             Reset Turn

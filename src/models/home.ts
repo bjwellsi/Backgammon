@@ -1,8 +1,8 @@
 import { Piece } from "./piece";
-import { Column } from "./Column";
 import { Color } from "./Color";
+import { PieceList } from "./piece-list";
 
-class Home extends Column {
+class Home extends PieceList {
   private readonly _color: Color;
   maxPieceCount: number;
 
@@ -40,10 +40,6 @@ class Home extends Column {
 
   homeFull(): boolean {
     return this.pieces.length >= this.maxPieceCount;
-  }
-
-  renderInConsole(): string {
-    return Color[this.color] + " Home:" + super.renderInConsole();
   }
 }
 

@@ -1,10 +1,11 @@
 import { Dice } from "./dice";
 import { CurrentTurn } from "./current-turn";
 import { Column } from "./column";
-import { useBoard } from "../controllers/board-provider";
+import { useBoardStore } from "../stores/game-store";
+import { useState } from "react";
 
 const Board: React.FC = () => {
-  const { board } = useBoard();
+  const board = useBoardStore((state) => state.board);
   const topLeft = [];
   for (let i = 0; i < 6; i++) {
     const column = board.columns[i];

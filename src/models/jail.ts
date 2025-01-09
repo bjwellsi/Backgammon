@@ -1,8 +1,8 @@
 import { Piece } from "./Piece";
-import { Column } from "./Column";
 import { Color } from "./Color";
+import { PieceList } from "./piece-list";
 
-class Jail extends Column {
+class Jail extends PieceList {
   private readonly _color: Color;
 
   constructor(color: Color) {

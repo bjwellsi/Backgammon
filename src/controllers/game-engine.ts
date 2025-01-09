@@ -1,22 +1,26 @@
 import { Board } from "../models/board";
 import { TurnAction } from "../models/turn-action";
+import { useBoardStore } from "../stores/game-store";
 
-function movePiece(board: Board, move: TurnAction): Board {
+function movePiece(action: TurnAction): void {
+  const board = useBoardStore.getState().board;
   const newBoard = board.clone();
-  newBoard.processTurnAction(move);
-  return newBoard;
+  newBoard.processTurnAction(action);
+  useBoardStore.setState({ board: newBoard });
 }
 
-function rollDice(board: Board): Board {
+function rollDice(): void {
+  const board = useBoardStore.getState().board;
   const newBoard = board.clone();
   newBoard.rollDice();
-  return newBoard;
+  useBoardStore.setState({ board: newBoard });
 }
 
-function nextTurn(board: Board): Board {
+function nextTurn(): void {
+  const board = useBoardStore.getState().board;
   const newBoard = board.clone();
   newBoard.changeTurn();
-  return newBoard;
+  useBoardStore.setState({ board: newBoard });
 }
 
 export { rollDice, nextTurn, movePiece };

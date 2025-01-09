@@ -1,8 +1,8 @@
-import { useBoard } from "../controllers/board-provider";
+import { useBoardStore } from "../stores/game-store";
 
 const Dice: React.FC = () => {
-  const { board } = useBoard();
-  const rolls = board.currentTeam.dice.rolls;
+  const dice = useBoardStore((state) => state.board.currentTeam.dice);
+  const rolls = dice.rolls;
   let ret = <></>;
   let rollsString = "";
 
