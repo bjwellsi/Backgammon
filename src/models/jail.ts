@@ -1,12 +1,15 @@
 import { Piece } from "./Piece";
 import { Color } from "./Color";
 import { PieceList } from "./piece-list";
+import { ID } from "./id";
 
 class Jail extends PieceList {
   private readonly _color: Color;
 
   constructor(color: Color) {
-    super(Color[color] + "-jail");
+    const idval = Color[color] + "-jail";
+    const id = new ID("jail", idval);
+    super(id);
     this._color = color;
   }
 
@@ -18,7 +21,7 @@ class Jail extends PieceList {
     if (piece.color == this.color) {
       this.pieces.push(piece);
     } else {
-      throw Error("wrong jail\n");
+      throw Error("wrong jail");
     }
   }
 

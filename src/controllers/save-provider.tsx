@@ -86,11 +86,11 @@ const SaveProvider: React.FC<{ children: React.ReactNode }> = ({
   const renameSave = (save: string, newName: string): void => {
     const oldSave = localStorage.getItem(save);
     if (!oldSave) {
-      throw Error("No save found\n");
+      throw Error("No save found");
     } else {
       const existingSave = localStorage.getItem(newName);
       if (existingSave) {
-        throw Error("Save by that name already exists\n");
+        throw Error("Save by that name already exists");
       } else {
         localStorage.removeItem(save);
         localStorage.setItem(newName, oldSave);
@@ -101,7 +101,7 @@ const SaveProvider: React.FC<{ children: React.ReactNode }> = ({
   const deleteSave = (save: string): void => {
     const existingSave = localStorage.getItem(save);
     if (!existingSave) {
-      throw Error("No save with that name found\n");
+      throw Error("No save with that name found");
     } else {
       localStorage.removeItem(save);
       setSaveList(listSaves());

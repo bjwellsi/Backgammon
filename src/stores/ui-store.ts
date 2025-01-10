@@ -1,12 +1,12 @@
 import { create } from "zustand";
-import { TurnAction } from "../models/turn-action";
+import { ID } from "../models/id";
 
 type UIStore = {
-  action: TurnAction;
+  fromList: ID | null;
 };
 
 const useUIStore = create<UIStore>((set) => ({
-  action: new TurnAction(null, null),
+  fromList: null,
 }));
 
 export { useUIStore };

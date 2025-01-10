@@ -1,13 +1,16 @@
 import { Piece } from "./piece";
 import { Color } from "./Color";
 import { PieceList } from "./piece-list";
+import { ID } from "./id";
 
 class Home extends PieceList {
   private readonly _color: Color;
   maxPieceCount: number;
 
   constructor(color: Color, maxPieceCount: number) {
-    super(Color[color] + "-home");
+    const idval = Color[color] + "-home";
+    const id = new ID("home", idval);
+    super(id);
     this._color = color;
     this.maxPieceCount = maxPieceCount;
 
@@ -22,10 +25,10 @@ class Home extends PieceList {
 
   addPiece(piece: Piece): void {
     if (piece.color != this.color) {
-      throw Error("Wrong home\n");
+      throw Error("Wrong home");
     }
     if (this.homeFull()) {
-      throw Error("Home is full\n");
+      throw Error("Home is full");
     }
     this.pieces.push(piece);
   }

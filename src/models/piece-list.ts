@@ -1,4 +1,5 @@
 import { Color } from "./color";
+import { ID } from "./id";
 import { Piece } from "./piece";
 import { Type } from "class-transformer";
 
@@ -6,9 +7,9 @@ class PieceList {
   @Type(() => Piece)
   pieces: Piece[];
 
-  readonly id: string;
+  readonly id: ID;
 
-  constructor(id: string) {
+  constructor(id: ID) {
     this.pieces = [];
     this.id = id;
   }
@@ -29,13 +30,13 @@ class PieceList {
       this.pieces.push(piece);
       return victim;
     } else {
-      throw Error("Column can't have multiple piece colors\n");
+      throw Error("Column can't have multiple piece colors");
     }
   }
 
   removePiece(): Piece {
     if (this.empty) {
-      throw Error("No pieces to remove\n");
+      throw Error("No pieces to remove");
     } else {
       //guaranteed to be a piece because it's not empty
       return this.pieces.pop() as Piece;
@@ -44,7 +45,7 @@ class PieceList {
 
   retrieveFirstPiece(): Piece {
     if (this.empty) {
-      throw Error("No pieces present\n");
+      throw Error("No pieces present");
     } else {
       return this.pieces[0];
     }

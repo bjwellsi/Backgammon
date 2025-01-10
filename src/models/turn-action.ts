@@ -1,13 +1,14 @@
 import cloneDeep from "lodash/cloneDeep";
+import { ID } from "./id";
 
 class TurnAction {
-  from: string | null;
-  to: string | null;
+  from: ID | null;
+  to: ID | null;
   private _actionLegal: boolean | null;
   private _errorMessage: string | null;
   private _rollCost: number | null;
 
-  constructor(from: string | null, to: string | null) {
+  constructor(from: ID, to: ID) {
     this.from = from;
     this.to = to;
     this._actionLegal = null;
