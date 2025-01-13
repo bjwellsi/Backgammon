@@ -21,12 +21,13 @@ class Board {
     this.teams = init?.teams ?? [];
     this.turn = init?.turn ?? new Turn();
     let columnIndex = 0;
+    let legalColors = this.teams.map((team) => team.color);
     this.columns =
       init?.columns ??
       Array(24)
         .fill(null)
         .map(() => {
-          return new Column(columnIndex++);
+          return new Column(columnIndex++, legalColors);
         });
 
     if (!init) {
