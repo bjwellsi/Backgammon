@@ -50,15 +50,15 @@ function getPieceList(board: Board, listID: ID): PieceList | null {
   let team;
   switch (listID.type) {
     case "home":
-      team = board.teams.find((team) => team.home.id.value == listID.value);
+      team = board.teams.find((team) => team.home.id.equals(listID));
       if (team) return team.home;
       else return null;
     case "jail":
-      team = board.teams.find((team) => team.jail.id.value == listID.value);
+      team = board.teams.find((team) => team.jail.id.equals(listID));
       if (team) return team.jail;
       else return null;
     case "column":
-      const column = board.columns.find((col) => col.id.value == listID.value);
+      const column = board.columns.find((col) => col.id.equals(listID));
       if (column) return column;
       else return null;
     default:
@@ -249,4 +249,11 @@ function legalMoves(board: Board, team: Team, opp: Team, fromList: ID): ID[] {
   return legalMoves;
 }
 
-export { rollDice, nextTurn, movePiece };
+export {
+  currentTeam,
+  currentOpponent,
+  rollDice,
+  nextTurn,
+  movePiece,
+  turnOver,
+};

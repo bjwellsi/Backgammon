@@ -8,25 +8,25 @@ const Board: React.FC = () => {
   const topLeft = [];
   for (let i = 0; i < 6; i++) {
     const column = board.columns[i];
-    topLeft.push(<Column key={column.id} columnIndex={i} />);
+    topLeft.push(<Column key={column.id.value} columnModel={column} />);
   }
 
   const topRight = [];
   for (let i = 6; i < 12; i++) {
     const column = board.columns[i];
-    topRight.push(<Column key={column.id} columnIndex={i} />);
+    topRight.push(<Column key={column.id.value} columnModel={column} />);
   }
 
   const bottomLeft = [];
   for (let i = 18; i < 24; i++) {
     const column = board.columns[i];
-    bottomLeft.push(<Column key={column.id} columnIndex={i} />);
+    bottomLeft.push(<Column key={column.id.value} columnModel={column} />);
   }
 
   const bottomRight = [];
   for (let i = 12; i < 18; i++) {
     const column = board.columns[i];
-    bottomRight.push(<Column key={column.id} columnIndex={i} />);
+    bottomRight.push(<Column key={column.id.value} columnModel={column} />);
   }
 
   const ret = (

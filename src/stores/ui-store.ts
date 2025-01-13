@@ -5,7 +5,7 @@ type UIStore = {
   fromList: ID | null;
 };
 
-const useUIStore = create<UIStore>((set) => ({
+const useUIStore = create<UIStore>(() => ({
   fromList: null,
 }));
 

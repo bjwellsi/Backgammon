@@ -20,21 +20,24 @@ class Board {
     this._piecesPerTeam = init?._piecesPerTeam ?? 15; // Default to 15 if not provided
     this.teams = init?.teams ?? [];
     this.turn = init?.turn ?? new Turn();
-    let columnIndex = 0;
-    let legalColors = this.teams.map((team) => team.color);
-    this.columns =
-      init?.columns ??
-      Array(24)
-        .fill(null)
-        .map(() => {
-          return new Column(columnIndex++, legalColors);
-        });
+    this.columns = init?.columns ?? [];
 
     if (!init) {
       this.teams.push(
         new Team(Color.Black, this._piecesPerTeam, -1, 6, -1, 24),
       );
       this.teams.push(new Team(Color.White, this._piecesPerTeam, 1, 6, 24, -1));
+
+      let legalColors = this.teams.map((team) => {
+        return team.color;
+      });
+      let columnIndex = 0;
+      this.columns = Array(24)
+        .fill(null)
+        .map(() => {
+          return new Column(columnIndex++, legalColors);
+        });
+
       this.setStartingTurn(this.teams[0].color, this.teams[1].color);
       this.populateColumns();
     }

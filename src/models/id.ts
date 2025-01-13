@@ -6,6 +6,10 @@ class ID {
     this.type = type;
     this.value = value;
   }
+
+  equals(other: ID) {
+    return this.type == other.type && this.value == other.value;
+  }
 }
 
 export { ID };

@@ -23,10 +23,10 @@ class PieceList {
   }
 
   addPiece(piece: Piece): Piece | void {
-    if (this.legalColors.indexOf(piece.color)) {
-      this.pieces.push(piece);
-    } else {
+    if (this.legalColors.indexOf(piece.color) < 0) {
       throw Error("Illegal piece");
+    } else {
+      this.pieces.push(piece);
     }
   }
 

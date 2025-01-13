@@ -2,7 +2,6 @@ import "reflect-metadata";
 import { Board } from "./components/board";
 import { ErrorBoundary } from "./components/error-boundary";
 import { ControlRow } from "./components/control-row";
-import { BoardProvider } from "./controllers/board-provider";
 import { SaveProvider } from "./controllers/save-provider";
 
 const App: React.FC = () => {
@@ -23,10 +22,8 @@ const App: React.FC = () => {
     <>
       <ErrorBoundary>
         <SaveProvider>
-          <BoardProvider>
-            <Board />
-            <ControlRow />
-          </BoardProvider>
+          <Board />
+          <ControlRow />
         </SaveProvider>
       </ErrorBoundary>
     </>
