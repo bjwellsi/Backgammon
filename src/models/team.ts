@@ -6,7 +6,6 @@ import { Type } from "class-transformer";
 
 class Team {
   color: Color;
-  directionMultiplier: number;
   homeBaseSize: number;
 
   @Type(() => Home)
@@ -21,12 +20,13 @@ class Team {
     piecesPerTeam: number,
     directionMultiplier: number,
     homeBaseSize: number,
+    homeIndex: number,
+    jailIndex: number,
   ) {
     this.color = color;
-    this.home = new Home(color, piecesPerTeam);
-    this.jail = new Jail(color);
+    this.home = new Home(color, piecesPerTeam, homeIndex, directionMultiplier);
+    this.jail = new Jail(color, jailIndex);
     this.dice = new Dice();
-    this.directionMultiplier = directionMultiplier;
     this.homeBaseSize = homeBaseSize;
   }
 

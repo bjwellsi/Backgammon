@@ -8,18 +8,22 @@ class PieceList {
   pieces: Piece[];
 
   readonly id: ID;
+  locationIndex: number;
 
-  constructor(id: ID) {
+  constructor(id: ID: locationIndex: number) {
     this.pieces = [];
     this.id = id;
+    this.locationIndex = locationIndex;
   }
 
   get empty(): boolean {
     return this.pieces.length === 0;
   }
+
   get color(): Color {
     return Color.None;
   }
+
   addPiece(piece: Piece): Piece | void {
     //returns the piece that was hit or nothing if add was successful
     if (this.empty || this.color == piece.color) {

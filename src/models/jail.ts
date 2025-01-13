@@ -6,10 +6,10 @@ import { ID } from "./id";
 class Jail extends PieceList {
   private readonly _color: Color;
 
-  constructor(color: Color) {
+  constructor(color: Color, locationIndex: number) {
     const idval = Color[color] + "-jail";
     const id = new ID("jail", idval);
-    super(id);
+    super(id, locationIndex);
     this._color = color;
   }
 

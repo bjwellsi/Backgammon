@@ -7,15 +7,20 @@ class Home extends PieceList {
   private readonly _color: Color;
   maxPieceCount: number;
 
-  constructor(color: Color, maxPieceCount: number) {
+  constructor(
+    color: Color,
+    maxPieceCount: number,
+    locationIndex: number,
+    directionMultiplier: number,
+  ) {
     const idval = Color[color] + "-home";
     const id = new ID("home", idval);
-    super(id);
+    super(id, locationIndex);
     this._color = color;
     this.maxPieceCount = maxPieceCount;
 
     for (let i = 0; i < maxPieceCount; i++) {
-      this.addPiece(new Piece(color, Color[color] + i));
+      this.addPiece(new Piece(color, Color[color] + i, directionMultiplier));
     }
   }
 

@@ -9,14 +9,41 @@ import { useBoardStore } from "../stores/game-store";
 
 function moveDistance(
   board: Board,
-  team: Team,
+  piece: Piece,
   fromList: ID,
   toList: ID,
 ): number {
   console.log("todo");
-  //this should return the distance to 2 columns, given the team passed in. that way a move can be directionally legal based on its result
-  //it should also be able to return the distance of a column from the home base, based on home base size
-  return 0;
+  //this should return the distance to 2 piece lists
+  const fromLocation = getPieceList(board, fromList);
+  const toLocation = getPieceList(board, toList);
+  if (!fromLocation || !toLocation) {
+    throw Error("Lists not found"); //this means you passed in an invalid list
+  }
+  return (
+    Math.abs(toLocation.locationIndex - fromLocation.locationIndex) *
+    piece.directionMultiplier
+  );
+}
+
+function getPieceList(board: Board, listID: ID): PieceList | null {
+  let team;
+  switch (listID.type) {
+    case "home":
+      team = board.teams.find((team) => team.home.id.value == listID.value);
+      if (team) return team.home;
+      else return null;
+    case "jail":
+      team = board.teams.find((team) => team.jail.id.value == listID.value);
+      if (team) return team.jail;
+      else return null;
+    case "column":
+      const column = board.columns.find((col) => col.id.value == listID.value);
+      if (column) return column;
+      else return null;
+    default:
+      return null;
+  }
 }
 
 function currentTeam(board: Board): Team {
@@ -67,11 +94,17 @@ function movePiece(fromList: ID, toList: ID): void {
       //if there's an enemy piece in toList, move it to the enemy jail
       enemyJail.pieces.push(toLocation.removePiece()); //this assumes columns can only have one category of pieces
     }
-    //move the piece from fromlist to tolist
-    toLocation.addPiece(fromLocation.removePiece());
-    //remove the roll from the teams available rolls
+    const pieceToMove = toLocation.removePiece();
     const team = currentTeam(board);
-    team.dice.useRoll(moveDistance(board, team, fromList, toList));
+    try {
+      //remove the roll from the teams available rolls
+      team.dice.useRoll(moveDistance(board, pieceToMove, fromList, toList));
+    } catch (err) {
+      toLocation.addPiece(pieceToMove);
+      throw err;
+    }
+    //move the piece from fromlist to tolist
+    toLocation.addPiece(pieceToMove);
   }
   useBoardStore.setState({ board: board });
 }
@@ -134,10 +167,10 @@ function legalMoves(fromList: ID): ID[] {
   //return the list of locations that the player could possibly move to
   //this function is gonna be pretty logic heavy, so lots of comments
   const board = useBoardStore.getState().board;
-  const fromLocation = getPieceList(board, fromList);
   const team = currentTeam(board);
   const opp = currentOpponent(board);
   const rolls = team.dice.rolls;
+  const fromLocation = getPieceList(board, fromList);
 
   let legalMoves: ID[] = [];
 
@@ -145,7 +178,8 @@ function legalMoves(fromList: ID): ID[] {
     return legalMoves; //no rolls left
   }
   //the list they're moving from has to have at least one of their pieces
-  if (fromList && pieceCount(board, fromList, team.color) > 0) {
+  if (fromLocation && pieceCount(board, fromList, team.color) > 0) {
+    const piece = fromLocation.retrieveFirstPiece(); //assumes lists only have one of a given type
     //populate the legalmoves for moves from a column
     if (fromList.type == "column") {
       //the jail can't have any of their pieces
@@ -155,14 +189,14 @@ function legalMoves(fromList: ID): ID[] {
         board.columns.forEach((col: Column) => {
           //also check if any pieces are currently outside homebase
           if (
-            moveDistance(board, team, team.home.id, col.id) > team.homeBaseSize
+            moveDistance(board, piece, team.home.id, col.id) > team.homeBaseSize
           ) {
             readyForHome = false;
           }
           //  the difference between the columns has to be a rolldistance
           //  they can't move backward
           //  the column they move to can't have > 1 of the other team's piece
-          const distance = moveDistance(board, team, fromList, col.id);
+          const distance = moveDistance(board, piece, fromList, col.id);
           if (
             rolls.indexOf(distance) > 0 &&
             pieceCount(board, col.id, opp.color) < 2
@@ -174,7 +208,7 @@ function legalMoves(fromList: ID): ID[] {
         //  they can't have any pieces outside homebase
         if (readyForHome) {
           //  the column has to be a rolldistance away from their home
-          const distance = moveDistance(board, team, fromList, team.home.id);
+          const distance = moveDistance(board, piece, fromList, team.home.id);
           if (rolls.indexOf(distance) > 0) {
             legalMoves.push(team.home.id);
           }
@@ -189,7 +223,7 @@ function legalMoves(fromList: ID): ID[] {
           legalMoves.push(col.id);
         }
         //  the location has to be a roll distance away from the jail. Jail starts at enemy home for distance calculations
-        const distance = moveDistance(board, team, fromList, col.id);
+        const distance = moveDistance(board, piece, fromList, col.id);
         if (!distance) {
           throw Error("Move distance is undefined"); //this shouldn't happen, error in the move distance logic
         }
@@ -200,26 +234,6 @@ function legalMoves(fromList: ID): ID[] {
     }
   }
   return legalMoves;
-}
-
-function getPieceList(board: Board, listID: ID): PieceList | null {
-  let team;
-  switch (listID.type) {
-    case "home":
-      team = board.teams.find((team) => team.home.id.value == listID.value);
-      if (team) return team.home;
-      else return null;
-    case "jail":
-      team = board.teams.find((team) => team.jail.id.value == listID.value);
-      if (team) return team.jail;
-      else return null;
-    case "column":
-      const column = board.columns.find((col) => col.id.value == listID.value);
-      if (column) return column;
-      else return null;
-    default:
-      return null;
-  }
 }
 
 export { rollDice, nextTurn, movePiece };

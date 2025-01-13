@@ -6,7 +6,7 @@ import { PieceList } from "./piece-list";
 class Column extends PieceList {
   constructor(index: number) {
     const id = new ID("column", `column-${index}`);
-    super(id);
+    super(id, index);
   }
 
   get color() {
