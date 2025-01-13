@@ -4,17 +4,9 @@ import { Piece } from "./piece";
 import { PieceList } from "./piece-list";
 
 class Column extends PieceList {
-  constructor(index: number) {
+  constructor(index: number, legalColors: Color[]) {
     const id = new ID("column", `column-${index}`);
-    super(id, index);
-  }
-
-  get color() {
-    if (this.empty) {
-      return Color.None;
-    } else {
-      return this.pieces[0].color;
-    }
+    super(id, index, legalColors);
   }
 }
 

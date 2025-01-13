@@ -6,35 +6,27 @@ import { Type } from "class-transformer";
 class PieceList {
   @Type(() => Piece)
   pieces: Piece[];
+  legalColors: Color[];
 
   readonly id: ID;
   locationIndex: number;
 
-  constructor(id: ID, locationIndex: number) {
+  constructor(id: ID, locationIndex: number, legalColors: Color[]) {
     this.pieces = [];
     this.id = id;
     this.locationIndex = locationIndex;
+    this.legalColors = legalColors;
   }
 
   get empty(): boolean {
     return this.pieces.length === 0;
   }
 
-  get color(): Color {
-    return Color.None;
-  }
-
   addPiece(piece: Piece): Piece | void {
-    //returns the piece that was hit or nothing if add was successful
-    if (this.empty || this.color == piece.color) {
+    if (this.legalColors.indexOf(piece.color)) {
       this.pieces.push(piece);
-    } else if (this.pieces.length === 1) {
-      //hit
-      const victim = this.pieces.pop();
-      this.pieces.push(piece);
-      return victim;
     } else {
-      throw Error("Column can't have multiple piece colors");
+      throw Error("Illegal piece");
     }
   }
 

@@ -32,19 +32,13 @@ function moveDistance(
     //this means you passed in an invalid list
     throw Error(`${toList} not found`);
   }
-  if (
-    fromList.type == "jail" ||
-    (fromList.type == "home" && fromLocation.color != piece.color)
-  ) {
-    //this shouldn't get called. You can't move from the other team's jail or home
-    throw Error(`Distance of ${piece} from ${fromList.type} is undefined`);
+  if (fromLocation.legalColors.indexOf(piece.color) < 0) {
+    //this shouldn't get called
+    throw Error(`Distance of ${piece} from ${fromList} is undefined`);
   }
-  if (
-    toList.type == "jail" ||
-    (toList.type == "home" && toLocation.color != piece.color)
-  ) {
-    //this shouldn't get called. You can't move from the other team's jail or home
-    throw Error(`Distance of ${piece} to ${toList.type} is undefined`);
+  if (fromLocation.legalColors.indexOf(piece.color) < 0) {
+    //this shouldn't get called
+    throw Error(`Distance of ${piece} to ${toList} is undefined`);
   }
   return (
     Math.abs(toLocation.locationIndex - fromLocation.locationIndex) *
@@ -93,7 +87,7 @@ function pieceCount(board: Board, pieceList: ID, color: Color): number {
   const list = getPieceList(board, pieceList);
   if (list) {
     list.pieces.forEach((piece: Piece) => {
-      if (piece.color != color) {
+      if (piece.color == color) {
         pieceCount++;
       }
     });
@@ -104,7 +98,12 @@ function pieceCount(board: Board, pieceList: ID, color: Color): number {
 function movePiece(fromList: ID, toList: ID): void {
   const oldBoard = useBoardStore.getState().board;
   const board = oldBoard.clone();
-  const options = legalMoves(fromList);
+  const options = legalMoves(
+    board,
+    currentTeam(board),
+    currentOpponent(board),
+    fromList,
+  );
   if (options.indexOf(toList) == -1) {
     throw Error("Can't move there");
   } else {
@@ -180,12 +179,9 @@ function nextTurn(): void {
   useBoardStore.setState({ board: board });
 }
 
-function legalMoves(fromList: ID): ID[] {
+function legalMoves(board: Board, team: Team, opp: Team, fromList: ID): ID[] {
   //return the list of locations that the player could possibly move to
   //this function is gonna be pretty logic heavy, so lots of comments
-  const board = useBoardStore.getState().board;
-  const team = currentTeam(board);
-  const opp = currentOpponent(board);
   const rolls = team.dice.rolls;
   const fromLocation = getPieceList(board, fromList);
 

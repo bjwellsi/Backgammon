@@ -24,8 +24,14 @@ class Team {
     jailIndex: number,
   ) {
     this.color = color;
-    this.home = new Home(color, piecesPerTeam, homeIndex, directionMultiplier);
-    this.jail = new Jail(color, jailIndex);
+    this.home = new Home(
+      color,
+      Array.of(color),
+      piecesPerTeam,
+      homeIndex,
+      directionMultiplier,
+    );
+    this.jail = new Jail(color, Array.of(color), jailIndex);
     this.dice = new Dice();
     this.homeBaseSize = homeBaseSize;
   }
