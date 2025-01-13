@@ -30,8 +30,8 @@ class Board {
         });
 
     if (!init) {
-      this.teams.push(new Team(Color.Black, this._piecesPerTeam, -1, 0, 6));
-      this.teams.push(new Team(Color.White, this._piecesPerTeam, 1, 23, 6));
+      this.teams.push(new Team(Color.Black, this._piecesPerTeam, -1, 6));
+      this.teams.push(new Team(Color.White, this._piecesPerTeam, 1, 6));
       this.setStartingTurn(this.teams[0].color, this.teams[1].color);
       this.populateColumns();
     }

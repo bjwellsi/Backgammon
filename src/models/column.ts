@@ -9,18 +9,6 @@ class Column extends PieceList {
     super(id);
   }
 
-  canBeHit(): boolean {
-    return this.pieces.length === 1;
-  }
-
-  approvedForMove(piece: Piece): boolean {
-    if (this.color == piece.color || this.empty || this.canBeHit()) {
-      return true;
-    } else {
-      return false;
-    }
-  }
-
   get color() {
     if (this.empty) {
       return Color.None;
