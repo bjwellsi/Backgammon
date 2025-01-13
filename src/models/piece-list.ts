@@ -10,7 +10,7 @@ class PieceList {
   readonly id: ID;
   locationIndex: number;
 
-  constructor(id: ID: locationIndex: number) {
+  constructor(id: ID, locationIndex: number) {
     this.pieces = [];
     this.id = id;
     this.locationIndex = locationIndex;

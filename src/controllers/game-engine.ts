@@ -7,18 +7,44 @@ import { PieceList } from "../models/piece-list";
 import { Team } from "../models/team";
 import { useBoardStore } from "../stores/game-store";
 
+function turnOver(board: Board): boolean {
+  if (board.turn.rolled && currentTeam(board).dice.rolls.length == 0) {
+    return true;
+  } else {
+    return false;
+  }
+}
+
 function moveDistance(
   board: Board,
   piece: Piece,
   fromList: ID,
   toList: ID,
 ): number {
-  console.log("todo");
-  //this should return the distance to 2 piece lists
+  //this should return the distance between 2 piece lists for a given piece
   const fromLocation = getPieceList(board, fromList);
   const toLocation = getPieceList(board, toList);
-  if (!fromLocation || !toLocation) {
-    throw Error("Lists not found"); //this means you passed in an invalid list
+  if (!fromLocation) {
+    //this means you passed in an invalid list
+    throw Error(`${fromList} not found`);
+  }
+  if (!toLocation) {
+    //this means you passed in an invalid list
+    throw Error(`${toList} not found`);
+  }
+  if (
+    fromList.type == "jail" ||
+    (fromList.type == "home" && fromLocation.color != piece.color)
+  ) {
+    //this shouldn't get called. You can't move from the other team's jail or home
+    throw Error(`Distance of ${piece} from ${fromList.type} is undefined`);
+  }
+  if (
+    toList.type == "jail" ||
+    (toList.type == "home" && toLocation.color != piece.color)
+  ) {
+    //this shouldn't get called. You can't move from the other team's jail or home
+    throw Error(`Distance of ${piece} to ${toList.type} is undefined`);
   }
   return (
     Math.abs(toLocation.locationIndex - fromLocation.locationIndex) *
@@ -82,7 +108,6 @@ function movePiece(fromList: ID, toList: ID): void {
   if (options.indexOf(toList) == -1) {
     throw Error("Can't move there");
   } else {
-    console.log("todo");
     const fromLocation = getPieceList(board, fromList);
     const toLocation = getPieceList(board, toList);
     if (!fromLocation || !toLocation) {
@@ -124,14 +149,6 @@ function clearDice(): void {
     team.dice.clearRolls();
   });
   useBoardStore.setState({ board: board });
-}
-
-function turnOver(board: Board): boolean {
-  if (board.turn.rolled && currentTeam(board).dice.rolls.length == 0) {
-    return true;
-  } else {
-    return false;
-  }
 }
 
 function nextTurn(): void {
@@ -222,7 +239,7 @@ function legalMoves(fromList: ID): ID[] {
         if (pieceCount(board, col.id, opp.color) <= 1) {
           legalMoves.push(col.id);
         }
-        //  the location has to be a roll distance away from the jail. Jail starts at enemy home for distance calculations
+        //  the location has to be a roll distance away from the jail
         const distance = moveDistance(board, piece, fromList, col.id);
         if (!distance) {
           throw Error("Move distance is undefined"); //this shouldn't happen, error in the move distance logic
