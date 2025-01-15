@@ -1,4 +1,4 @@
-import { nextTurn, rollDice } from "../controllers/game-engine";
+import { endGame, nextTurn, rollDice } from "../controllers/game-engine";
 import { loadManualSave, manualSave, resetTurn } from "../controllers/saves";
 
 const RollDiceButton: React.FC = () => {
@@ -42,7 +42,7 @@ const EndGameButton: React.FC = () => {
       <button
         id="end-game"
         onClick={() => {
-          console.log("todo");
+          endGame();
         }}
       >
         End Game

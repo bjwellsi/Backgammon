@@ -1,3 +1,4 @@
+import { Board } from "../models/board";
 import { ID } from "../models/id";
 import { Team } from "../models/team";
 import { useBoardStore } from "../stores/game-store";
@@ -9,6 +10,11 @@ import {
   pieceCount,
   moveDistance,
 } from "./game-state";
+
+function endGame(): void {
+  const board = new Board();
+  useBoardStore.setState({ board: board });
+}
 
 function movePiece(fromList: ID, toList: ID): void {
   const oldBoard = useBoardStore.getState().board;
@@ -99,4 +105,4 @@ function nextTurn(): void {
   useBoardStore.setState({ board: board });
 }
 
-export { currentTeam, currentOpponent, rollDice, nextTurn, movePiece };
+export { endGame, rollDice, nextTurn, movePiece };
