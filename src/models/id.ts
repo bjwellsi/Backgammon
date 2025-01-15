@@ -7,7 +7,7 @@ class ID {
     this.value = value;
   }
 
-  equals(other: ID) {
+  equals(other: ID): boolean {
     return this.type == other.type && this.value == other.value;
   }
 }

@@ -41,7 +41,7 @@ function moveDistance(
     throw Error(`Distance of ${piece} to ${toList} is undefined`);
   }
   return (
-    Math.abs(toLocation.locationIndex - fromLocation.locationIndex) *
+    (toLocation.locationIndex - fromLocation.locationIndex) *
     piece.directionMultiplier
   );
 }
@@ -104,7 +104,12 @@ function movePiece(fromList: ID, toList: ID): void {
     currentOpponent(board),
     fromList,
   );
-  if (options.indexOf(toList) == -1) {
+  console.log("dfdf");
+  if (
+    options.findIndex((listItem) => {
+      return listItem.equals(toList);
+    }) == -1
+  ) {
     throw Error("Can't move there");
   } else {
     const fromLocation = getPieceList(board, fromList);
@@ -118,7 +123,7 @@ function movePiece(fromList: ID, toList: ID): void {
       //if there's an enemy piece in toList, move it to the enemy jail
       enemyJail.pieces.push(toLocation.removePiece()); //this assumes columns can only have one category of pieces
     }
-    const pieceToMove = toLocation.removePiece();
+    const pieceToMove = fromLocation.removePiece();
     const team = currentTeam(board);
     try {
       //remove the roll from the teams available rolls
@@ -175,6 +180,7 @@ function nextTurn(): void {
     nextOpp++;
   }
 
+  clearDice();
   board.turn.nextTurn(nextTeam, nextOpp);
   useBoardStore.setState({ board: board });
 }
@@ -211,7 +217,7 @@ function legalMoves(board: Board, team: Team, opp: Team, fromList: ID): ID[] {
           //  the column they move to can't have > 1 of the other team's piece
           const distance = moveDistance(board, piece, fromList, col.id);
           if (
-            rolls.indexOf(distance) > 0 &&
+            rolls.indexOf(distance) >= 0 &&
             pieceCount(board, col.id, opp.color) < 2
           ) {
             legalMoves.push(col.id);
