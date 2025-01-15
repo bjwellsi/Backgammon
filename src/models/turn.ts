@@ -12,7 +12,7 @@ class Turn {
 
   roll(): void {
     if (this.rolled == true) {
-      throw new Error("Already rolled the dice this turn\n");
+      throw new Error("Already rolled the dice this turn");
     }
     this.rolled = true;
   }

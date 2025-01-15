@@ -1,18 +1,22 @@
-import { useBoard } from "../controllers/board-provider";
+import { rollDice } from "../controllers/game-engine";
 import { Saves } from "./saves";
 
 const ControlRow: React.FC = () => {
-  const { rollDice, resetBoard } = useBoard();
   const ret = (
     <>
       <div className="control-row">
         <button id="roll-dice" onClick={rollDice}>
           Roll
         </button>
-        <button id="reset-turn" onClick={() => console.log("todo")}>
+        <button
+          id="reset-turn"
+          onClick={() => {
+            console.log("todo");
+          }}
+        >
           Reset Turn
         </button>
-        <button id="end-game" onClick={resetBoard}>
+        <button id="end-game" onClick={() => console.log("todo")}>
           End Game
         </button>
         <br />

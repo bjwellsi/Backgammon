@@ -1,10 +1,15 @@
+import { useBoard } from "../controllers/board-provider";
+import { useSaves } from "../controllers/save-provider";
+
 const Saves: React.FC = () => {
-  const saveList: string[] = [];
+  const {} = useSaves();
+  const { board, updateBoard } = useBoard();
+  const { saveList, manualSave, loadBoard, deleteSave } = useSaves();
 
   const ret = (
     <>
       <div id="save-section">
-        <button id="new-save" onClick={() => console.log("todo")}>
+        <button id="new-save" onClick={() => manualSave(board)}>
           New Save
         </button>
         <ul id="save-names">
@@ -13,14 +18,12 @@ const Saves: React.FC = () => {
               <li key={save}>
                 <button
                   onClick={() => {
-                    console.log("todo");
-                  }}
+                  console.log("todo")
+                  }
                 >
                   {save}
                 </button>
-                <button id="delete-save" onClick={() => console.log("todo")}>
-                  Delete
-                </button>
+                <button onClick={() => deleteSave(save)}>Delete</button>
               </li>
             );
           })}

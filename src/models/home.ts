@@ -1,49 +1,30 @@
 import { Piece } from "./piece";
-import { Column } from "./Column";
 import { Color } from "./Color";
+import { PieceList } from "./piece-list";
+import { ID } from "./id";
 
-class Home extends Column {
-  private readonly _color: Color;
+class Home extends PieceList {
   maxPieceCount: number;
 
-  constructor(color: Color, maxPieceCount: number) {
-    super(Color[color] + "-home");
-    this._color = color;
+  constructor(
+    color: Color,
+    legalColors: Color[],
+    maxPieceCount: number,
+    locationIndex: number,
+    directionMultiplier: number,
+  ) {
+    const idval = Color[color] + "-home";
+    const id = new ID("home", idval);
+    super(id, locationIndex, legalColors);
     this.maxPieceCount = maxPieceCount;
 
     for (let i = 0; i < maxPieceCount; i++) {
-      this.addPiece(new Piece(color, Color[color] + i));
-    }
-  }
-
-  get color() {
-    return this._color;
-  }
-
-  addPiece(piece: Piece): void {
-    if (piece.color != this.color) {
-      throw Error("Wrong home\n");
-    }
-    if (this.homeFull()) {
-      throw Error("Home is full\n");
-    }
-    this.pieces.push(piece);
-  }
-
-  approvedForMove(piece: Piece): boolean {
-    if (piece.color == this.color && !this.homeFull()) {
-      return true;
-    } else {
-      return false;
+      this.addPiece(new Piece(color, Color[color] + i, directionMultiplier));
     }
   }
 
   homeFull(): boolean {
     return this.pieces.length >= this.maxPieceCount;
-  }
-
-  renderInConsole(): string {
-    return Color[this.color] + " Home:" + super.renderInConsole();
   }
 }
 

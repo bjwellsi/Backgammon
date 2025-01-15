@@ -1,14 +1,18 @@
-import { useBoard } from "../controllers/board-provider";
-import { Column } from "../models/column";
+import { selectPieceList } from "../controllers/ui-functions";
+import { Column as ColumnModel } from "../models/column";
+import { useUIStore } from "../stores/ui-store";
 import { PieceList } from "./piece-list";
 
-const Column: React.FC<{ column: Column; columnIndex: number }> = ({
-  column,
-  columnIndex,
-}) => {
-  const { movePiece } = useBoard();
-  const id = column.id;
+const Column: React.FC<{ columnModel: ColumnModel }> = ({ columnModel }) => {
+  const id = columnModel.id;
+  const selected = useUIStore((state) => state.fromList);
 
+  let highlighted = "";
+  if (selected && selected.equals(id)) {
+    highlighted = "highlighted";
+  }
+
+  const columnIndex = columnModel.locationIndex;
   let oddOrEven = "odd";
   if (columnIndex % 2 > 0) {
     oddOrEven = "even";
@@ -20,13 +24,13 @@ const Column: React.FC<{ column: Column; columnIndex: number }> = ({
   const ret = (
     <>
       <div
-        id={id}
-        className={`column piece-contaier ${oddOrEven} ${topOrBottom}`}
-        onClick={(event) => {
-          movePiece(event.currentTarget as HTMLDivElement);
+        id={id.value}
+        className={`column piece-contaier ${oddOrEven} ${topOrBottom} ${highlighted}`}
+        onClick={() => {
+          selectPieceList(id);
         }}
       >
-        <PieceList pieceList={column.pieces} />
+        <PieceList pieceList={columnModel.pieces} />
         <div
           key="triangle"
           className={`triangle ${oddOrEven} ${topOrBottom}`}

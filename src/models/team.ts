@@ -6,9 +6,7 @@ import { Type } from "class-transformer";
 
 class Team {
   color: Color;
-  directionMultiplier: number;
-  private _homeBaseStart: number;
-  private _homeBaseSize: number;
+  homeBaseSize: number;
 
   @Type(() => Home)
   home: Home;
@@ -21,63 +19,21 @@ class Team {
     color: Color,
     piecesPerTeam: number,
     directionMultiplier: number,
-    homeBaseStart: number,
     homeBaseSize: number,
+    homeIndex: number,
+    jailIndex: number,
   ) {
     this.color = color;
-    this.home = new Home(color, piecesPerTeam);
-    this.jail = new Jail(color);
+    this.home = new Home(
+      color,
+      Array.of(color),
+      piecesPerTeam,
+      homeIndex,
+      directionMultiplier,
+    );
+    this.jail = new Jail(color, Array.of(color), jailIndex);
     this.dice = new Dice();
-    this.directionMultiplier = directionMultiplier;
-    this._homeBaseStart = homeBaseStart;
-    this._homeBaseSize = homeBaseSize;
-  }
-
-  homeBaseIndex(columnIndex: number): number {
-    //returns -1 if the index is out of bounds of the home base
-    const index = Math.abs(this._homeBaseStart - columnIndex);
-    if (index < this._homeBaseSize) {
-      return index;
-    } else {
-      return -1;
-    }
-  }
-
-  homeBaseIndexToColumnNum(homeBaseIndex: number): number {
-    if (homeBaseIndex >= this._homeBaseSize) {
-      return -1;
-    } else {
-      return this._homeBaseStart - homeBaseIndex * this.directionMultiplier;
-    }
-  }
-
-  isInHomeBase(columnIndex: number): boolean {
-    const index = this.homeBaseIndex(columnIndex);
-    return index >= this.minHomeBaseIndex() && index <= this.maxHomeBaseIndex();
-  }
-
-  minHomeBaseIndex(): number {
-    return 0;
-  }
-
-  maxHomeBaseIndex(): number {
-    return this._homeBaseSize - 1;
-  }
-
-  incrementHomeBaseIndex(homeBaseIndex: number): number {
-    homeBaseIndex++;
-    if (this._homeBaseSize <= homeBaseIndex) {
-      return -1;
-    }
-    return homeBaseIndex;
-  }
-
-  decrementHomeBaseIndex(homeBaseIndex: number): number {
-    homeBaseIndex--;
-    if (homeBaseIndex < 0) {
-      return -1;
-    }
-    return homeBaseIndex;
+    this.homeBaseSize = homeBaseSize;
   }
 
   hasWon(): boolean {

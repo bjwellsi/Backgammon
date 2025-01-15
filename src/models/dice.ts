@@ -1,8 +1,7 @@
 import Chance from "chance";
-import { RendersInConsole } from "./renders-in-console";
 import { Exclude } from "class-transformer";
 
-class Dice implements RendersInConsole {
+class Dice {
   rolls: number[];
   @Exclude()
   private _chance: Chance;
@@ -60,13 +59,6 @@ class Dice implements RendersInConsole {
 
   rollsRemain(): boolean {
     return this.rolls.length > 0;
-  }
-
-  renderInConsole(): string {
-    if (this.rolls.length === 0) {
-      return "No moves left this turn";
-    }
-    return `dice: ${this.rolls.map((roll) => roll).join(", ")}`;
   }
 }
 
