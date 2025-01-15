@@ -1,5 +1,3 @@
-import { nextTurn } from "../controllers/game-engine";
-import { resetTurn } from "../controllers/saves";
 import { ChangeTurnButton, ResetTurnButton } from "./buttons";
 
 const EndOfTurnOverlay: React.FC = () => {

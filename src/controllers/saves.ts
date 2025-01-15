@@ -6,9 +6,6 @@ function saveBoard(saveName: string): void {
   const board = useBoardStore.getState().board;
   const content = serialize(board);
   localStorage.setItem(saveName, content);
-  //setSaveList(listSaves());
-  //update save list
-  console.log("todo");
 }
 
 function loadBoard(saveName: string): void {
@@ -26,7 +23,7 @@ function manualSave(): void {
 }
 
 function loadManualSave(): void {
-  loadBoard("manulSave");
+  loadBoard("manualSave");
 }
 
 function autoSave(): void {
