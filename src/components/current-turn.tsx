@@ -1,4 +1,4 @@
-import { currentTeam, turnOver } from "../controllers/game-engine";
+import { currentTeam, turnOver } from "../controllers/game-state";
 import { Color } from "../models/color";
 import { useBoardStore } from "../stores/game-store";
 import { EndOfTurnOverlay } from "./end-of-turn-overlay";
