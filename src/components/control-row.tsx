@@ -1,26 +1,20 @@
-import { rollDice } from "../controllers/game-engine";
-import { Saves } from "./saves";
+import {
+  EndGameButton,
+  LoadButton,
+  ResetTurnButton,
+  RollDiceButton,
+  SaveButton,
+} from "./buttons";
 
 const ControlRow: React.FC = () => {
   const ret = (
     <>
       <div className="control-row">
-        <button id="roll-dice" onClick={rollDice}>
-          Roll
-        </button>
-        <button
-          id="reset-turn"
-          onClick={() => {
-            console.log("todo");
-          }}
-        >
-          Reset Turn
-        </button>
-        <button id="end-game" onClick={() => console.log("todo")}>
-          End Game
-        </button>
-        <br />
-        <Saves />
+        <RollDiceButton />
+        <ResetTurnButton />
+        <EndGameButton />
+        <SaveButton />
+        <LoadButton />
       </div>
     </>
   );

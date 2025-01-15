@@ -1,21 +1,14 @@
 import { nextTurn } from "../controllers/game-engine";
+import { resetTurn } from "../controllers/saves";
+import { ChangeTurnButton, ResetTurnButton } from "./buttons";
 
 const EndOfTurnOverlay: React.FC = () => {
   const ret = (
     <>
       <div id="change-turn-overlay" className="overlay show-overlay">
         <div id="change-turn-popup" className="popup show-popup">
-          <button id="change-turn" onClick={nextTurn}>
-            Change Turn
-          </button>
-          <button
-            id="reset-turn"
-            onClick={() => {
-              console.log("todo");
-            }}
-          >
-            Reset Turn
-          </button>
+          <ChangeTurnButton />
+          <ResetTurnButton />
         </div>
       </div>
     </>

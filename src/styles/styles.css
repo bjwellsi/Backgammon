@@ -33,7 +33,10 @@
 
 .control-row {
   border: 8px solid transparent;
+  display: flex;
+  justify-content: center;
   place-items: center;
+  align-items: center;
 }
 
 button {

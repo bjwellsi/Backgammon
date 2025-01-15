@@ -19,7 +19,6 @@ function movePiece(fromList: ID, toList: ID): void {
     currentOpponent(board),
     fromList,
   );
-  console.log(options, toList);
   if (
     options.findIndex((listItem) => {
       return listItem.equals(toList);

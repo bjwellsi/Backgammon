@@ -1,0 +1,91 @@
+import { nextTurn, rollDice } from "../controllers/game-engine";
+import { loadManualSave, manualSave, resetTurn } from "../controllers/saves";
+
+const RollDiceButton: React.FC = () => {
+  return (
+    <>
+      <button id="roll-dice" onClick={rollDice}>
+        Roll
+      </button>
+    </>
+  );
+};
+
+const ChangeTurnButton: React.FC = () => {
+  return (
+    <>
+      <button id="change-turn" onClick={nextTurn}>
+        Change Turn
+      </button>
+    </>
+  );
+};
+
+const ResetTurnButton: React.FC = () => {
+  return (
+    <>
+      <button
+        id="reset-turn"
+        onClick={() => {
+          resetTurn();
+        }}
+      >
+        Reset Turn
+      </button>
+    </>
+  );
+};
+
+const EndGameButton: React.FC = () => {
+  return (
+    <>
+      <button
+        id="end-game"
+        onClick={() => {
+          console.log("todo");
+        }}
+      >
+        End Game
+      </button>
+    </>
+  );
+};
+
+const SaveButton: React.FC = () => {
+  return (
+    <>
+      <button
+        id="save"
+        onClick={() => {
+          manualSave();
+        }}
+      >
+        Save Game
+      </button>
+    </>
+  );
+};
+
+const LoadButton: React.FC = () => {
+  return (
+    <>
+      <button
+        id="load"
+        onClick={() => {
+          loadManualSave();
+        }}
+      >
+        Load Game
+      </button>
+    </>
+  );
+};
+
+export {
+  RollDiceButton,
+  ChangeTurnButton,
+  ResetTurnButton,
+  EndGameButton,
+  SaveButton,
+  LoadButton,
+};

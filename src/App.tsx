@@ -21,10 +21,8 @@ const App: React.FC = () => {
   return (
     <>
       <ErrorBoundary>
-        <SaveProvider>
-          <Board />
-          <ControlRow />
-        </SaveProvider>
+        <Board />
+        <ControlRow />
       </ErrorBoundary>
     </>
   );
