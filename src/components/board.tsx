@@ -2,6 +2,8 @@ import { Dice } from "./dice";
 import { CurrentTurn } from "./current-turn";
 import { Column } from "./column";
 import { useBoardStore } from "../stores/game-store";
+import { Home } from "./home";
+import { Jail } from "./jail";
 
 const Board: React.FC = () => {
   const board = useBoardStore((state) => state.board);
@@ -35,11 +37,17 @@ const Board: React.FC = () => {
         <CurrentTurn />
         <div className="board">
           <div className="row">
-            <div id="black-home" className="home black piece-container"></div>
+            <Home
+              key={board.teams[0].home.id.value}
+              home={board.teams[0].home}
+            />
             <div id="top-left" className="column-group-top">
               {topLeft}
             </div>
-            <div id="white-jail" className="jail black piece-container"></div>
+            <Jail
+              key={board.teams[1].jail.id.value}
+              jail={board.teams[1].jail}
+            />
             <div id="top-right" className="column-group-top">
               {topRight}
             </div>
@@ -55,11 +63,17 @@ const Board: React.FC = () => {
             <div className="home none-home"></div>
           </div>
           <div className="row">
-            <div id="white-home" className="home white piece-container"></div>
+            <Home
+              key={board.teams[1].home.id.value}
+              home={board.teams[1].home}
+            />
             <div id="bottom-left" className="column-group-bottom">
               {bottomLeft}
             </div>
-            <div id="black-jail" className="jail black piece-container"></div>
+            <Jail
+              key={board.teams[0].jail.id.value}
+              jail={board.teams[0].jail}
+            />
             <div id="bottom-right" className="column-group-bottom">
               {bottomRight}
             </div>
