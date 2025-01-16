@@ -1,8 +1,11 @@
+import Type from 
 import cloneDeep from "lodash/cloneDeep";
 import { ID } from "./id";
 
 class TurnAction {
+  @Type(ID)
   from: ID | null;
+  @Type(ID)
   to: ID | null;
   private _actionLegal: boolean | null;
   private _errorMessage: string | null;

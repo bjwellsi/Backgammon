@@ -2,7 +2,6 @@ import "reflect-metadata";
 import { Board } from "./components/board";
 import { ErrorBoundary } from "./components/error-boundary";
 import { ControlRow } from "./components/control-row";
-import { SaveProvider } from "./controllers/save-provider";
 
 const App: React.FC = () => {
   window.addEventListener("error", (event: ErrorEvent) => {

@@ -1,4 +1,4 @@
-import { currentTeam } from "../controllers/game-engine";
+import { currentTeam } from "../controllers/game-state";
 import { useBoardStore } from "../stores/game-store";
 
 const Dice: React.FC = () => {

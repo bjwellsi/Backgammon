@@ -1,3 +1,4 @@
+import "reflect-metadata";
 import { serialize, deserialize } from "class-transformer";
 import { Board } from "../models/board";
 import { useBoardStore } from "../stores/game-store";
@@ -34,6 +35,14 @@ function loadAutoSave(): void {
   loadBoard("auto");
 }
 
+function lastMoveSave(): void {
+  saveBoard("lastMove");
+}
+
+function undoLastMove(): void {
+  loadBoard("lastMove");
+}
+
 function saveTurnStart(): void {
   saveBoard("autoturn");
 }
@@ -58,4 +67,6 @@ export {
   loadAutoSave,
   saveTurnStart,
   resetTurn,
+  lastMoveSave,
+  undoLastMove,
 };

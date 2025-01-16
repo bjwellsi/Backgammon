@@ -6,8 +6,10 @@ import { Type } from "class-transformer";
 class PieceList {
   @Type(() => Piece)
   pieces: Piece[];
+  @Type(() => Color)
   legalColors: Color[];
 
+  @Type(() => ID)
   readonly id: ID;
   locationIndex: number;
 

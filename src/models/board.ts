@@ -1,11 +1,9 @@
 import cloneDeep from "lodash/cloneDeep";
+import { Type } from "class-transformer";
 import { Column } from "./column";
 import { Team } from "./team";
 import { Turn } from "./turn";
-import { TurnAction } from "./turn-action";
 import { Color } from "./color";
-import { Type } from "class-transformer";
-import { ID } from "./id";
 
 class Board {
   _piecesPerTeam: number;

@@ -1,5 +1,11 @@
 import { endGame, nextTurn, rollDice } from "../controllers/game-engine";
-import { loadManualSave, manualSave, resetTurn } from "../controllers/saves";
+import {
+  loadAutoSave,
+  loadManualSave,
+  manualSave,
+  resetTurn,
+  undoLastMove,
+} from "../controllers/saves";
 
 const RollDiceButton: React.FC = () => {
   return (
@@ -21,15 +27,20 @@ const ChangeTurnButton: React.FC = () => {
   );
 };
 
+const UndoButton: React.FC = () => {
+  return (
+    <>
+      <button id="undo" onClick={undoLastMove}>
+        Undo
+      </button>
+    </>
+  );
+};
+
 const ResetTurnButton: React.FC = () => {
   return (
     <>
-      <button
-        id="reset-turn"
-        onClick={() => {
-          resetTurn();
-        }}
-      >
+      <button id="reset-turn" onClick={resetTurn}>
         Reset Turn
       </button>
     </>
@@ -39,12 +50,7 @@ const ResetTurnButton: React.FC = () => {
 const EndGameButton: React.FC = () => {
   return (
     <>
-      <button
-        id="end-game"
-        onClick={() => {
-          endGame();
-        }}
-      >
+      <button id="end-game" onClick={endGame}>
         End Game
       </button>
     </>
@@ -54,12 +60,7 @@ const EndGameButton: React.FC = () => {
 const SaveButton: React.FC = () => {
   return (
     <>
-      <button
-        id="save"
-        onClick={() => {
-          manualSave();
-        }}
-      >
+      <button id="save" onClick={manualSave}>
         Save Game
       </button>
     </>
@@ -69,12 +70,7 @@ const SaveButton: React.FC = () => {
 const LoadButton: React.FC = () => {
   return (
     <>
-      <button
-        id="load"
-        onClick={() => {
-          loadManualSave();
-        }}
-      >
+      <button id="load" onClick={loadManualSave}>
         Load Game
       </button>
     </>
@@ -88,4 +84,5 @@ export {
   EndGameButton,
   SaveButton,
   LoadButton,
+  UndoButton,
 };

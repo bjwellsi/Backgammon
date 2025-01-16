@@ -10,13 +10,18 @@ import {
   pieceCount,
   moveDistance,
 } from "./game-state";
+import { autoSave, lastMoveSave, saveTurnStart } from "./saves";
 
 function endGame(): void {
   const board = new Board();
   useBoardStore.setState({ board: board });
+  autoSave();
+  lastMoveSave();
+  saveTurnStart();
 }
 
 function movePiece(fromList: ID, toList: ID): void {
+  lastMoveSave();
   const oldBoard = useBoardStore.getState().board;
   const board = oldBoard.clone();
   const options = legalMoves(
@@ -56,6 +61,7 @@ function movePiece(fromList: ID, toList: ID): void {
     toLocation.addPiece(pieceToMove);
   }
   useBoardStore.setState({ board: board });
+  autoSave();
 }
 
 function rollDice(): void {
@@ -64,6 +70,9 @@ function rollDice(): void {
   board.turn.roll();
   currentTeam(board).dice.roll();
   useBoardStore.setState({ board: board });
+  autoSave();
+  saveTurnStart();
+  lastMoveSave();
 }
 
 function clearDice(): void {
@@ -103,6 +112,9 @@ function nextTurn(): void {
   clearDice();
   board.turn.nextTurn(nextTeam, nextOpp);
   useBoardStore.setState({ board: board });
+  autoSave();
+  saveTurnStart();
+  lastMoveSave();
 }
 
 export { endGame, rollDice, nextTurn, movePiece };

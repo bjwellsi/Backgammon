@@ -1,9 +1,8 @@
 import {
   EndGameButton,
-  LoadButton,
   ResetTurnButton,
   RollDiceButton,
-  SaveButton,
+  UndoButton,
 } from "./buttons";
 
 const ControlRow: React.FC = () => {
@@ -11,10 +10,9 @@ const ControlRow: React.FC = () => {
     <>
       <div className="control-row">
         <RollDiceButton />
+        <UndoButton />
         <ResetTurnButton />
         <EndGameButton />
-        <SaveButton />
-        <LoadButton />
       </div>
     </>
   );
