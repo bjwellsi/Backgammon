@@ -1,5 +1,6 @@
 import { Dice } from "./dice";
 import { CurrentTurn } from "./current-turn";
+import { GameOverOverlay } from "./game-over-overlay";
 import { Column } from "./column";
 import { useBoardStore } from "../stores/game-store";
 import { Home } from "./home";

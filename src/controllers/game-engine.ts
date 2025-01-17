@@ -10,7 +10,13 @@ import {
   pieceCount,
   moveDistance,
 } from "./game-state";
-import { autoSave, lastMoveSave, saveTurnStart } from "./saves";
+import { autoSave, lastMoveSave, loadAutoSave, saveTurnStart } from "./saves";
+
+function initializeBoard(): void {
+  //technically this will initialize the board with an autosave if it exists,
+  //let it just load on its own if it doesn't
+  loadAutoSave();
+}
 
 function endGame(): void {
   const board = new Board();
@@ -117,4 +123,4 @@ function nextTurn(): void {
   lastMoveSave();
 }
 
-export { endGame, rollDice, nextTurn, movePiece };
+export { initializeBoard, endGame, rollDice, nextTurn, movePiece };
