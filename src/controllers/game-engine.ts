@@ -15,6 +15,8 @@ import { autoSave, lastMoveSave, loadAutoSave, saveTurnStart } from "./saves";
 function initializeBoard(): void {
   //technically this will initialize the board with an autosave if it exists,
   //let it just load on its own if it doesn't
+  console.log("todo");
+
   loadAutoSave();
 }
 

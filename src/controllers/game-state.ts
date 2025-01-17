@@ -7,7 +7,13 @@ import { PieceList } from "../models/piece-list";
 import { Team } from "../models/team";
 
 function turnOver(board: Board): boolean {
-  if (board.turn.rolled && currentTeam(board).dice.rolls.length == 0) {
+  const team = currentTeam(board);
+  const opp = currentOpponent(board);
+  if (
+    board.turn.rolled &&
+    (team.dice.rolls.length == 0 ||
+      legalMoveSources(board, team, opp).length == 0)
+  ) {
     return true;
   } else {
     return false;
@@ -146,22 +152,37 @@ function legalMoves(board: Board, team: Team, opp: Team, fromList: ID): ID[] {
       //populate the legalmoves for moves from jail
       //  they have to move to a column
       board.columns.forEach((col: Column) => {
-        //  the column they move to can't have >1 of the other team's piece
-        if (pieceCount(board, col.id, opp.color) <= 1) {
-          legalMoves.push(col.id);
-        }
         //  the location has to be a roll distance away from the jail
+        //  the column they move to can't have >1 of the other team's piece
         const distance = moveDistance(board, piece, fromList, col.id);
         if (!distance) {
           throw Error("Move distance is undefined"); //this shouldn't happen, error in the move distance logic
         }
-        if (rolls.indexOf(distance) > 0) {
+        if (
+          rolls.indexOf(distance) >= 0 &&
+          pieceCount(board, col.id, opp.color) <= 1
+        ) {
           legalMoves.push(col.id);
         }
       });
     }
   }
   return legalMoves;
+}
+
+function legalMoveSources(board: Board, team: Team, opp: Team): ID[] {
+  let legalSources: ID[] = [];
+  console.log("start");
+  board.columns.forEach((col) => {
+    if (legalMoves(board, team, opp, col.id).length > 0)
+      legalSources.push(col.id);
+  });
+
+  if (legalMoves(board, team, opp, team.jail.id).length > 0) {
+    legalSources.push(team.jail.id);
+  }
+
+  return legalSources;
 }
 
 export {
@@ -172,4 +193,5 @@ export {
   currentOpponent,
   pieceCount,
   moveDistance,
+  legalMoveSources,
 };
