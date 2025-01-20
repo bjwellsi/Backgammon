@@ -20,6 +20,7 @@ function loadBoard(saveName: string): void {
 }
 
 function manualSave(): void {
+  console.log("asdfd");
   saveBoard("manualSave");
 }
 

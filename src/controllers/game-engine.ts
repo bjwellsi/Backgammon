@@ -10,7 +10,14 @@ import {
   pieceCount,
   moveDistance,
 } from "./game-state";
-import { autoSave, lastMoveSave, loadAutoSave, saveTurnStart } from "./saves";
+import {
+  autoSave,
+  lastMoveSave,
+  loadAutoSave,
+  loadManualSave,
+  manualSave,
+  saveTurnStart,
+} from "./saves";
 
 function initializeBoard(): void {
   //technically this will initialize the board with an autosave if it exists,
@@ -83,15 +90,6 @@ function rollDice(): void {
   lastMoveSave();
 }
 
-function clearDice(): void {
-  const oldBoard = useBoardStore.getState().board;
-  const board = oldBoard.clone();
-  board.teams.forEach((team: Team) => {
-    team.dice.clearRolls();
-  });
-  useBoardStore.setState({ board: board });
-}
-
 function nextTurn(): void {
   const oldBoard = useBoardStore.getState().board;
   const board = oldBoard.clone();
@@ -117,7 +115,10 @@ function nextTurn(): void {
     nextOpp++;
   }
 
-  clearDice();
+  //clear the dice
+  board.teams.forEach((team: Team) => {
+    team.dice.clearRolls();
+  });
   board.turn.nextTurn(nextTeam, nextOpp);
   useBoardStore.setState({ board: board });
   autoSave();

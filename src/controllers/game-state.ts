@@ -172,7 +172,6 @@ function legalMoves(board: Board, team: Team, opp: Team, fromList: ID): ID[] {
 
 function legalMoveSources(board: Board, team: Team, opp: Team): ID[] {
   let legalSources: ID[] = [];
-  console.log("start");
   board.columns.forEach((col) => {
     if (legalMoves(board, team, opp, col.id).length > 0)
       legalSources.push(col.id);
