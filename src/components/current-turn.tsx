@@ -9,7 +9,7 @@ const CurrentTurn: React.FC = () => {
   const ret = (
     <>
       <h2 id="turn">{Color[currentTeam(board).color]}'s turn</h2>
-      {turnOver(board) && <EndOfTurnOverlay />}
+      {!board.winner && turnOver(board) && <EndOfTurnOverlay />}
       {board.winner && <GameOverOverlay />}
     </>
   );

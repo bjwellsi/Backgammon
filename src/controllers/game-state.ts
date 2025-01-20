@@ -100,13 +100,18 @@ function pieceCount(board: Board, pieceList: ID, color: Color): number {
   return pieceCount;
 }
 
-function legalMoves(board: Board, team: Team, opp: Team, fromList: ID): ID[] {
+function legalMoves(
+  board: Board,
+  team: Team,
+  opp: Team,
+  fromList: ID,
+): Map<string, number> {
   //return the list of locations that the player could possibly move to
   //this function is gonna be pretty logic heavy, so lots of comments
   const rolls = team.dice.rolls;
   const fromLocation = getPieceList(board, fromList);
 
-  let legalMoves: ID[] = [];
+  let legalMoves: Map<string, number> = new Map();
 
   if (!rolls || rolls.length == 0) {
     return legalMoves; //no rolls left
@@ -119,13 +124,20 @@ function legalMoves(board: Board, team: Team, opp: Team, fromList: ID): ID[] {
       //the jail can't have any of their pieces
       if (pieceCount(board, team.jail.id, team.color) == 0) {
         //for moving from a column to a column
-        let readyForHome: boolean = true;
+        let furthestDistanceFromHome: number = -1;
         board.columns.forEach((col: Column) => {
           //also check if any pieces are currently outside homebase
+          const distanceFromHome = moveDistance(
+            board,
+            piece,
+            col.id,
+            team.home.id,
+          );
           if (
-            moveDistance(board, piece, team.home.id, col.id) > team.homeBaseSize
+            distanceFromHome > furthestDistanceFromHome &&
+            pieceCount(board, col.id, team.color) > 0
           ) {
-            readyForHome = false;
+            furthestDistanceFromHome = distanceFromHome;
           }
           //  the difference between the columns has to be a rolldistance
           //  they can't move backward
@@ -135,16 +147,29 @@ function legalMoves(board: Board, team: Team, opp: Team, fromList: ID): ID[] {
             rolls.indexOf(distance) >= 0 &&
             pieceCount(board, col.id, opp.color) < 2
           ) {
-            legalMoves.push(col.id);
+            legalMoves.set(col.id.value, distance);
           }
         });
         //for moving home
         //  they can't have any pieces outside homebase
-        if (readyForHome) {
+        if (furthestDistanceFromHome <= team.homeBaseSize) {
           //  the column has to be a rolldistance away from their home
           const distance = moveDistance(board, piece, fromList, team.home.id);
-          if (rolls.indexOf(distance) > 0) {
-            legalMoves.push(team.home.id);
+          if (rolls.indexOf(distance) >= 0) {
+            //if the current column is a rolldistance from home, it's legal
+            legalMoves.set(team.home.id.value, distance);
+          } else {
+            //see if there is a roll that's greater than the move distance and the current column is the furthest populated column from home
+            //first find the largest roll.
+            const largestRoll = [...rolls].sort((a, b) => {
+              return b - a; //sort in descending order
+            })[0];
+            if (
+              furthestDistanceFromHome == distance &&
+              largestRoll > distance
+            ) {
+              legalMoves.set(team.home.id.value, largestRoll);
+            }
           }
         }
       }
@@ -162,7 +187,7 @@ function legalMoves(board: Board, team: Team, opp: Team, fromList: ID): ID[] {
           rolls.indexOf(distance) >= 0 &&
           pieceCount(board, col.id, opp.color) <= 1
         ) {
-          legalMoves.push(col.id);
+          legalMoves.set(col.id.value, distance);
         }
       });
     }
@@ -173,11 +198,11 @@ function legalMoves(board: Board, team: Team, opp: Team, fromList: ID): ID[] {
 function legalMoveSources(board: Board, team: Team, opp: Team): ID[] {
   let legalSources: ID[] = [];
   board.columns.forEach((col) => {
-    if (legalMoves(board, team, opp, col.id).length > 0)
+    if (legalMoves(board, team, opp, col.id).size > 0)
       legalSources.push(col.id);
   });
 
-  if (legalMoves(board, team, opp, team.jail.id).length > 0) {
+  if (legalMoves(board, team, opp, team.jail.id).size > 0) {
     legalSources.push(team.jail.id);
   }
 

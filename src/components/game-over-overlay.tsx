@@ -7,7 +7,7 @@ const GameOverOverlay: React.FC = () => {
     <>
       {winner && (
         <div id="game-over-overlay" className="overlay show-overlay">
-          <div id="change-over-popup" className="popup show-popup">
+          <div id="game-over-popup" className="popup show-popup">
             <h1>{`${winner} wins!`}</h1>
             <EndGameButton />
           </div>

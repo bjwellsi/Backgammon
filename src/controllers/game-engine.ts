@@ -45,11 +45,9 @@ function movePiece(fromList: ID, toList: ID): void {
     currentOpponent(board),
     fromList,
   );
-  if (
-    options.findIndex((listItem) => {
-      return listItem.equals(toList);
-    }) == -1
-  ) {
+  //try getting the roll for the legal move. If there isn't a value, then the move isn't legal
+  const roll = options.get(toList.value);
+  if (!roll) {
     throw Error("Can't move there");
   } else {
     const fromLocation = getPieceList(board, fromList);
@@ -67,7 +65,7 @@ function movePiece(fromList: ID, toList: ID): void {
     const team = currentTeam(board);
     try {
       //remove the roll from the teams available rolls
-      team.dice.useRoll(moveDistance(board, pieceToMove, fromList, toList));
+      team.dice.useRoll(roll);
     } catch (err) {
       toLocation.addPiece(pieceToMove);
       throw err;
