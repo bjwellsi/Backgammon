@@ -24,7 +24,11 @@ function initializeBoard(): void {
   //let it just load on its own if it doesn't
   console.log("todo");
 
-  loadAutoSave();
+  try {
+    loadAutoSave();
+  } catch (err) {
+    useBoardStore.setState({ board: new Board() });
+  }
 }
 
 function endGame(): void {
