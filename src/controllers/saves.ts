@@ -2,25 +2,65 @@ import "reflect-metadata";
 import { serialize, deserialize } from "class-transformer";
 import { Board } from "../models/board";
 import { useBoardStore } from "../stores/game-store";
+import { supabase } from "../config/supabaseClient";
 
 function saveBoard(saveName: string): void {
+  const save = async (board: string, save: string) => {
+    //insert or update
+    const { data } = await supabase
+      .from("SaveGames")
+      .select("save_name")
+      .eq("save_name", save)
+      .limit(1)
+      .single();
+
+    if (!data || !data.save_name) {
+      const { data } = await supabase
+        .from("SaveGames")
+        .insert([{ board: board, save_name: save }])
+        .select();
+
+      if (!data) {
+        throw Error(`Couldn't save ${save}`);
+      }
+    } else {
+      //update
+      const { data } = await supabase
+        .from("SaveGames")
+        .update({ board: board })
+        .eq("save_name", save)
+        .select();
+
+      if (!data) {
+        throw Error(`Couldn't save ${save}`);
+      }
+    }
+  };
   const board = useBoardStore.getState().board;
   const content = serialize(board);
-  localStorage.setItem(saveName, content);
+  save(content, saveName);
 }
 
 function loadBoard(saveName: string): void {
-  const content = localStorage.getItem(saveName);
-  if (content) {
-    const board = deserialize(Board, content);
-    useBoardStore.setState({ board: board });
-  } else {
-    throw Error(`Couldn't load ${saveName}`);
-  }
+  const load = async (save: string) => {
+    const { data } = await supabase
+      .from("SaveGames")
+      .select("board")
+      .eq("save_name", save)
+      .limit(1)
+      .single();
+
+    if (data) {
+      const board = deserialize(Board, data.board);
+      useBoardStore.setState({ board: board });
+    } else {
+      throw Error(`Couldn't load ${save}`);
+    }
+  };
+  load(saveName);
 }
 
 function manualSave(): void {
-  console.log("asdfd");
   saveBoard("manualSave");
 }
 
