@@ -15,7 +15,7 @@ const Home: React.FC<{ home: HomeModel }> = ({ home }) => {
     <>
       <div
         id={id.value}
-        className={`home piece-container ${highlighted}`}
+        className={`home left-home piece-container ${highlighted}`}
         onClick={() => {
           selectPieceList(id);
         }}

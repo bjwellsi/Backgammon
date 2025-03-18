@@ -21,6 +21,22 @@ const Column: React.FC<{ columnModel: ColumnModel }> = ({ columnModel }) => {
   if (columnIndex > 11) {
     topOrBottom = "bottom";
   }
+
+  let leftOrRight = "right";
+  if (columnIndex < 6 || columnIndex > 17) {
+    leftOrRight = "left";
+  }
+
+  let gridColumn = columnIndex; //for the top row, you just take the column index;
+  if (topOrBottom == "bottom") {
+    gridColumn = 23 - columnIndex; //for the bottom row, we need distance from 23.
+  }
+  if (leftOrRight == "left") {
+    gridColumn += 3; //shift 3 columns over for home + reference by 1
+  } else if (leftOrRight == "right") {
+    gridColumn += 4; //shift an extra 1 for jail
+  }
+
   const ret = (
     <>
       <div
@@ -29,16 +45,18 @@ const Column: React.FC<{ columnModel: ColumnModel }> = ({ columnModel }) => {
         onClick={() => {
           selectPieceList(id);
         }}
+        style={{ gridColumn: gridColumn }}
       >
         <PieceList pieceList={columnModel.pieces} />
-        <div
-          key="triangle"
-          className={`triangle ${oddOrEven} ${topOrBottom}`}
-        ></div>
       </div>
     </>
   );
   return ret;
 };
+/*
+  <div
+          key="triangle"
+          className={`triangle ${oddOrEven} ${topOrBottom}`}
+        ></div>*/
 
 export { Column };
