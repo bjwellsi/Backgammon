@@ -37,10 +37,6 @@
   background-color: #a77e29;
 }
 
-.board > * {
-  outline: 1px dashed black;
-}
-
 .center-row {
   grid-row: 2;
 }
@@ -84,12 +80,14 @@ button:hover {
 }
 
 .column {
+  position: relative;
   border: none;
   display: flex;
   align-items: center;
   padding: none;
   width: 100%;
   grid-column: span 1;
+  flex-direction: column;
 }
 
 .triangle {

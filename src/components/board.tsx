@@ -38,6 +38,7 @@ const Board: React.FC = () => {
           <Home key={board.teams[0].home.id.value} home={board.teams[0].home} />
           {columns}
           <Jail key={board.teams[1].jail.id.value} jail={board.teams[1].jail} />
+          <Dice />
           <div className="home right-home"></div>
           <div className="home right-home center-row"></div>
           <div id="jail center-row" className="jail"></div>

@@ -48,15 +48,14 @@ const Column: React.FC<{ columnModel: ColumnModel }> = ({ columnModel }) => {
         style={{ gridColumn: gridColumn }}
       >
         <PieceList pieceList={columnModel.pieces} />
+        <div
+          key="triangle"
+          className={`triangle ${oddOrEven} ${topOrBottom}`}
+        ></div>
       </div>
     </>
   );
   return ret;
 };
-/*
-  <div
-          key="triangle"
-          className={`triangle ${oddOrEven} ${topOrBottom}`}
-        ></div>*/
 
 export { Column };
