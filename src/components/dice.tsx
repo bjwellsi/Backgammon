@@ -8,9 +8,7 @@ const Dice: React.FC = () => {
   let rollsString = "";
 
   const gridRow = 2;
-  let gridColumn = 3 + Math.floor(Math.random() * 12);
-  if (gridColumn > 8) gridColumn += 1; //don't land it in jail
-
+  const gridColumn = 11;
   if (rolls.length > 0) {
     rollsString = rolls.join(", ");
     ret = (
